@@ -75,6 +75,10 @@
     "testEnvironment": "node"
   },
   "standard": {
+    "global": [
+      "localStorage",
+      "navigator"
+    ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
       "@typescript-eslint/eslint-plugin"
@@ -87,6 +91,6 @@
   },
   "simple-git-hooks": {
     "pre-commit": "npm run standard:test",
-    "pre-push": "npm run standard:test",
+    "pre-push": "npm run standard:test"
   }
 }
