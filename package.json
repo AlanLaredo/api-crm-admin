@@ -6,7 +6,6 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prepare": "simple-git-hooks",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -23,7 +22,8 @@
     "standard:test": "npm run standard:windows",
     "standard:windows": "standard ./src/**/*.ts | snazzy",
     "standard:linux": "standard \"$(pwd)/src/**/*.ts\" | ./node_modules/.bin/snazzy",
-    "standard:lint": "standard --fix \"$(pwd)/src/**/*.ts\" | ./node_modules/.bin/snazzy"
+    "standard:lint": "standard --fix \"$(pwd)/src/**/*.ts\" | ./node_modules/.bin/snazzy",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -48,7 +48,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "28.1.3",
     "prettier": "^2.3.2",
-    "simple-git-hooks": "^2.8.1",
     "snazzy": "^9.0.0",
     "source-map-support": "^0.5.20",
     "standard": "^17.0.0",
@@ -57,7 +56,8 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.1.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "husky": "^8.0.0"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -88,11 +88,6 @@
     "ignore": [
       "*.spec.ts"
     ],
-    "rules": {},
     "globals": []
-  },
-  "simple-git-hooks": {
-    "pre-commit": "npm run standard:test",
-    "pre-push": "npm run standard:test"
   }
 }
