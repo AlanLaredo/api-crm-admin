@@ -5,7 +5,7 @@ import { ENVIRONMENTS, JOI_VALIDATION_SCHEMA } from '../../environments/'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import config from '../../environments/config'
-import { CommonModule } from '../common/common.module'
+import { MODULES } from '..'
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { CommonModule } from '../common/common.module'
       isGlobal: true,
       validationSchema: JOI_VALIDATION_SCHEMA
     }),
-    CommonModule
+    ...MODULES
   ],
   controllers: [AppController],
   providers: [AppService]
