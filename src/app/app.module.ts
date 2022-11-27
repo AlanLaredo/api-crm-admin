@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 
-import { ENVIRONMENTS, JOI_VALIDATION_SCHEMA } from '../../environments/'
+import { ENVIRONMENTS, JOI_VALIDATION_SCHEMA } from '../environments'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import config from '../../environments/config'
-import { MODULES } from '..'
+import config from '../environments/config'
+import { MODULES } from '../modules'
 
 @Module({
   imports: [

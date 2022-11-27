@@ -2,14 +2,14 @@ import { Module, Global } from '@nestjs/common'
 import { ConfigType } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import config from '../../environments/config'
-// import { DATABASE_MODELS } from './mongoose/models'
-// import { MONGOOSE_SERVICES } from './mongoose/services'
+import config from '../environments/config'
+import { MONGOOSE_MODELS } from './mongoose/models'
+import { MONGOOSE_SERVICES } from './mongoose/services'
 
 @Global()
 @Module({
   imports: [
-    // MongooseModule.forFeature([...DATABASE_MODELS]),
+    MongooseModule.forFeature([...MONGOOSE_MODELS]),
     MongooseModule.forRootAsync({
       useFactory: async (configService: ConfigType<typeof config>) => {
         const {
@@ -37,10 +37,10 @@ import config from '../../environments/config'
     })
   ],
   providers: [
-    // ...MONGOOSE_SERVICES
+    ...MONGOOSE_SERVICES
   ],
   exports: [
-    // ...MONGOOSE_SERVICES,
+    ...MONGOOSE_SERVICES,
     MongooseModule
   ]
 })

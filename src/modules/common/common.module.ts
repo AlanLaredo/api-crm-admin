@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common'
-// import { MongooseModule } from '@nestjs/mongoose'
 // import { AuthModule } from 'src/auth/auth.module'
-import { DatabaseModule } from '../database/database.module'
+import { DatabaseModule } from '../../database/database.module'
 
 @Module({
   imports: [
-    // MongooseModule.forFeature(models),
     DatabaseModule
     // CoreModule
   ],
