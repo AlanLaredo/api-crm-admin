@@ -22,7 +22,6 @@ import { MONGOOSE_SERVICES } from './mongoose/services'
         } = configService.mongo
 
         const uri = `${connection}://${user}:${encodeURIComponent(password)}@${host}/${defaultDb}?authSource=${authDb}`
-
         return {
           uri,
           user,

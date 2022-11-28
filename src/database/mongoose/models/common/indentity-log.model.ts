@@ -5,20 +5,20 @@ import * as mongoose from 'mongoose'
 @Schema()
 export abstract class IdentityLogModel {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    createdBy: Types.ObjectId
+    createdBy!: Types.ObjectId
 
   @Prop({ required: true })
-    createdAt: Date
+    createdAt!: Date
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: false })
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
     modifiedBy?: Types.ObjectId
 
-  @Prop({ required: false })
+  @Prop()
     modifiedAt?: Date
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: false })
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
     deletedBy?: Types.ObjectId
 
-  @Prop({ required: false })
+  @Prop()
     deletedAt?: Date
 }
