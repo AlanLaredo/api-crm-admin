@@ -17,18 +17,18 @@ export class AppController {
 
   @Get()
   async getHello () {
-    const systemId: string = this.configService.get<string>('mongo.systemId')
+    // const systemId: string = this.configService.get<string>('mongo.systemId')
 
-    const newUser = {
-      username: 'slaredo',
-      password: '123',
-      email: 'santiagoalan@gmail.com',
-      firstName: 'Santiago',
-      createdAt: new Date(),
-      createdBy: new Types.ObjectId(systemId)
-    }
+    // const newUser = {
+    //   username: 'slaredo',
+    //   password: '123',
+    //   email: 'santiagoalan@gmail.com',
+    //   firstName: 'Santiago',
+    //   createdAt: new Date(),
+    //   createdBy: new Types.ObjectId(systemId)
+    // }
 
-    const result = await this.userService.create(newUser)
-    return result //  || this.appService.getHello()
+    // const result = await this.userService.create(newUser)
+    return this.appService.getHello()
   }
 }

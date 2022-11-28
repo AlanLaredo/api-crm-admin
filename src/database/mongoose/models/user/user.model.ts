@@ -7,7 +7,7 @@ import { IdentityLogModel } from '../common'
 @Schema({
   collection: 'users'
 })
-export class UserModel extends IdentityLogModel {
+export class User extends IdentityLogModel {
   id?: Types.ObjectId
 
   @Prop({ required: true, unique: true })
@@ -29,4 +29,4 @@ export class UserModel extends IdentityLogModel {
     roleAccessId?: Types.ObjectId
 }
 
-export const UserSchema = SchemaFactory.createForClass(UserModel)
+export const UserSchema = SchemaFactory.createForClass(User)
