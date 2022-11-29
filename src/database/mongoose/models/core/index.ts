@@ -1,16 +1,13 @@
 import { IModel } from '../../interfaces'
-import { ActionLogModel, ActionLogSchema } from './action-log.model'
-import { MetaConfigurationModel, MetaConfigurationSchema } from './meta-configuration.model'
+import { ActionLogModel, ActionLog } from './action-log.model'
+import { MetaConfigurationModel, MetaConfiguration } from './meta-configuration.model'
 
-export const CORE_MODELS: IModel[] = [{
-  name: ActionLogModel.name,
-  schema: ActionLogSchema
-}, {
-  name: MetaConfigurationModel.name,
-  schema: MetaConfigurationSchema
-}]
-
-export {
+export const CORE_MODELS: IModel[] = [
   ActionLogModel,
   MetaConfigurationModel
+]
+
+export {
+  ActionLog,
+  MetaConfiguration
 }

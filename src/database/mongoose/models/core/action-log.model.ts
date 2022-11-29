@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 import * as mongoose from 'mongoose'
 
@@ -7,7 +7,7 @@ import { IdentityLogSchema } from '../common'
 @Schema({
   collection: 'action_logs'
 })
-export class ActionLogModel extends IdentityLogSchema {
+export class ActionLog extends IdentityLogSchema {
   id?: Types.ObjectId
 
   @Prop({ types: mongoose.Schema.Types.ObjectId, required: true })
@@ -23,4 +23,9 @@ export class ActionLogModel extends IdentityLogSchema {
     description?: string
 }
 
-export const ActionLogSchema = SchemaFactory.createForClass(ActionLogModel)
+export const ActionLogSchema = SchemaFactory.createForClass(ActionLog)
+
+export const ActionLogModel: ModelDefinition = {
+  name: ActionLog.name,
+  schema: ActionLogSchema
+}

@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 
 import { IdentityLogSchema } from '../common'
@@ -6,7 +6,7 @@ import { IdentityLogSchema } from '../common'
 @Schema({
   collection: 'meta_configuration'
 })
-export class MetaConfigurationModel extends IdentityLogSchema {
+export class MetaConfiguration extends IdentityLogSchema {
   id?: Types.ObjectId
 
   @Prop({ type: String, required: true })
@@ -22,4 +22,9 @@ export class MetaConfigurationModel extends IdentityLogSchema {
     active!: boolean
 }
 
-export const MetaConfigurationSchema = SchemaFactory.createForClass(MetaConfigurationModel)
+export const MetaConfigurationSchema = SchemaFactory.createForClass(MetaConfiguration)
+
+export const MetaConfigurationModel: ModelDefinition = {
+  name: MetaConfiguration.name,
+  schema: MetaConfigurationSchema
+}
