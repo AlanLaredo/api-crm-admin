@@ -4,7 +4,7 @@ import { Controller, Get } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
 import { AppService } from './app.service'
-import { UserService } from 'src/database/mongoose/services/users'
+import { UserService } from 'src/database/mongoose/services/user'
 import { Types } from 'mongoose'
 import { User } from 'src/database/mongoose/models/user'
 

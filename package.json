@@ -20,7 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "standard:test": "npm run standard:windows",
-    "standard:windows": "standard ./src/**/*.ts | snazzy",
+    "standard:windows": "cls & standard ./src/**/*.ts | snazzy",
     "standard:linux": "standard \"$(pwd)/src/**/*.ts\" | ./node_modules/.bin/snazzy",
     "standard:lint": "standard --fix \"$(pwd)/src/**/*.ts\" | ./node_modules/.bin/snazzy",
     "prepare": "husky install"
