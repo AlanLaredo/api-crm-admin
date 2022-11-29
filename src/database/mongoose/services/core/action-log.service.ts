@@ -3,15 +3,15 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
-import { MainQueryMongoose } from '../main-query.mongoose'
+import { BaseServiceMongoose } from '../common/base-service.mongoose'
 
-import { ActionLogModel } from '../../models/core'
+import { ActionLog } from '../../models/core'
 
 @Injectable()
-export class ActionLogService extends MainQueryMongoose<ActionLogModel> {
+export class ActionLogService extends BaseServiceMongoose<ActionLog> {
   constructor (
-    @InjectModel(ActionLogModel.name) public MainModel: Model<ActionLogModel>
+    @InjectModel(ActionLog.name) public mainModel: Model<ActionLog>
   ) {
-    super(MainModel)
+    super(mainModel)
   }
 }

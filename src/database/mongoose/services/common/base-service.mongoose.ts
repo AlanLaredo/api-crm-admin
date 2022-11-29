@@ -2,7 +2,7 @@
 // TODO: Add paginator and limit
 import { Model, Types } from 'mongoose'
 
-export abstract class MainQueryMongoose<T> {
+export abstract class BaseServiceMongoose<T> {
   public MainModel: Model<any>
   constructor (MainModel: Model<T>) {
     this.MainModel = MainModel

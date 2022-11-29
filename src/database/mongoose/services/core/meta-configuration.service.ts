@@ -3,15 +3,15 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
-import { MainQueryMongoose } from '../main-query.mongoose'
+import { BaseServiceMongoose } from '../common/base-service.mongoose'
 
-import { MetaConfigurationModel } from '../../models/core'
+import { MetaConfiguration } from '../../models/core'
 
 @Injectable()
-export class MetaConfigurationService extends MainQueryMongoose<MetaConfigurationModel> {
+export class MetaConfigurationService extends BaseServiceMongoose<MetaConfiguration> {
   constructor (
-    @InjectModel(MetaConfigurationModel.name) public MainModel: Model<MetaConfigurationModel>
+    @InjectModel(MetaConfiguration.name) public mainModel: Model<MetaConfiguration>
   ) {
-    super(MainModel)
+    super(mainModel)
   }
 }
