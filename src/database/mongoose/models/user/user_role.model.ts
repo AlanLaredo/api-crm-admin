@@ -17,7 +17,7 @@ export class UserRole extends IdentityLogSchema {
     description?: string
 
   @Prop({ type: [mongoose.Schema.Types.ObjectId] })
-    permissions?: Types.ObjectId[]
+    permissionsIds?: Types.ObjectId[]
 }
 
 export const UserRoleSchema = SchemaFactory.createForClass(UserRole)

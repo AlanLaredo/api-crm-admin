@@ -20,7 +20,7 @@ export class JobVacancy extends IdentityLogSchema {
     totalVacancies!: number
 
   @Prop({ type: [String] })
-    requiredDocuments?: string[]
+    requiredDocumentsPath?: string[]
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     jobVacanciesStatusId!: Types.ObjectId
