@@ -1,5 +1,9 @@
-import { IdentityLogModel } from './indentity-log.model'
+import { IdentityLogSchema } from './indentity-log.schema'
+import { AddressSchema } from './address.schema'
+import { PersonSchema } from './person.schema'
 
 export {
-  IdentityLogModel
+  IdentityLogSchema,
+  AddressSchema,
+  PersonSchema
 }

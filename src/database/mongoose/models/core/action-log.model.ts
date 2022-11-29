@@ -2,12 +2,12 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 import * as mongoose from 'mongoose'
 
-import { IdentityLogModel } from '../common'
+import { IdentityLogSchema } from '../common'
 
 @Schema({
   collection: 'action_logs'
 })
-export class ActionLogModel extends IdentityLogModel {
+export class ActionLogModel extends IdentityLogSchema {
   id?: Types.ObjectId
 
   @Prop({ types: mongoose.Schema.Types.ObjectId, required: true })

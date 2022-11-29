@@ -1,11 +1,12 @@
 /* eslint-disable no-useless-constructor */
 
 import { Controller, Get } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 
 import { AppService } from './app.service'
 import { UserService } from 'src/database/mongoose/services/users'
-import { ConfigService } from '@nestjs/config'
 import { Types } from 'mongoose'
+import { User } from 'src/database/mongoose/models/user'
 
 @Controller()
 export class AppController {
@@ -17,18 +18,19 @@ export class AppController {
 
   @Get()
   async getHello () {
-    // const systemId: string = this.configService.get<string>('mongo.systemId')
+    const systemId: string = this.configService.get<string>('mongo.systemId')
 
-    // const newUser = {
-    //   username: 'slaredo',
-    //   password: '123',
-    //   email: 'santiagoalan@gmail.com',
-    //   firstName: 'Santiago',
-    //   createdAt: new Date(),
-    //   createdBy: new Types.ObjectId(systemId)
-    // }
+    const newUser: User = {
+      username: 'slaredo',
+      password: '123',
+      email: 'santiagoalan@gmail.com',
+      firstName: 'Santiago',
+      createdAt: new Date(),
+      createdBy: new Types.ObjectId(systemId)
+    }
+    console.log('adsasd')
 
-    // const result = await this.userService.create(newUser)
-    return this.appService.getHello()
+    const result = await this.userService.create(newUser)
+    return result
   }
 }

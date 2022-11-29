@@ -3,7 +3,7 @@ import { Types } from 'mongoose'
 import * as mongoose from 'mongoose'
 
 @Schema()
-export abstract class IdentityLogModel {
+export abstract class IdentityLogSchema {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     createdBy!: Types.ObjectId
 

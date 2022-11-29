@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
-import { UserModel } from '../../models/user'
+import { User } from '../../models/user'
 import { MainQueryMongoose } from '../main-query.mongoose'
 
 @Injectable()
-export class UserService extends MainQueryMongoose<UserModel> {
+export class UserService extends MainQueryMongoose<User> {
   constructor (
-    @InjectModel(UserModel.name) private userModel: Model<UserModel>) {
-    super(userModel)
+    @InjectModel(User.name) private mainModel: Model<User>) {
+    super(mainModel)
   }
 /*
   public async get (data: GetUsersFind = {}): Promise<UserEntity[]> {

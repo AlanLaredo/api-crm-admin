@@ -1,31 +1,22 @@
 import { IModel } from '../../interfaces'
-import { RolePermissionModel, RolePermissionSchema } from './role-permission.model'
-import { UserPreferencesModel, UserPreferencesSchema } from './user-preferences.model'
-import { UserSessionModel, UserSessionSchema } from './user-session.model'
-import { UserModel, UserSchema } from './user.model'
-import { UserRoleModel, UserRoleSchema } from './user_role.model'
+import { RolePermissionModel, RolePermission } from './role-permission.model'
+import { UserPreferencesModel, UserPreferences } from './user-preferences.model'
+import { UserSessionModel, UserSession } from './user-session.model'
+import { UserModel, User } from './user.model'
+import { UserRoleModel, UserRole } from './user_role.model'
 
-export const USER_MODELS: IModel[] = [{
-  name: UserModel.name,
-  schema: UserSchema
-}, {
-  name: UserSessionModel.name,
-  schema: UserSessionSchema
-}, {
-  name: UserPreferencesModel.name,
-  schema: UserPreferencesSchema
-}, {
-  name: UserRoleModel.name,
-  schema: UserRoleSchema
-}, {
-  name: RolePermissionModel.name,
-  schema: RolePermissionSchema
-}]
+export const USER_MODELS: IModel[] = [
+  RolePermissionModel,
+  UserPreferencesModel,
+  UserSessionModel,
+  UserModel,
+  UserRoleModel
+]
 
 export {
-  UserModel,
-  UserSessionModel,
-  UserPreferencesModel,
-  UserRoleModel,
-  RolePermissionModel
+  User,
+  RolePermission,
+  UserPreferences,
+  UserSession,
+  UserRole
 }

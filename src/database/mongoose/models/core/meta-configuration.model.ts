@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 
-import { IdentityLogModel } from '../common'
+import { IdentityLogSchema } from '../common'
 
 @Schema({
   collection: 'meta_configuration'
 })
-export class MetaConfigurationModel extends IdentityLogModel {
+export class MetaConfigurationModel extends IdentityLogSchema {
   id?: Types.ObjectId
 
   @Prop({ type: String, required: true })
