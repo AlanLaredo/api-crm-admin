@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
-import { JobVacancyStatus } from '../../models/recruiment'
+import { JobVacancyStatusEntity } from 'src/entities/recruiment'
 import { BaseServiceMongoose } from '../common/base-service.mongoose'
 
 @Injectable()
-export class JobVacancyStatusService extends BaseServiceMongoose<JobVacancyStatus> {
+export class JobVacancyStatusService extends BaseServiceMongoose<JobVacancyStatusEntity> {
   constructor (
-    @InjectModel(JobVacancyStatus.name) private mainModel: Model<JobVacancyStatus>) {
+    @InjectModel(JobVacancyStatusEntity.name) private mainModel: Model<JobVacancyStatusEntity>) {
     super(mainModel)
   }
 }

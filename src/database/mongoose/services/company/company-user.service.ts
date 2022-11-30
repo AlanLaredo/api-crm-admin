@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
-import { CompanyUser } from '../../models/company'
+import { CompanyUserEntity } from 'src/entities/company'
 import { BaseServiceMongoose } from '../common/base-service.mongoose'
 
 @Injectable()
-export class CompanyUserService extends BaseServiceMongoose<CompanyUser> {
+export class CompanyUserService extends BaseServiceMongoose<CompanyUserEntity> {
   constructor (
-    @InjectModel(CompanyUser.name) private mainModel: Model<CompanyUser>) {
+    @InjectModel(CompanyUserEntity.name) private mainModel: Model<CompanyUserEntity>) {
     super(mainModel)
   }
 }

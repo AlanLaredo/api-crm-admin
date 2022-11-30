@@ -6,7 +6,6 @@ import mongoose, { Types } from 'mongoose'
 
 import { AppService } from './app.service'
 import { UserService } from 'src/database/mongoose/services/user'
-import { User } from 'src/database/mongoose/models/user'
 import { UserEntity } from 'src/entities/user'
 
 @Controller()
@@ -23,18 +22,13 @@ export class AppController {
 
     // // get a custom configuration value
     // const dbHost = this.configService.get<string>('database.host');
-    const newUser: User = {
+    const newUser: UserEntity = {
       username: '1slaredo',
       password: '123',
       email: '1santiagoalan@gmail.com',
       firstName: 'Santiago',
       createdAt: new Date(),
-      createdBy: new Types.ObjectId(systemId),
-      roleAccess: [{
-        name: 'test 2',
-        createdAt: new Date(),
-        createdBy: new mongoose.Types.ObjectId(systemId)
-      }]
+      createdBy: new Types.ObjectId(systemId)
     }
 
     const newUser2: UserEntity = {
@@ -43,12 +37,7 @@ export class AppController {
       email: '1dep@gmail.com',
       firstName: 'Rodolfo',
       createdAt: new Date(),
-      createdBy: new mongoose.Types.ObjectId(systemId),
-      roleAccess: [{
-        name: 'test 222 ',
-        createdAt: new Date(),
-        createdBy: new mongoose.Types.ObjectId(systemId)
-      }]
+      createdBy: new mongoose.Types.ObjectId(systemId)
     }
 
     console.log('adsasd' + newUser.firstName)
