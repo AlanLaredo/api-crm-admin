@@ -1,13 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { ActionLogEntity } from 'src/entities/core'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-@Schema({
-  collection: 'action_logs'
-})
-export class ActionLog extends ActionLogEntity {
-}
+import { ActionLogEntity, ActionLogSchema } from 'src/entities/core'
 
 export const ActionLogModel: ModelDefinition = {
-  name: ActionLog.name,
-  schema: SchemaFactory.createForClass(ActionLog)
+  name: ActionLogEntity.name,
+  schema: ActionLogSchema
 }

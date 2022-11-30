@@ -1,13 +1,7 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { ProcessFunctionEntity } from 'src/entities/process'
-
-@Schema({
-  collection: 'process_functions'
-})
-export class ProcessFunction extends ProcessFunctionEntity {
-}
+import { ModelDefinition } from '@nestjs/mongoose'
+import { ProcessFunctionEntity, ProcessFunctionSchema } from 'src/entities/process'
 
 export const ProcessFunctionModel: ModelDefinition = {
-  name: ProcessFunction.name,
-  schema: SchemaFactory.createForClass(ProcessFunction)
+  name: ProcessFunctionEntity.name,
+  schema: ProcessFunctionSchema
 }

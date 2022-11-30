@@ -1,14 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-import { EmployeeReassignmentEntity } from 'src/entities/employee'
-
-@Schema({
-  collection: 'employee_reassignments'
-})
-export class EmployeeReassignment extends EmployeeReassignmentEntity {
-}
+import { EmployeeReassignmentEntity, EmployeeReassignmentSchema } from 'src/entities/employee'
 
 export const EmployeeReassignmentModel: ModelDefinition = {
-  name: EmployeeReassignment.name,
-  schema: SchemaFactory.createForClass(EmployeeReassignment)
+  name: EmployeeReassignmentEntity.name,
+  schema: EmployeeReassignmentSchema
 }

@@ -1,13 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { MetaConfigurationEntity } from 'src/entities/core'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-@Schema({
-  collection: 'meta_configuration'
-})
-export class MetaConfiguration extends MetaConfigurationEntity {
-}
+import { MetaConfigurationEntity, MetaConfigurationSchema } from 'src/entities/core'
 
 export const MetaConfigurationModel: ModelDefinition = {
-  name: MetaConfiguration.name,
-  schema: SchemaFactory.createForClass(MetaConfiguration)
+  name: MetaConfigurationEntity.name,
+  schema: MetaConfigurationSchema
 }

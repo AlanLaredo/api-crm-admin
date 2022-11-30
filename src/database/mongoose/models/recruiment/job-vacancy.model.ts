@@ -1,13 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { JobVacancyEntity } from 'src/entities/recruiment'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-@Schema({
-  collection: 'job_vacancies'
-})
-export class JobVacancy extends JobVacancyEntity {
-}
+import { JobVacancyEntity, JobVacancySchema } from 'src/entities/recruiment'
 
 export const JobVacancyModel: ModelDefinition = {
-  name: JobVacancy.name,
-  schema: SchemaFactory.createForClass(JobVacancy)
+  name: JobVacancyEntity.name,
+  schema: JobVacancySchema
 }

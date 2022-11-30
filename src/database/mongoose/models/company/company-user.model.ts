@@ -1,16 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-import { CompanyUserEntity } from 'src/entities/company'
-
-@Schema({
-  collection: 'company_users'
-})
-export class CompanyUser extends CompanyUserEntity {
-}
-
-export const CompanyUserSchema = SchemaFactory.createForClass(CompanyUser)
+import { CompanyUserEntity, CompanyUserSchema } from 'src/entities/company'
 
 export const CompanyUserModel: ModelDefinition = {
-  name: CompanyUser.name,
+  name: CompanyUserEntity.name,
   schema: CompanyUserSchema
 }

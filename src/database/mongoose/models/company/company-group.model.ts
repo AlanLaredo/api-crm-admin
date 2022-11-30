@@ -1,16 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-import { CompanyGroupEntity } from 'src/entities/company'
-
-@Schema({
-  collection: 'company_groups'
-})
-export class CompanyGroup extends CompanyGroupEntity {
-}
-
-export const CompanyGroupSchema = SchemaFactory.createForClass(CompanyGroup)
+import { CompanyGroupEntity, CompanyGroupSchema } from 'src/entities/company'
 
 export const CompanyGroupModel: ModelDefinition = {
-  name: CompanyGroup.name,
+  name: CompanyGroupEntity.name,
   schema: CompanyGroupSchema
 }

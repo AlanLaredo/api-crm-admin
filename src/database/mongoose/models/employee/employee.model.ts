@@ -1,13 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { EmployeeEntity } from 'src/entities/employee'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-@Schema({
-  collection: 'employees'
-})
-export class Employee extends EmployeeEntity {
-}
+import { EmployeeEntity, EmployeeSchema } from 'src/entities/employee'
 
 export const EmployeeModel: ModelDefinition = {
-  name: Employee.name,
-  schema: SchemaFactory.createForClass(Employee)
+  name: EmployeeEntity.name,
+  schema: EmployeeSchema
 }

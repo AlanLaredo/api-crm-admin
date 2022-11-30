@@ -1,6 +1,6 @@
 import { ModelDefinition } from '@nestjs/mongoose'
-import { UserRoleEntity } from 'src/entities/user'
-import { UserRoleSchema } from 'src/entities/user/user_role.entity'
+
+import { UserRoleEntity, UserRoleSchema } from 'src/entities/user'
 
 export const UserRoleModel: ModelDefinition = {
   name: UserRoleEntity.name,

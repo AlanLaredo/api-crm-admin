@@ -1,13 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { CustomerEntity } from 'src/entities/process'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-@Schema({
-  collection: 'curstomers'
-})
-export class Customer extends CustomerEntity {
-}
+import { CustomerEntity, CustomerSchema } from 'src/entities/process'
 
 export const CustomerModel: ModelDefinition = {
-  name: Customer.name,
-  schema: SchemaFactory.createForClass(Customer)
+  name: CustomerEntity.name,
+  schema: CustomerSchema
 }

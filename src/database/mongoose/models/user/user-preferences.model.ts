@@ -1,14 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-import { UserPreferencesEntity } from 'src/entities/user'
-
-@Schema({
-  collection: 'user_preferences'
-})
-export class UserPreferences extends UserPreferencesEntity {
-}
+import { UserPreferencesEntity, UserPreferencesSchema } from 'src/entities/user'
 
 export const UserPreferencesModel: ModelDefinition = {
-  name: UserPreferences.name,
-  schema: SchemaFactory.createForClass(UserPreferences)
+  name: UserPreferencesEntity.name,
+  schema: UserPreferencesSchema
 }

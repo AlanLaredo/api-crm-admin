@@ -1,13 +1,8 @@
-import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { RolePermissionEntity } from 'src/entities/user'
+import { ModelDefinition } from '@nestjs/mongoose'
 
-@Schema({
-  collection: 'role_permissions'
-})
-export class RolePermission extends RolePermissionEntity {
-}
+import { RolePermissionEntity, RolePermissionSchema } from 'src/entities/user'
 
 export const RolePermissionModel: ModelDefinition = {
-  name: RolePermission.name,
-  schema: SchemaFactory.createForClass(RolePermission)
+  name: RolePermissionEntity.name,
+  schema: RolePermissionSchema
 }
