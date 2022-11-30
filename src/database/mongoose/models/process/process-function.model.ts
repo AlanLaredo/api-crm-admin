@@ -1,27 +1,13 @@
-import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-
-import { IdentityLogSchema } from '../common'
+import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ProcessFunctionEntity } from 'src/entities/process'
 
 @Schema({
   collection: 'process_functions'
 })
-export class ProcessFunction extends IdentityLogSchema {
-  id?: Types.ObjectId
-
-  @Prop({ required: true })
-    name!: string
-
-  @Prop()
-    description?: string
-
-  @Prop({ required: true })
-    key!: string
+export class ProcessFunction extends ProcessFunctionEntity {
 }
-
-export const ProcessFunctionSchema = SchemaFactory.createForClass(ProcessFunction)
 
 export const ProcessFunctionModel: ModelDefinition = {
   name: ProcessFunction.name,
-  schema: ProcessFunctionSchema
+  schema: SchemaFactory.createForClass(ProcessFunction)
 }

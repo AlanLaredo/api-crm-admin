@@ -1,37 +1,14 @@
-import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import * as mongoose from 'mongoose'
+import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { IdentityLogSchema } from '../common'
+import { RecruitEntity } from 'src/entities/recruiment'
 
 @Schema({
   collection: 'recruits'
 })
-export class Recruit extends IdentityLogSchema {
-  id?: Types.ObjectId
-
-  @Prop({ required: true, unique: true })
-    data!: string
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    jobVacancyId!: Types.ObjectId
-
-  @Prop({ required: true })
-    interviewerName!: string
-
-  @Prop({ type: [String] })
-    requiredDocuments?: string[]
-
-  @Prop()
-    requiredInfo?: string
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    statusApplicantId!: Types.ObjectId
+export class Recruit extends RecruitEntity {
 }
-
-export const RecruitSchema = SchemaFactory.createForClass(Recruit)
 
 export const RecruitModel: ModelDefinition = {
   name: Recruit.name,
-  schema: RecruitSchema
+  schema: SchemaFactory.createForClass(Recruit)
 }

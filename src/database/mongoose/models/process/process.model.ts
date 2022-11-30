@@ -1,31 +1,13 @@
-import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import * as mongoose from 'mongoose'
-
-import { IdentityLogSchema } from '../common'
+import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ProcessEntity } from 'src/entities/process'
 
 @Schema({
   collection: 'processes'
 })
-export class Process extends IdentityLogSchema {
-  id?: Types.ObjectId
-
-  @Prop({ required: true })
-    name!: string
-
-  @Prop()
-    order!: number
-
-  @Prop({ types: [mongoose.Schema.Types.ObjectId] })
-    functionsIds?: Types.ObjectId[]
-
-  @Prop()
-    companyId!: Types.ObjectId
+export class Process extends ProcessEntity {
 }
-
-export const ProcessSchema = SchemaFactory.createForClass(Process)
 
 export const ProcessModel: ModelDefinition = {
   name: Process.name,
-  schema: ProcessSchema
+  schema: SchemaFactory.createForClass(Process)
 }

@@ -1,31 +1,14 @@
-import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import * as mongoose from 'mongoose'
+import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { IdentityLogSchema } from '../common'
+import { EmployeeReassignmentEntity } from 'src/entities/employee'
 
 @Schema({
   collection: 'employee_reassignments'
 })
-export class EmployeeReassignment extends IdentityLogSchema {
-  id?: Types.ObjectId
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    employeId!: Types.ObjectId
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    transmitterClientId!: Types.ObjectId
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    receiverClientId!: Types.ObjectId
-
-  @Prop()
-    reason?: string
+export class EmployeeReassignment extends EmployeeReassignmentEntity {
 }
-
-export const EmployeeReassignmentSchema = SchemaFactory.createForClass(EmployeeReassignment)
 
 export const EmployeeReassignmentModel: ModelDefinition = {
   name: EmployeeReassignment.name,
-  schema: EmployeeReassignmentSchema
+  schema: SchemaFactory.createForClass(EmployeeReassignment)
 }

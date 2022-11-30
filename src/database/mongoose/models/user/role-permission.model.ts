@@ -1,27 +1,13 @@
-import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-
-import { IdentityLogSchema } from '../common'
+import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { RolePermissionEntity } from 'src/entities/user'
 
 @Schema({
   collection: 'role_permissions'
 })
-export class RolePermission extends IdentityLogSchema {
-  id?: Types.ObjectId
-
-  @Prop({ required: true })
-    name!: string
-
-  @Prop()
-    description?: string
-
-  @Prop()
-    tag!: string
+export class RolePermission extends RolePermissionEntity {
 }
-
-export const RolePermissionSchema = SchemaFactory.createForClass(RolePermission)
 
 export const RolePermissionModel: ModelDefinition = {
   name: RolePermission.name,
-  schema: RolePermissionSchema
+  schema: SchemaFactory.createForClass(RolePermission)
 }

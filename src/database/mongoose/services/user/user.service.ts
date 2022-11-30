@@ -12,18 +12,18 @@ export class UserService extends BaseServiceMongoose<User> {
     super(mainModel)
   }
 /*
-  public async get (data: GetUsersFind = {}): Promise<UserEntity[]> {
+  public async get (data: GetUsersFind = {}): Promise<User[]> {
     return await this.UserModel.find({ ...data, deletedAt: null }).select('-password').exec()
   }
 
-  public async getById (id: Types.ObjectId): Promise<UserEntity> {
+  public async getById (id: Types.ObjectId): Promise<User> {
     const user = await this.UserModel.findById(
       id
     ).select('-password').exec()
     return user
   }
 
-  public async find (data: GetUsersFind = {}): Promise<UserEntity[]> {
+  public async find (data: GetUsersFind = {}): Promise<User[]> {
     const filters: any = {}
     Object.keys(data)
       .map(key => {
@@ -36,7 +36,7 @@ export class UserService extends BaseServiceMongoose<User> {
     return await this.UserModel.find({ ...data, deletedAt: null }).select('-password').exec()
   }
 
-  public async create (data: UserEntity): Promise<UserEntity> {
+  public async create (data: User): Promise<User> {
     data.username = data.username.trim().toLowerCase()
     data.password = await this.authService.getHashPassword(data.password)
     const newUser = await new this.UserModel({

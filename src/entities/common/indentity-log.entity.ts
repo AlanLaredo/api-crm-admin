@@ -1,6 +1,5 @@
 import { Prop, Schema } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import * as mongoose from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 
 @Schema()
 export abstract class IdentityLogEntity {

@@ -1,24 +1,13 @@
-import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-
-import { IdentityLogSchema } from '../common'
+import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ApplicantStatusEntity } from 'src/entities/recruiment'
 
 @Schema({
   collection: 'applicant_status'
 })
-export class ApplicantStatus extends IdentityLogSchema {
-  id?: Types.ObjectId
-
-  @Prop({ required: true })
-    name!: string
-
-  @Prop()
-    description?: string
+export class ApplicantStatus extends ApplicantStatusEntity {
 }
-
-export const ApplicantStatusSchema = SchemaFactory.createForClass(ApplicantStatus)
 
 export const ApplicantStatusModel: ModelDefinition = {
   name: ApplicantStatus.name,
-  schema: ApplicantStatusSchema
+  schema: SchemaFactory.createForClass(ApplicantStatus)
 }

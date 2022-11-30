@@ -1,11 +1,11 @@
-import { Prop, Schema } from '@nestjs/mongoose'
+import { Prop } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
 
-@Schema({
-  collection: 'role_permissions'
-})
+// @Schema({
+//   collection: 'role_permissions'
+// })
 export class RolePermissionEntity extends IdentityLogEntity {
   id?: Types.ObjectId
 

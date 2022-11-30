@@ -1,28 +1,14 @@
-import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import * as mongoose from 'mongoose'
+import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { IdentityLogSchema } from '../common'
+import { UserPreferencesEntity } from 'src/entities/user'
 
 @Schema({
   collection: 'user_preferences'
 })
-export class UserPreferences extends IdentityLogSchema {
-  id?: Types.ObjectId
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    userId!: Types.ObjectId
-
-  @Prop()
-    theme?: string
-
-  @Prop()
-    menuMode?: string
+export class UserPreferences extends UserPreferencesEntity {
 }
-
-export const UserPreferencesSchema = SchemaFactory.createForClass(UserPreferences)
 
 export const UserPreferencesModel: ModelDefinition = {
   name: UserPreferences.name,
-  schema: UserPreferencesSchema
+  schema: SchemaFactory.createForClass(UserPreferences)
 }

@@ -1,35 +1,12 @@
-import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import * as mongoose from 'mongoose'
+import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { IdentityLogSchema } from '../common'
+import { UserEntity } from 'src/entities/user'
 
 @Schema({
   collection: 'users'
 })
-export class User extends IdentityLogSchema {
-  id?: Types.ObjectId
-
-  @Prop({ required: true, unique: true })
-    username!: string
-
-  @Prop({ required: true })
-    password?: string
-
-  @Prop({ required: true, unique: true })
-    email!: string
-
-  @Prop({ required: true })
-    firstName!: string
-
-  @Prop()
-    lastName?: string
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId })
-    roleAccessId?: Types.ObjectId
+export class User extends UserEntity {
 }
-
-export const UserSchema = SchemaFactory.createForClass(User)
 
 export const UserModel: ModelDefinition = {
   name: User.name,

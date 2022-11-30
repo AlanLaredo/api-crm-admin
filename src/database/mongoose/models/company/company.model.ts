@@ -1,31 +1,14 @@
-import { ModelDefinition, Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
-import * as mongoose from 'mongoose'
+import { ModelDefinition, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { IdentityLogSchema } from '../common'
+import { CompanyEntity } from 'src/entities/company'
 
 @Schema({
   collection: 'companies'
 })
-export class Company extends IdentityLogSchema {
-  id?: Types.ObjectId
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    name!: Types.ObjectId
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId })
-    companyGroupId?: Types.ObjectId
-
-  @Prop()
-    logoImagePath?: string
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId })
-    companyId?: Types.ObjectId
+export class Company extends CompanyEntity {
 }
-
-export const CompanySchema = SchemaFactory.createForClass(Company)
 
 export const CompanyModel: ModelDefinition = {
   name: Company.name,
-  schema: CompanySchema
+  schema: SchemaFactory.createForClass(Company)
 }

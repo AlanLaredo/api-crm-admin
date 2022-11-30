@@ -2,7 +2,7 @@ import { Module, Global } from '@nestjs/common'
 import { ConfigType } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import config from '../environments/config'
+import configuration from '../environments/configuration'
 import { MONGOOSE_MODELS } from './mongoose/models'
 import { MONGOOSE_SERVICES } from './mongoose/services'
 
@@ -11,7 +11,7 @@ import { MONGOOSE_SERVICES } from './mongoose/services'
   imports: [
     MongooseModule.forFeature([...MONGOOSE_MODELS]),
     MongooseModule.forRootAsync({
-      useFactory: async (configService: ConfigType<typeof config>) => {
+      useFactory: async (configService: ConfigType<typeof configuration>) => {
         const {
           connection,
           user,
@@ -32,7 +32,7 @@ import { MONGOOSE_SERVICES } from './mongoose/services'
           tlsInsecure: true
         }
       },
-      inject: [config.KEY]
+      inject: [configuration.KEY]
     })
   ],
   providers: [

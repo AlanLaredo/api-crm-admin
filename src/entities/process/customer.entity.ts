@@ -1,11 +1,11 @@
-import { Prop, Schema } from '@nestjs/mongoose'
+import { Prop } from '@nestjs/mongoose'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity, PersonEntity } from '../common'
 
-@Schema({
-  collection: 'curstomers'
-})
+// @Schema({
+//   collection: 'curstomers'
+// })
 export class CustomerEntity extends IdentityLogEntity {
   id?: Types.ObjectId
 
