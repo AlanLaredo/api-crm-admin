@@ -1,17 +1,21 @@
+import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
 
-@Schema({
+@ObjectType()@Schema({
   collection: 'job_vacancy_status'
 })
 export class JobVacancyStatusEntity extends IdentityLogEntity {
-  id?: Types.ObjectId
+  @Field(() => ID)
+    id?: Types.ObjectId
 
+  @Field()
   @Prop({ required: true })
     name!: string
 
+  @Field()
   @Prop()
     description?: string
 }

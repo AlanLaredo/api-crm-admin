@@ -1,24 +1,34 @@
-import { Prop, Schema } from '@nestjs/mongoose'
+import { Field, ObjectType } from '@nestjs/graphql'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { AddressEntity } from './address.entity'
+import { AddressEntity, AddressSchema } from './address.entity'
 
+@ObjectType()
 @Schema()
-export abstract class PersonEntity {
+export class PersonEntity {
+  @Field()
   @Prop({ required: true })
     name!: string
 
+  @Field()
   @Prop()
     lastName?: string
 
+  @Field(type => [String])
   @Prop({ type: [String] })
     phoneContacts?: string[]
 
+  @Field(type => [String])
   @Prop({ type: [String] })
     emails?: string[]
 
+  @Field()
   @Prop()
     comments?: string
 
-  @Prop({ type: AddressEntity })
+  @Field(type => AddressEntity)
+  @Prop({ type: AddressSchema })
     address?: AddressEntity
 }
+
+export const PersonSchema = SchemaFactory.createForClass(PersonEntity)

@@ -1,14 +1,16 @@
-import { Field, Float, ID, Int } from '@nestjs/graphql'
+import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose, { Types } from 'mongoose'
 
-import { IdentityLogEntity, PersonEntity } from '../common'
+import { IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
 
+@ObjectType()
 @Schema({
   collection: 'client_services'
 })
 export class ClientServiceEntity extends IdentityLogEntity {
-  id?: Types.ObjectId
+  @Field(() => ID)
+    id?: Types.ObjectId
 
   @Field(type => ID, { nullable: false })
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
@@ -75,10 +77,10 @@ export class ClientServiceEntity extends IdentityLogEntity {
     startDate?: Date
 
   @Field(type => PersonEntity)
-  @Prop({ type: PersonEntity })
+  @Prop({ type: PersonSchema })
     emergencyContact?: PersonEntity
 
-  @Prop({ type: PersonEntity })
+  @Prop({ type: PersonSchema })
     paymentContact?: PersonEntity
 
   @Prop()

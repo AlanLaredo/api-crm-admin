@@ -1,9 +1,11 @@
 import { IdentityLogEntity } from './indentity-log.entity'
-import { AddressEntity } from './address.entity'
-import { PersonEntity } from './person.entity'
+import { AddressEntity, AddressSchema } from './address.entity'
+import { PersonEntity, PersonSchema } from './person.entity'
 
 export {
   IdentityLogEntity,
   AddressEntity,
-  PersonEntity
+  AddressSchema,
+  PersonEntity,
+  PersonSchema
 }

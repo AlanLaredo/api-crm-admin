@@ -1,29 +1,38 @@
+import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose, { Types } from 'mongoose'
 
-import { IdentityLogEntity } from '../common'
+import { IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
 
+@ObjectType()
 @Schema({
   collection: 'recruits'
 })
 export class RecruitEntity extends IdentityLogEntity {
-  id?: Types.ObjectId
+  @Field(() => ID)
+    id?: Types.ObjectId
 
-  @Prop({ required: true, unique: true })
-    data!: string
+  @Field()
+  @Prop({ type: PersonSchema, required: true })
+    data!: PersonEntity
 
+  @Field()
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     jobVacancyId!: Types.ObjectId
 
+  @Field()
   @Prop({ required: true })
     interviewerName!: string
 
+  @Field()
   @Prop({ type: [String] })
     requiredDocuments?: string[]
 
+  @Field()
   @Prop()
     requiredInfo?: string
 
+  @Field()
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     statusApplicantId!: Types.ObjectId
 }

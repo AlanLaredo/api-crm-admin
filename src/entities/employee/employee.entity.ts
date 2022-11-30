@@ -1,33 +1,43 @@
+import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose, { Types } from 'mongoose'
 
-import { AddressEntity, IdentityLogEntity, PersonEntity } from '../common'
+import { AddressEntity, AddressSchema, IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
 
+@ObjectType()
 @Schema({
   collection: 'employees'
 })
 export class EmployeeEntity extends IdentityLogEntity {
-  id?: Types.ObjectId
+  @Field(() => ID)
+    id?: Types.ObjectId
 
+  @Field()
   @Prop()
     keycode?: string
 
-  @Prop({ type: PersonEntity, required: true })
+  @Field(type => PersonEntity)
+  @Prop({ type: PersonSchema, required: true })
     person!: PersonEntity
 
+  @Field(type => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     positionId?: Types.ObjectId
 
+  @Field()
   @Prop()
     hiringDate?: Date
 
+  @Field()
   @Prop()
     startOperationDate?: Date
 
+  @Field(type => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     clientId?: Types.ObjectId
 
-  @Prop({ type: AddressEntity })
+  @Field(type => AddressEntity)
+  @Prop({ type: AddressSchema })
     address?: AddressEntity
 }
 

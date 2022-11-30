@@ -1,23 +1,29 @@
+import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
 
-@Schema({
+@ObjectType()@Schema({
   collection: 'processes'
 })
 export class ProcessEntity extends IdentityLogEntity {
-  id?: Types.ObjectId
+  @Field(() => ID)
+    id?: Types.ObjectId
 
+  @Field()
   @Prop({ required: true })
     name!: string
 
+  @Field()
   @Prop()
     order!: number
 
+  @Field()
   @Prop({ types: [mongoose.Schema.Types.ObjectId] })
     functionsIds?: Types.ObjectId[]
 
+  @Field()
   @Prop()
     companyId!: Types.ObjectId
 }
