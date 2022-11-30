@@ -1,10 +1,13 @@
 
-import { CompanyEntity } from './company.entity'
-import { CompanyGroupEntity } from './company-group.entity'
-import { CompanyUserEntity } from './company-user.entity'
+import { CompanyEntity, CompanySchema } from './company.entity'
+import { CompanyGroupEntity, CompanyGroupSchema } from './company-group.entity'
+import { CompanyUserEntity, CompanyUserSchema } from './company-user.entity'
 
 export {
   CompanyEntity,
+  CompanySchema,
   CompanyGroupEntity,
-  CompanyUserEntity
+  CompanyGroupSchema,
+  CompanyUserEntity,
+  CompanyUserSchema
 }

@@ -1,11 +1,11 @@
-import { Prop } from '@nestjs/mongoose'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
 
-// @Schema({
-//   collection: 'process_functions'
-// })
+@Schema({
+  collection: 'process_functions'
+})
 export class ProcessFunctionEntity extends IdentityLogEntity {
   id?: Types.ObjectId
 
@@ -18,3 +18,5 @@ export class ProcessFunctionEntity extends IdentityLogEntity {
   @Prop({ required: true })
     key!: string
 }
+
+export const ProcessFunctionSchema = SchemaFactory.createForClass(ProcessFunctionEntity)

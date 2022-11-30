@@ -8,7 +8,9 @@ import { CompanyUserEntity } from 'src/entities/company'
 export class CompanyUser extends CompanyUserEntity {
 }
 
+export const CompanyUserSchema = SchemaFactory.createForClass(CompanyUser)
+
 export const CompanyUserModel: ModelDefinition = {
   name: CompanyUser.name,
-  schema: SchemaFactory.createForClass(CompanyUser)
+  schema: CompanyUserSchema
 }

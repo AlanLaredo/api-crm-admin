@@ -8,7 +8,9 @@ import { ClientEntity } from 'src/entities/client'
 export class Client extends ClientEntity {
 }
 
+export const ClientSchema = SchemaFactory.createForClass(Client)
+
 export const ClientModel: ModelDefinition = {
   name: Client.name,
-  schema: SchemaFactory.createForClass(Client)
+  schema: ClientSchema
 }

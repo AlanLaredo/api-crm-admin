@@ -1,8 +1,10 @@
 
-import { ActionLogEntity } from './action-log.entity'
-import { MetaConfigurationEntity } from './meta-configuration.entity'
+import { ActionLogEntity, ActionLogSchema } from './action-log.entity'
+import { MetaConfigurationEntity, MetaConfigurationSchema } from './meta-configuration.entity'
 
 export {
   ActionLogEntity,
-  MetaConfigurationEntity
+  ActionLogSchema,
+  MetaConfigurationEntity,
+  MetaConfigurationSchema
 }

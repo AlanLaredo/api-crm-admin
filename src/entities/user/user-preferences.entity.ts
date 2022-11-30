@@ -1,11 +1,11 @@
-import { Prop } from '@nestjs/mongoose'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
 
-// @Schema({
-//   collection: 'user_preferences'
-// })
+@Schema({
+  collection: 'user_preferences'
+})
 export class UserPreferencesEntity extends IdentityLogEntity {
   id?: Types.ObjectId
 
@@ -18,3 +18,5 @@ export class UserPreferencesEntity extends IdentityLogEntity {
   @Prop()
     menuMode?: string
 }
+
+export const UserPreferencesSchema = SchemaFactory.createForClass(UserPreferencesEntity)

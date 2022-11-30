@@ -1,8 +1,10 @@
 
-import { EmployeeReassignmentEntity } from './employee-reassignment.entity'
-import { EmployeeEntity } from './employee.entity'
+import { EmployeeReassignmentEntity, EmployeeReassignmentSchema } from './employee-reassignment.entity'
+import { EmployeeEntity, EmployeeSchema } from './employee.entity'
 
 export {
   EmployeeReassignmentEntity,
-  EmployeeEntity
+  EmployeeReassignmentSchema,
+  EmployeeEntity,
+  EmployeeSchema
 }

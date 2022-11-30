@@ -29,7 +29,12 @@ export class AppController {
       email: '1santiagoalan@gmail.com',
       firstName: 'Santiago',
       createdAt: new Date(),
-      createdBy: new Types.ObjectId(systemId)
+      createdBy: new Types.ObjectId(systemId),
+      roleAccess: [{
+        name: 'test 2',
+        createdAt: new Date(),
+        createdBy: new mongoose.Types.ObjectId(systemId)
+      }]
     }
 
     const newUser2: UserEntity = {
@@ -38,7 +43,12 @@ export class AppController {
       email: '1dep@gmail.com',
       firstName: 'Rodolfo',
       createdAt: new Date(),
-      createdBy: new mongoose.Types.ObjectId(systemId)
+      createdBy: new mongoose.Types.ObjectId(systemId),
+      roleAccess: [{
+        name: 'test 222 ',
+        createdAt: new Date(),
+        createdBy: new mongoose.Types.ObjectId(systemId)
+      }]
     }
 
     console.log('adsasd' + newUser.firstName)

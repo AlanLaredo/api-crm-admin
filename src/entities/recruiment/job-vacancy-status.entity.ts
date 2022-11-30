@@ -1,11 +1,11 @@
-import { Prop } from '@nestjs/mongoose'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
 
-// @Schema({
-//   collection: 'job_vacancy_status'
-// })
+@Schema({
+  collection: 'job_vacancy_status'
+})
 export class JobVacancyStatusEntity extends IdentityLogEntity {
   id?: Types.ObjectId
 
@@ -15,3 +15,5 @@ export class JobVacancyStatusEntity extends IdentityLogEntity {
   @Prop()
     description?: string
 }
+
+export const JobVacancyStatusSchema = SchemaFactory.createForClass(JobVacancyStatusEntity)

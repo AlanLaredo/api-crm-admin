@@ -1,62 +1,80 @@
-import { Prop } from '@nestjs/mongoose'
+import { Field, Float, ID, Int } from '@nestjs/graphql'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity, PersonEntity } from '../common'
 
-// @Schema({
-//   collection: 'client_services'
-// })
+@Schema({
+  collection: 'client_services'
+})
 export class ClientServiceEntity extends IdentityLogEntity {
   id?: Types.ObjectId
 
+  @Field(type => ID, { nullable: false })
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     cientId!: Types.ObjectId
 
+  @Field()
   @Prop()
     serviceType?: string
 
+  @Field()
   @Prop()
     scheduleHours?: string
 
+  @Field(type => Float)
   @Prop()
     serviceCost?: number
 
+  @Field(type => Float)
   @Prop()
     elementCost?: number
 
+  @Field(type => Float)
   @Prop()
     patrolCost?: number
 
+  @Field(type => Float)
   @Prop()
     quadBikeCost?: number
 
+  @Field(type => Float)
   @Prop()
     bossShiftCost?: number
 
+  @Field(type => Float)
   @Prop()
     qrCost?: number
 
+  @Field(type => Float)
   @Prop()
-    costHolyDays?: string
+    costHolyDays?: number
 
+  @Field()
   @Prop()
     addressExecution?: string
 
+  @Field(type => Int)
   @Prop()
     totalElementsDay?: number
 
+  @Field(type => Int)
   @Prop()
     totalElementsNight?: number
 
+  @Field(type => Int)
   @Prop()
     totalPatrol?: number
 
+  @Field(type => Int)
   @Prop()
     totalQaudBike?: number
 
+  @Field(type => Date)
   @Prop()
     startDate?: Date
 
+  @Field(type => PersonEntity)
   @Prop({ type: PersonEntity })
     emergencyContact?: PersonEntity
 
@@ -90,3 +108,5 @@ export class ClientServiceEntity extends IdentityLogEntity {
   @Prop()
     paymentForm?: string
 }
+
+export const ClientServiceSchema = SchemaFactory.createForClass(ClientServiceEntity)

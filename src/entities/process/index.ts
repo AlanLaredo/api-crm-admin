@@ -1,10 +1,13 @@
 
-import { CustomerEntity } from './customer.entity'
-import { ProcessFunctionEntity } from './process-function.entity'
-import { ProcessEntity } from './process.entity'
+import { CustomerEntity, CustomerSchema } from './customer.entity'
+import { ProcessFunctionEntity, ProcessFunctionSchema } from './process-function.entity'
+import { ProcessEntity, ProcessSchema } from './process.entity'
 
 export {
   CustomerEntity,
+  CustomerSchema,
   ProcessFunctionEntity,
-  ProcessEntity
+  ProcessFunctionSchema,
+  ProcessEntity,
+  ProcessSchema
 }
