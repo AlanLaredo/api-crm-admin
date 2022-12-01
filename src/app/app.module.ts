@@ -1,7 +1,7 @@
-// import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { ConfigModule } from '@nestjs/config'
-// import { GraphQLModule } from '@nestjs/graphql'
+import { GraphQLModule } from '@nestjs/graphql'
 import { Module } from '@nestjs/common'
+import { MercuriusDriverConfig, MercuriusDriver } from '@nestjs/mercurius'
 
 import configuration from '../environments/configuration'
 import { ENVIRONMENTS, JOI_VALIDATION_SCHEMA } from '../environments'
@@ -17,13 +17,12 @@ import { MODULES } from '../modules'
       isGlobal: true,
       validationSchema: JOI_VALIDATION_SCHEMA
     }),
-    // GraphQLModule.forRoot<ApolloDriverConfig>({
-    //   driver: ApolloDriver,
-    //   // TODO: check this property @Alan installSubscriptionHandlers: true,
-    //   autoSchemaFile: 'admin-schemas.gql',
-    //   playground: true,
-    //   path: '/admin'
-    // }),
+    GraphQLModule.forRoot<MercuriusDriverConfig>({
+      driver: MercuriusDriver,
+      autoSchemaFile: 'crm-schemas.gql',
+      path: '/admin',
+      graphiql: true
+    }),
     ...MODULES
   ],
   controllers: [AppController],
