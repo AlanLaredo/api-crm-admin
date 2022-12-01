@@ -10,8 +10,8 @@ import { CommonModule } from '../common/common.module'
   providers: [],
   exports: []
 })
-export class UsersModule {
+export class CompanyModule {
   constructor () {
-    console.log('Users module sucessfully initialized.')
+    console.log('Company module sucessfully initialized.')
   }
 }

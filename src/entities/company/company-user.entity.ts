@@ -15,7 +15,7 @@ export class CompanyUserEntity extends IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     companyId!: Types.ObjectId
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     userId!: Types.ObjectId
 }

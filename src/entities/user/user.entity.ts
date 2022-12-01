@@ -9,11 +9,7 @@ import { IdentityLogEntity } from '../common'
   collection: 'users'
 })
 export class UserEntity extends IdentityLogEntity {
-  @Field(type => {
-    console.log('data type')
-    console.log(type)
-    return ID
-  })
+  @Field(type => ID)
     id?: Types.ObjectId
 
   @Field()
@@ -36,7 +32,7 @@ export class UserEntity extends IdentityLogEntity {
   @Prop()
     lastName?: string
 
-  @Field()
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     roleAccessId?: Types.ObjectId
 }

@@ -1,19 +1,19 @@
 import { AuthModule } from './auth/auth.module'
-import { ClientsModule } from './clients/clients.module'
-import { CompaniesModule } from './companies/companies.module'
+import { ClientModule } from './client/client.module'
+import { CompanyModule } from './company/company.module'
 import { CoreModule } from './core/core.module'
-import { EmployeesModule } from './employees/employees.module'
+import { EmployeeModule } from './employee/employee.module'
 import { ProcessModule } from './process/process.module'
-import { RecruimentsModule } from './recruiments/recruiments.module'
-import { UsersModule } from './users/users.module'
+import { RecruimentModule } from './recruiment/recruiment.module'
+import { UserModule } from './user/user.module'
 
 export const MODULES = [
   AuthModule,
-  ClientsModule,
-  CompaniesModule,
+  ClientModule,
+  CompanyModule,
   CoreModule,
-  EmployeesModule,
+  EmployeeModule,
   ProcessModule,
-  RecruimentsModule,
-  UsersModule
+  RecruimentModule,
+  UserModule
 ]

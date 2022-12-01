@@ -1,17 +1,20 @@
 import { Module, Global } from '@nestjs/common'
 
 import { CommonModule } from '../common/common.module'
+import { USER_RESOLVERS } from './resolvers'
 
 @Global()
 @Module({
   imports: [
     CommonModule
   ],
-  providers: [],
+  providers: [
+    ...USER_RESOLVERS
+  ],
   exports: []
 })
-export class ClientsModule {
+export class UserModule {
   constructor () {
-    console.log('Clients module sucessfully initialized.')
+    console.log('User module sucessfully initialized.')
   }
 }

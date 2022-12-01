@@ -12,7 +12,7 @@ export class ActionLogEntity extends IdentityLogEntity {
   @Field(() => ID)
     id?: Types.ObjectId
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ types: mongoose.Schema.Types.ObjectId, required: true })
     userId!: Types.ObjectId
 

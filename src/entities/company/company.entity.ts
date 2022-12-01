@@ -12,11 +12,11 @@ export class CompanyEntity extends IdentityLogEntity {
   @Field(() => ID)
     id?: Types.ObjectId
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     name!: Types.ObjectId
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     companyGroupId?: Types.ObjectId
 
@@ -24,7 +24,7 @@ export class CompanyEntity extends IdentityLogEntity {
   @Prop()
     logoImagePath?: string
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     companyId?: Types.ObjectId
 }

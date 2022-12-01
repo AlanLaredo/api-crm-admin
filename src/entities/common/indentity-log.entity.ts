@@ -5,7 +5,7 @@ import mongoose, { Types } from 'mongoose'
 @ObjectType()
 @Schema()
 export abstract class IdentityLogEntity {
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     createdBy!: Types.ObjectId
 
@@ -13,19 +13,19 @@ export abstract class IdentityLogEntity {
   @Prop({ required: true })
     createdAt!: Date
 
-  @Field(type => ID)
+  @Field(() => ID, { nullable: true })
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     modifiedBy?: Types.ObjectId
 
-  @Field(type => Date)
+  @Field(type => Date, { nullable: true })
   @Prop()
     modifiedAt?: Date
 
-  @Field(type => ID)
+  @Field(() => ID, { nullable: true })
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     deletedBy?: Types.ObjectId
 
-  @Field(type => Date)
+  @Field(type => Date, { nullable: true })
   @Prop()
     deletedAt?: Date
 }

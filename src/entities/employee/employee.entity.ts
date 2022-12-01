@@ -20,7 +20,7 @@ export class EmployeeEntity extends IdentityLogEntity {
   @Prop({ type: PersonSchema, required: true })
     person!: PersonEntity
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     positionId?: Types.ObjectId
 
@@ -32,7 +32,7 @@ export class EmployeeEntity extends IdentityLogEntity {
   @Prop()
     startOperationDate?: Date
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     clientId?: Types.ObjectId
 

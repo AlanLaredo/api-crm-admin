@@ -24,9 +24,9 @@ export class RecruitEntity extends IdentityLogEntity {
   @Prop({ required: true })
     interviewerName!: string
 
-  @Field()
+  @Field(type => [String])
   @Prop({ type: [String] })
-    requiredDocuments?: string[]
+    requiredDocumentsPaths?: string[]
 
   @Field()
   @Prop()

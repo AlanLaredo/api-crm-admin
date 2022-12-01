@@ -12,15 +12,15 @@ export class EmployeeReassignmentEntity extends IdentityLogEntity {
   @Field(() => ID)
     id?: Types.ObjectId
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     employeId!: Types.ObjectId
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     transmitterClientId!: Types.ObjectId
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     receiverClientId!: Types.ObjectId
 

@@ -12,7 +12,7 @@ export class ClientServiceEntity extends IdentityLogEntity {
   @Field(() => ID)
     id?: Types.ObjectId
 
-  @Field(type => ID, { nullable: false })
+  @Field(() => ID, { nullable: false })
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     cientId!: Types.ObjectId
 

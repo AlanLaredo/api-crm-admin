@@ -36,7 +36,7 @@ export class ClientEntity extends IdentityLogEntity {
   @Prop({ type: AddressSchema })
     fiscalAddress?: AddressEntity
 
-  @Field(type => ID)
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     companyId!: Types.ObjectId
 }

@@ -20,7 +20,7 @@ export class UserRoleEntity extends IdentityLogEntity {
   @Prop()
     description?: string
 
-  @Field()
+  @Field(type => [mongoose.Schema.Types.ObjectId])
   @Prop({ type: [mongoose.Schema.Types.ObjectId] })
     permissionsIds?: Types.ObjectId[]
 }
