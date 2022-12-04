@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Exclude } from 'class-transformer'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
@@ -16,7 +17,7 @@ export class UserEntity extends IdentityLogEntity {
   @Prop({ required: true, unique: true })
     username!: string
 
-  @Field()
+  @Exclude()
   @Prop({ required: true })
     password?: string
 
@@ -28,12 +29,12 @@ export class UserEntity extends IdentityLogEntity {
   @Prop({ required: true })
     firstName!: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     lastName?: string
 
-  @Field(() => ID)
-  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  @Field(() => ID, { nullable: true })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, nullable: true })
     roleAccessId?: Types.ObjectId
 }
 

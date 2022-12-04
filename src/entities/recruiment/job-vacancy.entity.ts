@@ -24,7 +24,7 @@ export class JobVacancyEntity extends IdentityLogEntity {
   @Prop({ required: true })
     totalVacancies!: number
 
-  @Field(type => [String])
+  @Field(type => [String], { nullable: true })
   @Prop({ type: [String] })
     requiredDocumentsPaths?: string[]
 

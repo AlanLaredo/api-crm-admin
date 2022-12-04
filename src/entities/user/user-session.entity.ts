@@ -16,7 +16,7 @@ export class UserSessionEntity extends IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     userId!: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop({ default: false })
     changePassword?: boolean
 

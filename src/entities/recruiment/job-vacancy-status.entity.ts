@@ -15,7 +15,7 @@ export class JobVacancyStatusEntity extends IdentityLogEntity {
   @Prop({ required: true })
     name!: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     description?: string
 }

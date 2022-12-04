@@ -16,15 +16,15 @@ export class CompanyEntity extends IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     name!: Types.ObjectId
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     companyGroupId?: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     logoImagePath?: string
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     companyId?: Types.ObjectId
 }

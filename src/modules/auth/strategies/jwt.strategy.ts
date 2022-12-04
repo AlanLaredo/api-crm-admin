@@ -4,7 +4,7 @@ import { PassportStrategy } from '@nestjs/passport'
 import config from '../../../environments/configuration'
 
 import { Strategy, ExtractJwt } from 'passport-jwt'
-import { PayloadTokenInterface } from '../shared/interfaces/token.interface'
+import { IToken } from '../shared/interfaces'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     })
   }
 
-  validate (payload: PayloadTokenInterface) {
+  validate (payload: IToken) {
     return payload
   }
 }

@@ -16,98 +16,98 @@ export class ClientServiceEntity extends IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     cientId!: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     serviceType?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     scheduleHours?: string
 
-  @Field(type => Float)
+  @Field(type => Float, { nullable: true })
   @Prop()
     serviceCost?: number
 
-  @Field(type => Float)
+  @Field(type => Float, { nullable: true })
   @Prop()
     elementCost?: number
 
-  @Field(type => Float)
+  @Field(type => Float, { nullable: true })
   @Prop()
     patrolCost?: number
 
-  @Field(type => Float)
+  @Field(type => Float, { nullable: true })
   @Prop()
     quadBikeCost?: number
 
-  @Field(type => Float)
+  @Field(type => Float, { nullable: true })
   @Prop()
     bossShiftCost?: number
 
-  @Field(type => Float)
+  @Field(type => Float, { nullable: true })
   @Prop()
     qrCost?: number
 
-  @Field(type => Float)
+  @Field(type => Float, { nullable: true })
   @Prop()
     costHolyDays?: number
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     addressExecution?: string
 
-  @Field(type => Int)
+  @Field(type => Int, { nullable: true })
   @Prop()
     totalElementsDay?: number
 
-  @Field(type => Int)
+  @Field(type => Int, { nullable: true })
   @Prop()
     totalElementsNight?: number
 
-  @Field(type => Int)
+  @Field(type => Int, { nullable: true })
   @Prop()
     totalPatrol?: number
 
-  @Field(type => Int)
+  @Field(type => Int, { nullable: true })
   @Prop()
     totalQaudBike?: number
 
-  @Field(type => Date)
+  @Field(type => Date, { nullable: true })
   @Prop()
     startDate?: Date
 
-  @Field(type => PersonEntity)
+  @Field(type => PersonEntity, { nullable: true })
   @Prop({ type: PersonSchema })
     emergencyContact?: PersonEntity
 
-  @Prop({ type: PersonSchema })
+  @Prop({ type: PersonSchema, nullable: true })
     paymentContact?: PersonEntity
 
-  @Prop()
+  @Prop({ nullable: true })
     creditDays?: string
 
-  @Prop()
+  @Prop({ nullable: true })
     paymentDays?: string
 
-  @Prop()
+  @Prop({ nullable: true })
     folioCounterReceipt?: string
 
-  @Prop()
+  @Prop({ nullable: true })
     billing?: string
 
-  @Prop()
+  @Prop({ nullable: true })
     branchBank?: string
 
-  @Prop()
+  @Prop({ nullable: true })
     lastFourDigits?: string
 
-  @Prop()
+  @Prop({ nullable: true })
     paymentMethod?: string
 
-  @Prop()
+  @Prop({ nullable: true })
     usageCfdi?: string
 
-  @Prop()
+  @Prop({ nullable: true })
     paymentForm?: string
 }
 

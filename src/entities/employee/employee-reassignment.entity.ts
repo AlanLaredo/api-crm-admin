@@ -24,7 +24,7 @@ export class EmployeeReassignmentEntity extends IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     receiverClientId!: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     reason?: string
 }

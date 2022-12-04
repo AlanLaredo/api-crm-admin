@@ -24,11 +24,11 @@ export class RecruitEntity extends IdentityLogEntity {
   @Prop({ required: true })
     interviewerName!: string
 
-  @Field(type => [String])
+  @Field(type => [String], { nullable: true })
   @Prop({ type: [String] })
     requiredDocumentsPaths?: string[]
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     requiredInfo?: string
 

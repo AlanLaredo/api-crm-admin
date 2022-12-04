@@ -12,11 +12,11 @@ export class ClientEntity extends IdentityLogEntity {
   @Field(() => ID)
     id?: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     keycode?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     rfc?: string
 
@@ -24,15 +24,15 @@ export class ClientEntity extends IdentityLogEntity {
   @Prop({ required: true })
     businessName!: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     businessReason?: string
 
-  @Field(type => PersonEntity)
+  @Field(type => PersonEntity, { nullable: true })
   @Prop({ type: PersonSchema })
     legalRepresentativeContact?: PersonEntity
 
-  @Field(type => AddressEntity)
+  @Field(type => AddressEntity, { nullable: true })
   @Prop({ type: AddressSchema })
     fiscalAddress?: AddressEntity
 

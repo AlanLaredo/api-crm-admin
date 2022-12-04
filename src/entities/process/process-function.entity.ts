@@ -16,7 +16,7 @@ export class ProcessFunctionEntity extends IdentityLogEntity {
   @Prop({ required: true })
     name!: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     description?: string
 

@@ -12,7 +12,7 @@ export class EmployeeEntity extends IdentityLogEntity {
   @Field(() => ID)
     id?: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     keycode?: string
 
@@ -20,23 +20,23 @@ export class EmployeeEntity extends IdentityLogEntity {
   @Prop({ type: PersonSchema, required: true })
     person!: PersonEntity
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     positionId?: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     hiringDate?: Date
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     startOperationDate?: Date
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     clientId?: Types.ObjectId
 
-  @Field(type => AddressEntity)
+  @Field(type => AddressEntity, { nullable: true })
   @Prop({ type: AddressSchema })
     address?: AddressEntity
 }

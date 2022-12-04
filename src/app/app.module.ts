@@ -8,6 +8,7 @@ import { ENVIRONMENTS, JOI_VALIDATION_SCHEMA } from '../environments'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { MODULES } from '../modules'
+import errorFormatterFunction from './error-config.function'
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { MODULES } from '../modules'
       driver: MercuriusDriver,
       autoSchemaFile: 'crm-schemas.gql',
       path: '/admin',
-      graphiql: true
+      graphiql: true,
+      errorFormatter: errorFormatterFunction
     }),
     ...MODULES
   ],

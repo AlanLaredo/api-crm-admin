@@ -32,19 +32,19 @@ export class CustomerEntity extends IdentityLogEntity {
   @Prop({ required: true })
     customerName!: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     catalogPriority?: number
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     attachedQuotePath?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     comments?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop({ type: PersonSchema })
     contact?: PersonEntity
 }

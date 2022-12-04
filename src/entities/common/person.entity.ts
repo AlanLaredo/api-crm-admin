@@ -10,23 +10,23 @@ export class PersonEntity {
   @Prop({ required: true })
     name!: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     lastName?: string
 
-  @Field(type => [String])
+  @Field(type => [String], { nullable: true })
   @Prop({ type: [String] })
     phoneContacts?: string[]
 
-  @Field(type => [String])
+  @Field(type => [String], { nullable: true })
   @Prop({ type: [String] })
     emails?: string[]
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     comments?: string
 
-  @Field(type => AddressEntity)
+  @Field(type => AddressEntity, { nullable: true })
   @Prop({ type: AddressSchema })
     address?: AddressEntity
 }

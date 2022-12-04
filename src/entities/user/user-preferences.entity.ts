@@ -16,11 +16,11 @@ export class UserPreferencesEntity extends IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     userId!: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     theme?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     menuMode?: string
 }

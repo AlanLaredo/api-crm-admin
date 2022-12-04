@@ -16,7 +16,7 @@ export class ActionLogEntity extends IdentityLogEntity {
   @Prop({ types: mongoose.Schema.Types.ObjectId, required: true })
     userId!: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop({ type: String })
     file?: string
 
@@ -24,7 +24,7 @@ export class ActionLogEntity extends IdentityLogEntity {
   @Prop({ type: String, required: true })
     action!: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop({ type: String })
     description?: string
 }

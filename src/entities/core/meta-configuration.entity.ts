@@ -16,11 +16,11 @@ export class MetaConfigurationEntity extends IdentityLogEntity {
   @Prop({ type: String, required: true })
     key!: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop({ type: String, required: false, default: null })
     value?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop({ type: String })
     description?: string
 

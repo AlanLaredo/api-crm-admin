@@ -1,18 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { InjectModel } from '@nestjs/mongoose'
 import * as bcrypt from 'bcrypt'
-import { Model } from 'mongoose'
+import { UserService } from 'src/database/mongoose/services/user'
 
 import { RolePermissionEntity, UserEntity } from 'src/entities/user'
-import { PayloadTokenInterface } from '../shared/interfaces/token.interface'
+import { IToken } from '../shared/interfaces'
 
 @Injectable()
 export class AuthService {
   /* eslint-disable no-useless-constructor */
   constructor (
-    @InjectModel(UserEntity.name) private userModel: Model<UserEntity>,
-    private jwtService: JwtService) { }
+    private jwtService: JwtService,
+    private userService: UserService) { }
 
   public async getHashPassword (password: string): Promise<string> {
     return await bcrypt.hash(password, 10)
@@ -24,7 +23,8 @@ export class AuthService {
 
   public async login (username: string, noHashedPassword: string): Promise<UserEntity> {
     username = username.toLowerCase()
-    const user = await this.userModel.findOne({ username })
+    const user: any = await this.userService.getOne({ username })
+
     if (!user) {
       throw new UnauthorizedException('The user not exists')
     }
@@ -39,11 +39,10 @@ export class AuthService {
   public async generateToken (user: UserEntity) {
     const permissions: RolePermissionEntity[] = await this.getPermissions(user)
     const { _id } = { ...user } as any
-    const payload: PayloadTokenInterface = {
+    const payload: IToken = {
       userId: _id,
       permissions
     }
-
     // const { permissionsConfig, ...userWithoutPermissions } = user
 
     return {

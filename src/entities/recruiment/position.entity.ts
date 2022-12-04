@@ -20,7 +20,7 @@ export class PositionEntity extends IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     clientId!: Types.ObjectId
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     salary?: number
 }

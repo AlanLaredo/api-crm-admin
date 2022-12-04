@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 
@@ -10,6 +11,11 @@ async function bootstrap () {
     AppModule,
     new FastifyAdapter()
   )
+
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidUnknownValues: true
+  }))
 
   const configService = app.get(ConfigService)
   await app.listen(configService.get('SYSTEM_PORT'))

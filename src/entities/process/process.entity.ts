@@ -19,7 +19,7 @@ export class ProcessEntity extends IdentityLogEntity {
   @Prop()
     order!: number
 
-  @Field(type => [mongoose.Schema.Types.ObjectId])
+  @Field(type => [mongoose.Schema.Types.ObjectId], { nullable: true })
   @Prop({ types: [mongoose.Schema.Types.ObjectId] })
     functionsIds?: Types.ObjectId[]
 

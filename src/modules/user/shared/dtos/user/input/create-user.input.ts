@@ -1,5 +1,5 @@
 import { InputType, Field, ID } from '@nestjs/graphql'
-import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsEmail, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import { Types } from 'mongoose'
 
 @InputType()
@@ -11,11 +11,10 @@ export class CreateUserInput {
 
   @IsOptional()
   @IsString()
-  @Field()
+  @Field({ nullable: true })
     password?: string
 
-  @IsNotEmpty()
-  @IsString()
+  @IsEmail()
   @Field()
     email!: string
 
@@ -26,11 +25,11 @@ export class CreateUserInput {
 
   @IsOptional()
   @IsString()
-  @Field()
+  @Field({ nullable: true })
     lastName?: string
 
   @IsOptional()
   @IsMongoId()
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
     roleAccessId?: Types.ObjectId
 }

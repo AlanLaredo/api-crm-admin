@@ -16,11 +16,11 @@ export class UserRoleEntity extends IdentityLogEntity {
   @Prop({ required: true })
     name!: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     description?: string
 
-  @Field(type => [mongoose.Schema.Types.ObjectId])
+  @Field(type => [mongoose.Schema.Types.ObjectId], { nullable: true })
   @Prop({ type: [mongoose.Schema.Types.ObjectId] })
     permissionsIds?: Types.ObjectId[]
 }

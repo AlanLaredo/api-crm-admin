@@ -4,39 +4,39 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 @ObjectType()
 @Schema()
 export class AddressEntity {
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     name?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     street?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     exteriorNumber?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     interiorNumber?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     neightborhood?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     city?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     state?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     country?: string
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     postalCode?: string
 }
