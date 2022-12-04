@@ -1,4 +1,4 @@
-import { InputType, Field, ID, PartialType, ArgsType } from '@nestjs/graphql'
+import { InputType, Field, ID, PartialType } from '@nestjs/graphql'
 import { IsMongoId } from 'class-validator'
 import { Types } from 'mongoose'
 import { CreateUserInput } from './create-user.input'

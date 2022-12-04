@@ -24,13 +24,13 @@ type PersonEntity {
 }
 
 type UserEntity {
-  createdBy: ID!
-  createdAt: DateTime!
+  createdBy: ID
+  createdAt: DateTime
   modifiedBy: ID
   modifiedAt: DateTime
   deletedBy: ID
   deletedAt: DateTime
-  id: ID!
+  id: ID
   username: String!
   email: String!
   firstName: String!
@@ -44,9 +44,9 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Query {
-  user(username: String, password: String, email: String, firstName: String, lastName: String, roleAccessId: ID, id: ID): UserEntity
-  users(username: String, password: String, email: String, firstName: String, lastName: String, roleAccessId: ID, id: ID): [UserEntity!]!
-  getUserFind(username: String, password: String, email: String, firstName: String, lastName: String, roleAccessId: ID, id: ID): [UserEntity!]!
+  user(createdBy: ID, createdAt: DateTime, modifiedBy: ID, modifiedAt: DateTime, deletedBy: ID, deletedAt: DateTime, id: ID, username: String, email: String, firstName: String, lastName: String, roleAccessId: ID, password: String, offset: Int = 0, limit: Int = 10): UserEntity
+  users(createdBy: ID, createdAt: DateTime, modifiedBy: ID, modifiedAt: DateTime, deletedBy: ID, deletedAt: DateTime, id: ID, username: String, email: String, firstName: String, lastName: String, roleAccessId: ID, password: String, offset: Int = 0, limit: Int = 10): [UserEntity!]!
+  getUserFind(createdBy: ID, createdAt: DateTime, modifiedBy: ID, modifiedAt: DateTime, deletedBy: ID, deletedAt: DateTime, id: ID, username: String, email: String, firstName: String, lastName: String, roleAccessId: ID, password: String, offset: Int = 0, limit: Int = 10): [UserEntity!]!
 }
 
 type Mutation {
@@ -56,22 +56,35 @@ type Mutation {
 }
 
 input CreateUserInput {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID
   username: String!
-  password: String
   email: String!
   firstName: String!
   lastName: String
   roleAccessId: ID
+  password: String!
 }
 
 input UpdateUserInput {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID!
   username: String
-  password: String
   email: String
   firstName: String
   lastName: String
   roleAccessId: ID
-  id: ID!
+  password: String
 }
 
 input DeleteIDInput {

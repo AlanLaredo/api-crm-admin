@@ -1,15 +1,16 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { ArgsType, Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema } from '@nestjs/mongoose'
 import mongoose, { Types } from 'mongoose'
 
 @ObjectType()
+@ArgsType()
 @Schema()
-export abstract class IdentityLogEntity {
-  @Field(() => ID)
+export class IdentityLogEntity {
+  @Field(() => ID, { nullable: true })
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     createdBy!: Types.ObjectId
 
-  @Field(type => Date)
+  @Field(type => Date, { nullable: true })
   @Prop({ required: true })
     createdAt!: Date
 
@@ -29,3 +30,5 @@ export abstract class IdentityLogEntity {
   @Prop()
     deletedAt?: Date
 }
+
+export default Object.getOwnPropertyNames(new IdentityLogEntity()) as (keyof IdentityLogEntity)[]
