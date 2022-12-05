@@ -10,7 +10,7 @@ export class IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     createdBy!: Types.ObjectId
 
-  @Field(type => Date, { nullable: true })
+  @Field(() => Date, { nullable: true })
   @Prop({ required: true })
     createdAt!: Date
 
@@ -18,7 +18,7 @@ export class IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     modifiedBy?: Types.ObjectId
 
-  @Field(type => Date, { nullable: true })
+  @Field(() => Date, { nullable: true })
   @Prop()
     modifiedAt?: Date
 
@@ -26,7 +26,7 @@ export class IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId })
     deletedBy?: Types.ObjectId
 
-  @Field(type => Date, { nullable: true })
+  @Field(() => Date, { nullable: true })
   @Prop()
     deletedAt?: Date
 }

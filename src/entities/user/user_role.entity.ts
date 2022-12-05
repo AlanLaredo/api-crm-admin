@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
@@ -9,18 +10,24 @@ import { IdentityLogEntity } from '../common'
   collection: 'user_roles'
 })
 export class UserRoleEntity extends IdentityLogEntity {
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
+  @IsNotEmpty()
+  @IsString()
   @Field()
   @Prop({ required: true })
     name!: string
 
+  @IsOptional()
+  @IsString()
   @Field({ nullable: true })
   @Prop()
     description?: string
 
-  @Field(type => [mongoose.Schema.Types.ObjectId], { nullable: true })
+  @IsOptional()
+  @IsArray()
+  @Field(() => [mongoose.Schema.Types.ObjectId], { nullable: true })
   @Prop({ type: [mongoose.Schema.Types.ObjectId] })
     permissionsIds?: Types.ObjectId[]
 }

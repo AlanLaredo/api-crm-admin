@@ -1,6 +1,6 @@
-import { CreateUserInput } from './input/create-user.input'
-import { UpdateUserInput } from './input/update-user.input'
-import { GetUserArgs } from './args/get-user.args'
+import { CreateUserInput } from './create-user.input'
+import { UpdateUserInput } from './update-user.input'
+import { GetUserArgs } from './get-user.args'
 
 export {
   CreateUserInput,

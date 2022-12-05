@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { IsArray, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
@@ -9,30 +10,38 @@ import { IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
   collection: 'recruits'
 })
 export class RecruitEntity extends IdentityLogEntity {
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
-  @Field()
+  @Field(() => PersonEntity)
   @Prop({ type: PersonSchema, required: true })
     data!: PersonEntity
 
-  @Field()
+  @IsMongoId()
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     jobVacancyId!: Types.ObjectId
 
+  @IsNotEmpty()
+  @IsString()
   @Field()
   @Prop({ required: true })
     interviewerName!: string
 
-  @Field(type => [String], { nullable: true })
+  @IsOptional()
+  @IsArray()
+  @Field(() => [String], { nullable: true })
   @Prop({ type: [String] })
     requiredDocumentsPaths?: string[]
 
+  @IsOptional()
+  @IsString()
   @Field({ nullable: true })
   @Prop()
     requiredInfo?: string
 
-  @Field()
+  @IsMongoId()
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     statusApplicantId!: Types.ObjectId
 }

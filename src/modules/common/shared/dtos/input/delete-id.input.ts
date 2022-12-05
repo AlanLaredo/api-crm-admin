@@ -6,6 +6,6 @@ import { Types } from 'mongoose'
 export class DeleteIDInput {
   @IsNotEmpty()
   @IsMongoId()
-  @Field(type => ID)
+  @Field(() => ID)
     id!: Types.ObjectId
 }

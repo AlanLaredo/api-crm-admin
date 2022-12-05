@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { IsArray, IsInt, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
@@ -8,23 +9,29 @@ import { IdentityLogEntity } from '../common'
   collection: 'processes'
 })
 export class ProcessEntity extends IdentityLogEntity {
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
+  @IsNotEmpty()
+  @IsString()
   @Field()
   @Prop({ required: true })
     name!: string
 
+  @IsInt()
   @Field()
   @Prop()
     order!: number
 
-  @Field(type => [mongoose.Schema.Types.ObjectId], { nullable: true })
-  @Prop({ types: [mongoose.Schema.Types.ObjectId] })
+  @IsOptional()
+  @IsArray()
+  @Field(() => [mongoose.Schema.Types.ObjectId], { nullable: true })
+  @Prop({ type: [mongoose.Schema.Types.ObjectId] })
     functionsIds?: Types.ObjectId[]
 
-  @Field()
-  @Prop()
+  @IsMongoId()
+  @Field(() => ID)
+  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     companyId!: Types.ObjectId
 }
 

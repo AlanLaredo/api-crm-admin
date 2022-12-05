@@ -6,6 +6,6 @@ import { Types } from 'mongoose'
 export class GetIDSArgs {
   @IsNotEmpty()
   @IsArray()
-  @Field(type => [ID])
+  @Field(() => [ID])
     ids!: Types.ObjectId[]
 }

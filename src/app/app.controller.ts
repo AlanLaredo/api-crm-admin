@@ -2,11 +2,9 @@
 
 import { Controller, Get } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Types } from 'mongoose'
 
 import { AppService } from './app.service'
 import { UserService } from 'src/database/mongoose/services/user'
-import { UserEntity } from 'src/entities/user'
 import { AuthService } from 'src/modules/auth/services'
 
 @Controller()
@@ -20,24 +18,24 @@ export class AppController {
 
   @Get()
   async getHello () {
-    const systemId: string = this.configService.get<string>('config.mongo.systemId')
+    // const systemId: string = this.configService.get<string>('config.mongo.systemId')
 
-    // get a custom configuration value
-    const newUser: UserEntity = {
-      username: 'slaredo',
-      password: 'Pass.word*',
-      email: 'santiagoalan@gmail.com',
-      firstName: 'Santiago',
-      lastName: 'Laredo',
-      createdAt: new Date(),
-      createdBy: new Types.ObjectId(systemId)
-    }
+    // // get a custom configuration value
+    // const newUser: UserEntity = {
+    //   username: 'slaredo',
+    //   password: 'Pass.word*',
+    //   email: 'santiagoalan@gmail.com',
+    //   firstName: 'Santiago',
+    //   lastName: 'Laredo',
+    //   createdAt: new Date(),
+    //   createdBy: new Types.ObjectId(systemId)
+    // }
 
-    newUser.password = await this.authService.getHashPassword(newUser.password)
+    // newUser.password = await this.authService.getHashPassword(newUser.password)
 
-    const result = await this.userService.create(newUser)
-    console.log(result)
+    // const result = await this.userService.create(newUser)
+    // console.log(result)
     // const result2 = await this.userService.create(newUser2)
-    return result
+    return {}
   }
 }

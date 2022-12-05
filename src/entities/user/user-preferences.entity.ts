@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { IsMongoId, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
@@ -9,17 +10,22 @@ import { IdentityLogEntity } from '../common'
   collection: 'user_preferences'
 })
 export class UserPreferencesEntity extends IdentityLogEntity {
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
-  @Field()
+  @IsMongoId()
+  @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     userId!: Types.ObjectId
 
+  @IsOptional()
+  @IsString()
   @Field({ nullable: true })
   @Prop()
     theme?: string
 
+  @IsOptional()
+  @IsString()
   @Field({ nullable: true })
   @Prop()
     menuMode?: string

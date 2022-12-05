@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
@@ -9,21 +10,28 @@ import { IdentityLogEntity } from '../common'
   collection: 'action_logs'
 })
 export class ActionLogEntity extends IdentityLogEntity {
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
+  @IsMongoId()
   @Field(() => ID)
-  @Prop({ types: mongoose.Schema.Types.ObjectId, required: true })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
     userId!: Types.ObjectId
 
+  @IsOptional()
+  @IsString()
   @Field({ nullable: true })
   @Prop({ type: String })
     file?: string
 
+  @IsNotEmpty()
+  @IsString()
   @Field()
   @Prop({ type: String, required: true })
     action!: string
 
+  @IsOptional()
+  @IsString()
   @Field({ nullable: true })
   @Prop({ type: String })
     description?: string

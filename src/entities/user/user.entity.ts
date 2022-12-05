@@ -11,7 +11,7 @@ import { IdentityLogEntity } from '../common'
   collection: 'users'
 })
 export class UserEntity extends IdentityLogEntity {
-  @Field(type => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
   @IsNotEmpty()
