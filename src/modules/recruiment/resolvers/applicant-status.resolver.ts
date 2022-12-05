@@ -24,7 +24,7 @@ export class ApplicantStatusResolver {
   }
 
   @Query(() => [ApplicantStatusEntity])
-  async applicantStatuss (@Args() data: GetApplicantStatusArgs,
+  async applicantStatusList (@Args() data: GetApplicantStatusArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<ApplicantStatusEntity[]> {
     return this.applicantStatusService.get(data)
   }

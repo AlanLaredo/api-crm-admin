@@ -25,7 +25,7 @@ export class ProcessEntity extends IdentityLogEntity {
 
   @IsOptional()
   @IsArray()
-  @Field(() => [mongoose.Schema.Types.ObjectId], { nullable: true })
+  @Field(() => [ID], { nullable: true })
   @Prop({ type: [mongoose.Schema.Types.ObjectId] })
     functionsIds?: Types.ObjectId[]
 
