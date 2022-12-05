@@ -23,7 +23,9 @@
     "standard:windows": "cls & standard ./src/**/*.ts | snazzy",
     "standard:linux": "standard \"$(pwd)/src/**/*.ts\" | ./node_modules/.bin/snazzy",
     "standard:lint": "standard --fix \"$(pwd)/src/**/*.ts\" | ./node_modules/.bin/snazzy",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "gqlg:operations": "gqlg --schemaFilePath ./crm-schemas.gql --destDirPath ./graphql/operations --depthLimit 5",
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -52,6 +54,13 @@
     "rxjs": "^7.2.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.15.0",
+    "@graphql-codegen/introspection": "2.2.1",
+    "@graphql-codegen/typescript": "^2.8.3",
+    "@graphql-codegen/typescript-apollo-angular": "3.5.6",
+    "@graphql-codegen/typescript-graphql-files-modules": "^2.2.1",
+    "@graphql-codegen/typescript-operations": "^2.5.8",
+    "@graphql-codegen/typescript-resolvers": "^2.7.8",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
