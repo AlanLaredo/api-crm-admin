@@ -38,4 +38,4 @@ lerna-debug.log*
 # mongodb local data
 /mongo_data
 /graphql
-.crm-schemas.gql
+crm-schemas.gql
