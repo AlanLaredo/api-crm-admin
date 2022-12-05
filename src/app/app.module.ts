@@ -24,7 +24,8 @@ import errorFormatterFunction from './error-config.function'
       path: '/admin',
       graphiql: true,
       errorFormatter: errorFormatterFunction
-    }),
+    } as MercuriusDriverConfig),
+    // autoOperationsSchemaFile: 'operations.graphql'
     ...MODULES
   ],
   controllers: [AppController],

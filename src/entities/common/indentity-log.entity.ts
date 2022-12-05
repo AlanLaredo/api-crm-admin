@@ -31,4 +31,12 @@ export class IdentityLogEntity {
     deletedAt?: Date
 }
 
-export default Object.getOwnPropertyNames(new IdentityLogEntity()) as (keyof IdentityLogEntity)[]
+// console.log(Object.getOwnPropertyNames(new IdentityLogEntity()) as (keyof IdentityLogEntity)[])
+
+export const IdentityLogEntityProps = [
+  'createdBy',
+  'createdAt',
+  'modifiedBy',
+  'modifiedAt',
+  'deletedBy',
+  'deletedAt'] as (keyof IdentityLogEntity)[]

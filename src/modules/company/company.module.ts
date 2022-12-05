@@ -1,13 +1,16 @@
 import { Module, Global } from '@nestjs/common'
 
 import { CommonModule } from '../common/common.module'
+import { COMPANY_RESOLVERS } from './resolvers'
 
 @Global()
 @Module({
   imports: [
     CommonModule
   ],
-  providers: [],
+  providers: [
+    ...COMPANY_RESOLVERS
+  ],
   exports: []
 })
 export class CompanyModule {

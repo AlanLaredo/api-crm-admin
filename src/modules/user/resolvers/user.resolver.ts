@@ -16,7 +16,7 @@ import { AuthService } from 'src/modules/auth/services'
 import { CreateUserInput, UpdateUserInput, GetUserArgs } from '../shared/dtos/user'
 
 @UseGuards(JwtAuthGuard)
-@Resolver(of => UserEntity)
+@Resolver(() => UserEntity)
 export class UserResolver {
   constructor (
     private readonly userService: UserService,
@@ -42,6 +42,7 @@ export class UserResolver {
   @Mutation(() => UserEntity)
   async createUser (@Args('createUserData') createUserData: CreateUserInput,
   @Context(UserDataPipe) user: UserEntity): Promise<UserEntity> {
+    createUserData.username = createUserData.username.trim().toLowerCase()
     if (createUserData.password) {
       createUserData.password = await this.authService.getHashPassword(createUserData.password)
     }

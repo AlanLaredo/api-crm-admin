@@ -23,6 +23,51 @@ type PersonEntity {
   address: AddressEntity
 }
 
+type RolePermissionEntity {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID
+  name: String!
+  description: String
+  tag: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type UserPreferencesEntity {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID
+  userId: ID!
+  theme: String
+  menuMode: String
+}
+
+type UserSessionEntity {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID
+  userId: ID!
+  changePassword: Boolean
+  platformKey: String!
+  token: String!
+}
+
 type UserEntity {
   createdBy: ID
   createdAt: DateTime
@@ -38,30 +83,313 @@ type UserEntity {
   roleAccessId: ID
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Query {
-  user(createdBy: ID, createdAt: DateTime, modifiedBy: ID, modifiedAt: DateTime, deletedBy: ID, deletedAt: DateTime, id: ID, username: String, email: String, firstName: String, lastName: String, roleAccessId: ID, password: String, offset: Int = 0, limit: Int = 10): UserEntity
-  users(createdBy: ID, createdAt: DateTime, modifiedBy: ID, modifiedAt: DateTime, deletedBy: ID, deletedAt: DateTime, id: ID, username: String, email: String, firstName: String, lastName: String, roleAccessId: ID, password: String, offset: Int = 0, limit: Int = 10): [UserEntity!]!
-  getUserFind(createdBy: ID, createdAt: DateTime, modifiedBy: ID, modifiedAt: DateTime, deletedBy: ID, deletedAt: DateTime, id: ID, username: String, email: String, firstName: String, lastName: String, roleAccessId: ID, password: String, offset: Int = 0, limit: Int = 10): [UserEntity!]!
-}
-
-type Mutation {
-  createUser(createUserData: CreateUserInput!): UserEntity!
-  updateUser(updateUserData: UpdateUserInput!): UserEntity!
-  deleteUser(deleteIdData: DeleteIDInput!): UserEntity!
-}
-
-input CreateUserInput {
+type UserRoleEntity {
   createdBy: ID
   createdAt: DateTime
   modifiedBy: ID
   modifiedAt: DateTime
   deletedBy: ID
   deletedAt: DateTime
+  id: ID
+  name: String!
+  description: String
+  permissionsIds: [ID!]
+}
+
+type ApplicantStatusEntity {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID
+  name: String!
+  description: String
+}
+
+type JobVacancyStatusEntity {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID
+  name: String!
+  description: String
+}
+
+type JobVacancyEntity {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID
+  name: String!
+  clientId: ID!
+  totalVacancies: Float!
+  requiredDocumentsPaths: [String!]
+  jobVacanciesStatusId: ID!
+}
+
+type PositionEntity {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID
+  name: String!
+  clientId: ID!
+  salary: Float
+}
+
+type RecruitEntity {
+  createdBy: ID
+  createdAt: DateTime
+  modifiedBy: ID
+  modifiedAt: DateTime
+  deletedBy: ID
+  deletedAt: DateTime
+  id: ID
+  data: PersonEntity!
+  jobVacancyId: ID!
+  interviewerName: String!
+  requiredDocumentsPaths: [String!]
+  requiredInfo: String
+  statusApplicantId: ID!
+}
+
+input CreateAddressInput {
+  name: String
+  street: String
+  exteriorNumber: String
+  interiorNumber: String
+  neightborhood: String
+  city: String
+  state: String
+  country: String
+  postalCode: String
+}
+
+input CreatePersonInput {
+  name: String!
+  lastName: String
+  phoneContacts: [String!]
+  emails: [String!]
+  comments: String
+  address: CreateAddressInput
+}
+
+type Query {
+  applicantStatus(id: ID, name: String, description: String, offset: Int = 0, limit: Int = 10): ApplicantStatusEntity
+  applicantStatuss(id: ID, name: String, description: String, offset: Int = 0, limit: Int = 10): [ApplicantStatusEntity!]!
+  getApplicantStatusFind(id: ID, name: String, description: String, offset: Int = 0, limit: Int = 10): [ApplicantStatusEntity!]!
+  jobVacancyStatus(id: ID, name: String, description: String, offset: Int = 0, limit: Int = 10): JobVacancyStatusEntity
+  jobVacancyStatusList(id: ID, name: String, description: String, offset: Int = 0, limit: Int = 10): [JobVacancyStatusEntity!]!
+  getJobVacancyStatusFind(id: ID, name: String, description: String, offset: Int = 0, limit: Int = 10): [JobVacancyStatusEntity!]!
+  jobVacancy(id: ID, name: String, clientId: ID, totalVacancies: Float, requiredDocumentsPaths: [String!], jobVacanciesStatusId: ID, offset: Int = 0, limit: Int = 10): JobVacancyEntity
+  jobVacancies(id: ID, name: String, clientId: ID, totalVacancies: Float, requiredDocumentsPaths: [String!], jobVacanciesStatusId: ID, offset: Int = 0, limit: Int = 10): [JobVacancyEntity!]!
+  getJobVacancyFind(id: ID, name: String, clientId: ID, totalVacancies: Float, requiredDocumentsPaths: [String!], jobVacanciesStatusId: ID, offset: Int = 0, limit: Int = 10): [JobVacancyEntity!]!
+  position(id: ID, name: String, clientId: ID, salary: Float, offset: Int = 0, limit: Int = 10): PositionEntity
+  positions(id: ID, name: String, clientId: ID, salary: Float, offset: Int = 0, limit: Int = 10): [PositionEntity!]!
+  getPositionFind(id: ID, name: String, clientId: ID, salary: Float, offset: Int = 0, limit: Int = 10): [PositionEntity!]!
+  recruit(id: ID, data: CreatePersonInput, jobVacancyId: ID, interviewerName: String, requiredDocumentsPaths: [String!], requiredInfo: String, statusApplicantId: ID, offset: Int = 0, limit: Int = 10): RecruitEntity
+  recruits(id: ID, data: CreatePersonInput, jobVacancyId: ID, interviewerName: String, requiredDocumentsPaths: [String!], requiredInfo: String, statusApplicantId: ID, offset: Int = 0, limit: Int = 10): [RecruitEntity!]!
+  getRecruitFind(id: ID, data: CreatePersonInput, jobVacancyId: ID, interviewerName: String, requiredDocumentsPaths: [String!], requiredInfo: String, statusApplicantId: ID, offset: Int = 0, limit: Int = 10): [RecruitEntity!]!
+  rolePermission(id: ID, name: String, description: String, tag: String, offset: Int = 0, limit: Int = 10): RolePermissionEntity
+  rolePermissions(id: ID, name: String, description: String, tag: String, offset: Int = 0, limit: Int = 10): [RolePermissionEntity!]!
+  getRolePermissionFind(id: ID, name: String, description: String, tag: String, offset: Int = 0, limit: Int = 10): [RolePermissionEntity!]!
+  userPreferences(id: ID, userId: ID, theme: String, menuMode: String, offset: Int = 0, limit: Int = 10): UserPreferencesEntity
+  userPreferencesList(id: ID, userId: ID, theme: String, menuMode: String, offset: Int = 0, limit: Int = 10): [UserPreferencesEntity!]!
+  getUserPreferencesFind(id: ID, userId: ID, theme: String, menuMode: String, offset: Int = 0, limit: Int = 10): [UserPreferencesEntity!]!
+  userRole(id: ID, name: String, description: String, permissionsIds: [ID!], offset: Int = 0, limit: Int = 10): UserRoleEntity
+  userRoles(id: ID, name: String, description: String, permissionsIds: [ID!], offset: Int = 0, limit: Int = 10): [UserRoleEntity!]!
+  getUserRoleFind(id: ID, name: String, description: String, permissionsIds: [ID!], offset: Int = 0, limit: Int = 10): [UserRoleEntity!]!
+  userSession(id: ID, userId: ID, changePassword: Boolean, platformKey: String, token: String, offset: Int = 0, limit: Int = 10): UserSessionEntity
+  userSessions(id: ID, userId: ID, changePassword: Boolean, platformKey: String, token: String, offset: Int = 0, limit: Int = 10): [UserSessionEntity!]!
+  getUserSessionFind(id: ID, userId: ID, changePassword: Boolean, platformKey: String, token: String, offset: Int = 0, limit: Int = 10): [UserSessionEntity!]!
+  user(id: ID, username: String, email: String, firstName: String, lastName: String, roleAccessId: ID, password: String, offset: Int = 0, limit: Int = 10): UserEntity
+  users(id: ID, username: String, email: String, firstName: String, lastName: String, roleAccessId: ID, password: String, offset: Int = 0, limit: Int = 10): [UserEntity!]!
+  getUserFind(id: ID, username: String, email: String, firstName: String, lastName: String, roleAccessId: ID, password: String, offset: Int = 0, limit: Int = 10): [UserEntity!]!
+}
+
+type Mutation {
+  createApplicantStatus(createApplicantStatusData: CreateApplicantStatusInput!): ApplicantStatusEntity!
+  updateApplicantStatus(updateApplicantStatusData: UpdateApplicantStatusInput!): ApplicantStatusEntity!
+  deleteApplicantStatus(deleteIdData: DeleteIDInput!): ApplicantStatusEntity!
+  createJobVacancyStatus(createJobVacancyStatusData: CreateJobVacancyStatusInput!): JobVacancyStatusEntity!
+  updateJobVacancyStatus(updateJobVacancyStatusData: UpdateJobVacancyStatusInput!): JobVacancyStatusEntity!
+  deleteJobVacancyStatus(deleteIdData: DeleteIDInput!): JobVacancyStatusEntity!
+  createJobVacancy(createJobVacancyData: CreateJobVacancyInput!): JobVacancyEntity!
+  updateJobVacancy(updateJobVacancyData: UpdateJobVacancyInput!): JobVacancyEntity!
+  deleteJobVacancy(deleteIdData: DeleteIDInput!): JobVacancyEntity!
+  createPosition(createPositionData: CreatePositionInput!): PositionEntity!
+  updatePosition(updatePositionData: UpdatePositionInput!): PositionEntity!
+  deletePosition(deleteIdData: DeleteIDInput!): PositionEntity!
+  createRecruit(createRecruitData: CreateRecruitInput!): RecruitEntity!
+  updateRecruit(updateRecruitData: UpdateRecruitInput!): RecruitEntity!
+  deleteRecruit(deleteIdData: DeleteIDInput!): RecruitEntity!
+  createRolePermission(createRolePermissionData: CreateRolePermissionInput!): RolePermissionEntity!
+  updateRolePermission(updateRolePermissionData: UpdateRolePermissionInput!): RolePermissionEntity!
+  deleteRolePermission(deleteIdData: DeleteIDInput!): RolePermissionEntity!
+  createUserPreferences(createUserPreferencesData: CreateUserPreferencesInput!): UserPreferencesEntity!
+  updateUserPreferences(updateUserPreferencesData: UpdateUserPreferencesInput!): UserPreferencesEntity!
+  deleteUserPreferences(deleteIdData: DeleteIDInput!): UserPreferencesEntity!
+  createUserRole(createUserRoleData: CreateUserRoleInput!): UserRoleEntity!
+  updateUserRole(updateUserRoleData: UpdateUserRoleInput!): UserRoleEntity!
+  deleteUserRole(deleteIdData: DeleteIDInput!): UserRoleEntity!
+  createUserSession(createUserSessionData: CreateUserSessionInput!): UserSessionEntity!
+  updateUserSession(updateUserSessionData: UpdateUserSessionInput!): UserSessionEntity!
+  deleteUserSession(deleteIdData: DeleteIDInput!): UserSessionEntity!
+  createUser(createUserData: CreateUserInput!): UserEntity!
+  updateUser(updateUserData: UpdateUserInput!): UserEntity!
+  deleteUser(deleteIdData: DeleteIDInput!): UserEntity!
+}
+
+input CreateApplicantStatusInput {
+  id: ID
+  name: String!
+  description: String
+}
+
+input UpdateApplicantStatusInput {
+  id: ID!
+  name: String
+  description: String
+}
+
+input DeleteIDInput {
+  id: ID!
+}
+
+input CreateJobVacancyStatusInput {
+  id: ID
+  name: String!
+  description: String
+}
+
+input UpdateJobVacancyStatusInput {
+  id: ID!
+  name: String
+  description: String
+}
+
+input CreateJobVacancyInput {
+  id: ID
+  name: String!
+  clientId: ID!
+  totalVacancies: Float!
+  requiredDocumentsPaths: [String!]
+  jobVacanciesStatusId: ID!
+}
+
+input UpdateJobVacancyInput {
+  id: ID!
+  name: String
+  clientId: ID
+  totalVacancies: Float
+  requiredDocumentsPaths: [String!]
+  jobVacanciesStatusId: ID
+}
+
+input CreatePositionInput {
+  id: ID
+  name: String!
+  clientId: ID!
+  salary: Float
+}
+
+input UpdatePositionInput {
+  id: ID!
+  name: String
+  clientId: ID
+  salary: Float
+}
+
+input CreateRecruitInput {
+  id: ID
+  data: CreatePersonInput!
+  jobVacancyId: ID!
+  interviewerName: String!
+  requiredDocumentsPaths: [String!]
+  requiredInfo: String
+  statusApplicantId: ID!
+}
+
+input UpdateRecruitInput {
+  id: ID!
+  data: CreatePersonInput
+  jobVacancyId: ID
+  interviewerName: String
+  requiredDocumentsPaths: [String!]
+  requiredInfo: String
+  statusApplicantId: ID
+}
+
+input CreateRolePermissionInput {
+  id: ID
+  name: String!
+  description: String
+  tag: String!
+}
+
+input UpdateRolePermissionInput {
+  id: ID!
+  name: String
+  description: String
+  tag: String
+}
+
+input CreateUserPreferencesInput {
+  id: ID
+  userId: ID!
+  theme: String
+  menuMode: String
+}
+
+input UpdateUserPreferencesInput {
+  id: ID!
+  userId: ID
+  theme: String
+  menuMode: String
+}
+
+input CreateUserRoleInput {
+  id: ID
+  name: String!
+  description: String
+  permissionsIds: [ID!]
+}
+
+input UpdateUserRoleInput {
+  id: ID!
+  name: String
+  description: String
+  permissionsIds: [ID!]
+}
+
+input CreateUserSessionInput {
+  id: ID
+  userId: ID!
+  changePassword: Boolean
+  platformKey: String!
+  token: String!
+}
+
+input UpdateUserSessionInput {
+  id: ID!
+  userId: ID
+  changePassword: Boolean
+  platformKey: String
+  token: String
+}
+
+input CreateUserInput {
   id: ID
   username: String!
   email: String!
@@ -72,12 +400,6 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
-  createdBy: ID
-  createdAt: DateTime
-  modifiedBy: ID
-  modifiedAt: DateTime
-  deletedBy: ID
-  deletedAt: DateTime
   id: ID!
   username: String
   email: String
@@ -85,8 +407,4 @@ input UpdateUserInput {
   lastName: String
   roleAccessId: ID
   password: String
-}
-
-input DeleteIDInput {
-  id: ID!
 }

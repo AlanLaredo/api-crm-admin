@@ -1,8 +1,9 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsOptional, IsString } from 'class-validator'
 
 @ObjectType()
+@InputType('CreateAddressInput')
 @Schema()
 export class AddressEntity {
   @IsOptional()

@@ -1,15 +1,15 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 import { AddressEntity, AddressSchema } from './address.entity'
 
 @ObjectType()
+@InputType('CreatePersonInput')
 @Schema()
 export class PersonEntity {
   @IsNotEmpty()
   @IsString()
-
   @Field()
   @Prop({ required: true })
     name!: string
