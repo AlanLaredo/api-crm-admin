@@ -77,3 +77,20 @@ npx husky-init && npm install
 
 Crear contenedor de docker con base de datos, revisar docker-compose.yml
 docker compose up
+
+## Generate Operations for frontend
+# Install
+npm install gql-generator -g
+
+# see the usage
+gqlg --help
+
+# Generate sample queries from schema file
+# gqlg --schemaFilePath ./crm-schemas.gql --destDirPath ./operations --depthLimit 5
+
+## Generate typescript types from schema file
+# creating a codegen.yml
+npx graphql-code-generator init
+
+# Documentation
+https://github.com/dotansimha/graphql-code-generator/issues/2043
