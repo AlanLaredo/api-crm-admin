@@ -34,7 +34,6 @@ export class AppController {
     // newUser.password = await this.authService.getHashPassword(newUser.password)
 
     // const result = await this.userService.create(newUser)
-    // console.log(result)
     // const result2 = await this.userService.create(newUser2)
     return {}
   }

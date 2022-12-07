@@ -24,7 +24,7 @@ export class ProcessResolver {
   }
 
   @Query(() => [ProcessEntity])
-  async processs (@Args() data: GetProcessArgs,
+  async processList (@Args() data: GetProcessArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<ProcessEntity[]> {
     return this.processService.get(data)
   }

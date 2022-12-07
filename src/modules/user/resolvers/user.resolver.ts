@@ -53,6 +53,11 @@ export class UserResolver {
   async updateUser (@Args('updateUserData') updateUserData: UpdateUserInput,
   @Context(UserDataPipe) user: UserEntity): Promise<UserEntity> {
     const { id, ...data } = updateUserData
+
+    if (updateUserData.username) {
+      updateUserData.username = updateUserData.username.trim().toLowerCase()
+    }
+
     if (data.password) {
       data.password = await this.authService.getHashPassword(data.password)
     }

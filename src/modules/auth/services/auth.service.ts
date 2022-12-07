@@ -44,7 +44,6 @@ export class AuthService {
       permissions
     }
     // const { permissionsConfig, ...userWithoutPermissions } = user
-
     return {
       access_token: this.jwtService.sign(payload),
       // user: userWithoutPermissions

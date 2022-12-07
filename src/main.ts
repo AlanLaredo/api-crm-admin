@@ -1,16 +1,18 @@
 import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
-
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
+import * as bodyParser from 'body-parser'
 
 import { AppModule } from './app/app.module'
 
 async function bootstrap () {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter()
+  const app = await NestFactory.create(
+    AppModule
   )
+
+  app.use(bodyParser.json({ limit: '200mb' }))
+  app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }))
+  app.enableCors()
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
