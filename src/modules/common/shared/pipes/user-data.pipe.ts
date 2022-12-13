@@ -6,13 +6,14 @@ import {
 } from '@nestjs/common'
 import decodeJWT from 'jwt-decode'
 
-import { UserService } from 'src/database/mongoose/services/user'
-import { UserEntity } from 'src/entities/user'
+import { UserRoleService, UserService } from 'src/database/mongoose/services/user'
+import { UserEntity, UserRoleEntity } from 'src/entities/user'
 import { IToken } from 'src/modules/auth/shared/interfaces'
 
 @Injectable()
 export class UserDataPipe implements PipeTransform {
-  constructor (private readonly userService: UserService) {
+  constructor (private readonly userService: UserService,
+    private readonly userRoleService: UserRoleService) {
   }
 
   async transform (
@@ -20,6 +21,13 @@ export class UserDataPipe implements PipeTransform {
     metadata: ArgumentMetadata) : Promise<UserEntity> {
     const decodedToken: IToken = decodeJWT(value.req.headers.authorization)
     const user = await this.userService.getById(decodedToken.userId)
+    const userRole: UserRoleEntity = await this.userRoleService.getById(user.roleAccessId)
+    if (userRole && userRole.name === 'CrmAdmin') {
+      user.roleAccess = userRole
+      user.isAdmin = true
+    } else {
+      user.isAdmin = false
+    }
     return user
   }
 }

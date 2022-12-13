@@ -7,6 +7,7 @@ export const JOI_VALIDATION_SCHEMA = Joi.object({
   JWT_SECRET: Joi.string().required(),
   JWT_EXPIRES_IN: Joi.string().optional().default('1d'),
 
+  DEFAULT_PASSWORD: Joi.string().required(),
   MONGO_INITDB_ROOT_USERNAME: Joi.string().required(),
   MONGO_INITDB_ROOT_PASSWORD: Joi.string().required(),
   MONGO_AUTH_DATABASE: Joi.string().required(),

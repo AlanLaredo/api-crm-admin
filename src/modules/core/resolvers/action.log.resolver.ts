@@ -24,7 +24,7 @@ export class ActionLogResolver {
   }
 
   @Query(() => [ActionLogEntity])
-  async jobVacancies (@Args() data: GetActionLogArgs,
+  async actionLogs (@Args() data: GetActionLogArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<ActionLogEntity[]> {
     return this.actionLogService.get(data)
   }

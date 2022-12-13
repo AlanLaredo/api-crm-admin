@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-constructor */
-import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql'
+import { Resolver, Query, Args, Mutation, Context, ResolveField, ID } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 
 // import { DeleteIDInput } from 'src/common/shared/dtos'
@@ -10,16 +10,21 @@ import { JwtAuthGuard } from 'src/modules/auth/shared/guards'
 import { UserDataPipe } from 'src/modules/common/shared/pipes'
 import { DeleteIDInput } from 'src/modules/common/shared/dtos'
 
-import { UserEntity } from 'src/entities/user'
-import { UserService } from 'src/database/mongoose/services/user'
+import { UserEntity, UserRoleEntity } from 'src/entities/user'
+import { UserRoleService, UserService } from 'src/database/mongoose/services/user'
 import { AuthService } from 'src/modules/auth/services'
 import { CreateUserInput, UpdateUserInput, GetUserArgs } from '../shared/dtos/user'
+import { CompanyService, CompanyUserService } from 'src/database/mongoose/services/company'
+import { CompanyEntity } from 'src/entities/company'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => UserEntity)
 export class UserResolver {
   constructor (
     private readonly userService: UserService,
+    private readonly userRoleService: UserRoleService,
+    private readonly companyService: CompanyService,
+    private readonly companyUserService: CompanyUserService,
     private readonly authService: AuthService) { }
 
   @Query(() => UserEntity, { nullable: true })
@@ -31,7 +36,7 @@ export class UserResolver {
   @Query(() => [UserEntity])
   async users (@Args() data: GetUserArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<UserEntity[]> {
-    return this.userService.get(data)
+    return this.userService.get(user.isAdmin ? data : { ...data, companyId: user.companyId })
   }
 
   @Query(() => [UserEntity])
@@ -47,6 +52,16 @@ export class UserResolver {
       createUserData.password = await this.authService.getHashPassword(createUserData.password)
     }
     return this.userService.create({ ...createUserData, createdBy: user.id, createdAt: new Date() })
+  }
+
+  @ResolveField(() => UserRoleEntity)
+  async roleAccess (user: UserEntity) {
+    return this.userRoleService.getById(user.roleAccessId)
+  }
+
+  @ResolveField(() => CompanyEntity, { nullable: true })
+  async company (user: UserEntity) {
+    return this.companyService.getById(user.companyId)
   }
 
   @Mutation(() => UserEntity)

@@ -1,5 +1,5 @@
 import { ConfigModule } from '@nestjs/config'
-import { GraphQLModule } from '@nestjs/graphql'
+import { GqlModuleOptions, GraphQLModule } from '@nestjs/graphql'
 import { Module } from '@nestjs/common'
 
 import configuration from '../environments/configuration'
@@ -7,7 +7,7 @@ import { ENVIRONMENTS, JOI_VALIDATION_SCHEMA } from '../environments'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { MODULES } from '../modules'
-import errorFormatterFunction from './error-config.function'
+// import errorFormatterFunction from './error-config.function'
 import { ApolloDriver } from '@nestjs/apollo'
 
 @Module({
@@ -24,7 +24,7 @@ import { ApolloDriver } from '@nestjs/apollo'
       autoSchemaFile: 'crm-schemas.gql',
       path: '/admin',
       playground: true
-    }),
+    } as GqlModuleOptions),
     // GraphQLModule.forRoot<MercuriusDriverConfig>({
     //   driver: MercuriusDriver,
     //   autoSchemaFile: 'crm-schemas.gql',

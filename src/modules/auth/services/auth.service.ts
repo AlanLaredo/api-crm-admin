@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-import { UserService } from 'src/database/mongoose/services/user'
+import { UserRoleService, UserService } from 'src/database/mongoose/services/user'
 
-import { RolePermissionEntity, UserEntity } from 'src/entities/user'
+import { RolePermissionEntity, UserEntity, UserRoleEntity } from 'src/entities/user'
 import { IToken } from '../shared/interfaces'
 
 @Injectable()
@@ -11,7 +11,8 @@ export class AuthService {
   /* eslint-disable no-useless-constructor */
   constructor (
     private jwtService: JwtService,
-    private userService: UserService) { }
+    private userService: UserService,
+    private userRoleService: UserRoleService) { }
 
   public async getHashPassword (password: string): Promise<string> {
     return await bcrypt.hash(password, 10)
@@ -37,17 +38,22 @@ export class AuthService {
   }
 
   public async generateToken (user: UserEntity) {
+    const userRole: UserRoleEntity = await this.userRoleService.getById(user.roleAccessId)
     const permissions: RolePermissionEntity[] = await this.getPermissions(user)
     const { _id } = { ...user } as any
     const payload: IToken = {
       userId: _id,
-      permissions
+      permissions,
+      userRole
     }
     // const { permissionsConfig, ...userWithoutPermissions } = user
     return {
       access_token: this.jwtService.sign(payload),
       // user: userWithoutPermissions
-      user
+      user: {
+        ...user,
+        userRole
+      }
     }
   }
 

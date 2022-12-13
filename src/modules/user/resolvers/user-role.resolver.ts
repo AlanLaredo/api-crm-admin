@@ -25,7 +25,11 @@ export class UserRoleResolver {
   @Query(() => [UserRoleEntity])
   async userRoles (@Args() data: GetUserRoleArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<UserRoleEntity[]> {
-    return this.userRoleService.get(data)
+    let userRoles = await this.userRoleService.get(data)
+    if (!user.isAdmin) {
+      userRoles = userRoles.filter(role => role.name !== 'CrmAdmin')
+    }
+    return userRoles
   }
 
   @Query(() => [UserRoleEntity])
@@ -36,12 +40,18 @@ export class UserRoleResolver {
   @Mutation(() => UserRoleEntity)
   async createUserRole (@Args('createUserRoleData') createUserRoleData: CreateUserRoleInput,
   @Context(UserDataPipe) user: UserEntity): Promise<UserRoleEntity> {
+    if (createUserRoleData.name.toLowerCase() === 'CrmAdmin'.toLowerCase()) {
+      throw new Error('No se puede crear este rol.')
+    }
     return this.userRoleService.create({ ...createUserRoleData, createdBy: user.id, createdAt: new Date() })
   }
 
   @Mutation(() => UserRoleEntity)
   async updateUserRole (@Args('updateUserRoleData') updateUserRoleData: UpdateUserRoleInput,
   @Context(UserDataPipe) user: UserEntity): Promise<UserRoleEntity> {
+    if (updateUserRoleData.name.toLowerCase() === 'CrmAdmin'.toLowerCase()) {
+      throw new Error('No se puede editar este rol.')
+    }
     const { id, ...data } = updateUserRoleData
     return this.userRoleService.update(id, { ...data, modifiedBy: user.id, modifiedAt: new Date() })
   }

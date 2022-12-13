@@ -8,6 +8,7 @@ export default registerAs('config', () => {
     },
     mongo: {
       systemId: process.env.SYSTEM_MONGO_ID,
+      defaultPassword: process.env.DEFAULT_PASSWORD,
       user: process.env.MONGO_INITDB_ROOT_USERNAME,
       password: process.env.MONGO_INITDB_ROOT_PASSWORD,
       connection: process.env.MONGO_CONNECTION,

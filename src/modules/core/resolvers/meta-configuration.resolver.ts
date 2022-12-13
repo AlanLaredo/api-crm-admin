@@ -24,13 +24,13 @@ export class MetaConfigurationResolver {
   }
 
   @Query(() => [MetaConfigurationEntity])
-  async jobVacancies (@Args() data: GetMetaConfigurationArgs,
+  async metaConfigurations (@Args() data: GetMetaConfigurationArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<MetaConfigurationEntity[]> {
     return this.metaConfigurationService.get(data)
   }
 
   @Query(() => [MetaConfigurationEntity])
-  async getMetaConfigurationFind (@Args() data: GetMetaConfigurationArgs): Promise<MetaConfigurationEntity[]> {
+  async metaConfigurationFind (@Args() data: GetMetaConfigurationArgs): Promise<MetaConfigurationEntity[]> {
     return this.metaConfigurationService.find(data)
   }
 

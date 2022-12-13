@@ -24,7 +24,7 @@ export class CompanyGroupResolver {
   }
 
   @Query(() => [CompanyGroupEntity])
-  async jobVacancies (@Args() data: GetCompanyGroupArgs,
+  async companyGroups (@Args() data: GetCompanyGroupArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<CompanyGroupEntity[]> {
     return this.companyGroupService.get(data)
   }

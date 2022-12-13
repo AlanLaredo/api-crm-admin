@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-constructor */
-import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql'
+import { Resolver, Query, Args, Mutation, Context, ResolveField } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 
 import { JwtAuthGuard } from 'src/modules/auth/shared/guards'
@@ -10,12 +10,18 @@ import { CreateEmployeeInput, UpdateEmployeeInput, GetEmployeeArgs } from '../sh
 import { UserEntity } from 'src/entities/user'
 import { EmployeeEntity } from 'src/entities/employee'
 import { EmployeeService } from 'src/database/mongoose/services/employee'
+import { CompanyEntity } from 'src/entities/company'
+import { CompanyService } from 'src/database/mongoose/services/company'
+import { ClientEntity } from 'src/entities/client'
+import { ClientService } from 'src/database/mongoose/services/client'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => EmployeeEntity)
 export class EmployeeResolver {
   constructor (
-    private readonly employeeService: EmployeeService) { }
+    private readonly employeeService: EmployeeService,
+    private readonly companyService: CompanyService,
+    private readonly clientService: ClientService) { }
 
   @Query(() => EmployeeEntity, { nullable: true })
   async employee (@Args() data: GetEmployeeArgs,
@@ -30,8 +36,18 @@ export class EmployeeResolver {
   }
 
   @Query(() => [EmployeeEntity])
-  async getEmployeeFind (@Args() data: GetEmployeeArgs): Promise<EmployeeEntity[]> {
+  async employeeFind (@Args() data: GetEmployeeArgs): Promise<EmployeeEntity[]> {
     return this.employeeService.find(data)
+  }
+
+  @ResolveField(() => CompanyEntity, { nullable: true })
+  async company (data: EmployeeEntity) {
+    return this.companyService.getById(data.companyId)
+  }
+
+  @ResolveField(() => ClientEntity, { nullable: true })
+  async client (data: EmployeeEntity) {
+    return this.clientService.getById(data.clientId)
   }
 
   @Mutation(() => EmployeeEntity)

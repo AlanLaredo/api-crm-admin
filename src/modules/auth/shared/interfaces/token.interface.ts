@@ -3,7 +3,7 @@ import { RolePermissionEntity, UserRoleEntity } from 'src/entities/user'
 
 // FIXME: this interface can be updated to include the new fields
 export default interface IToken {
-  roles?: UserRoleEntity[],
+  userRole?: UserRoleEntity,
   permissions?: RolePermissionEntity[],
   userId?: Types.ObjectId
 }

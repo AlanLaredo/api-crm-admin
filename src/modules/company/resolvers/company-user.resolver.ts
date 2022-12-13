@@ -24,7 +24,7 @@ export class CompanyUserResolver {
   }
 
   @Query(() => [CompanyUserEntity])
-  async jobVacancies (@Args() data: GetCompanyUserArgs,
+  async companyUsers (@Args() data: GetCompanyUserArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<CompanyUserEntity[]> {
     return this.companyUserService.get(data)
   }

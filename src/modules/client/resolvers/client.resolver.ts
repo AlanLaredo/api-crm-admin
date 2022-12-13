@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-constructor */
-import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql'
+import { Resolver, Query, Args, Mutation, Context, ResolveField, Parent } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 
 import { JwtAuthGuard } from 'src/modules/auth/shared/guards'
@@ -9,13 +9,16 @@ import { DeleteIDInput } from 'src/modules/common/shared/dtos'
 import { CreateClientInput, UpdateClientInput, GetClientArgs } from '../shared/dtos/client'
 import { UserEntity } from 'src/entities/user'
 import { ClientService } from 'src/database/mongoose/services/client'
-import { ClientEntity, ClientServiceEntity } from 'src/entities/client'
+import { ClientEntity } from 'src/entities/client'
+import { CompanyEntity } from 'src/entities/company'
+import { CompanyService } from 'src/database/mongoose/services/company'
 
 @UseGuards(JwtAuthGuard)
-@Resolver(() => ClientServiceEntity)
+@Resolver(() => ClientEntity)
 export class ClientResolver {
   constructor (
-    private readonly clientService: ClientService) { }
+    private readonly clientService: ClientService,
+    private readonly companyService: CompanyService) { }
 
   @Query(() => ClientEntity, { nullable: true })
   async client (@Args() data: GetClientArgs,
@@ -24,9 +27,9 @@ export class ClientResolver {
   }
 
   @Query(() => [ClientEntity])
-  async jobVacancies (@Args() data: GetClientArgs,
+  async clients (@Args() data: GetClientArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<ClientEntity[]> {
-    return this.clientService.get(data)
+    return this.clientService.get(user.isAdmin ? data : { ...data, companyId: user.companyId })
   }
 
   @Query(() => [ClientEntity])
@@ -34,9 +37,16 @@ export class ClientResolver {
     return this.clientService.find(data)
   }
 
+  @ResolveField(() => CompanyEntity)
+  async company (@Parent() data: ClientEntity) {
+    return this.companyService.getById(data.companyId)
+  }
+
   @Mutation(() => ClientEntity)
   async createClient (@Args('createClientData') createClientData: CreateClientInput,
   @Context(UserDataPipe) user: UserEntity): Promise<ClientEntity> {
+    console.log(createClientData)
+
     return this.clientService.create({ ...createClientData, createdBy: user.id, createdAt: new Date() })
   }
 

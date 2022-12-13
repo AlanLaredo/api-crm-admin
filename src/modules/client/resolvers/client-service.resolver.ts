@@ -24,7 +24,7 @@ export class ClientServiceResolver {
   }
 
   @Query(() => [ClientServiceEntity])
-  async jobVacancies (@Args() data: GetClientServiceArgs,
+  async clientServices (@Args() data: GetClientServiceArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<ClientServiceEntity[]> {
     return this.clientServiceService.get(data)
   }

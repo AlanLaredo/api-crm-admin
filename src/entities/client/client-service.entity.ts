@@ -16,7 +16,7 @@ export class ClientServiceEntity extends IdentityLogEntity {
   @IsMongoId()
   @Field(() => ID, { nullable: false })
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    cientId!: Types.ObjectId
+    clientId!: Types.ObjectId
 
   @IsOptional()
   @IsString()
@@ -100,7 +100,7 @@ export class ClientServiceEntity extends IdentityLogEntity {
   @IsNumber()
   @Field(() => Int, { nullable: true })
   @Prop()
-    totalQaudBike?: number
+    totalQuadBike?: number
 
   @IsOptional()
   @IsDate()
