@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
+import { ClientEntity } from '../client'
 
 import { IdentityLogEntity } from '../common'
 
@@ -29,6 +30,9 @@ export class PositionEntity extends IdentityLogEntity {
   @Field({ nullable: true })
   @Prop()
     salary?: number
+
+  @Field(() => ClientEntity, { nullable: true })
+    client?: ClientEntity
 }
 
 export const PositionSchema = SchemaFactory.createForClass(PositionEntity)

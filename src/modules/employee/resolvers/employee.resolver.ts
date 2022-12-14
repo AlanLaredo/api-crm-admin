@@ -32,7 +32,7 @@ export class EmployeeResolver {
   @Query(() => [EmployeeEntity])
   async employees (@Args() data: GetEmployeeArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<EmployeeEntity[]> {
-    return this.employeeService.get(data)
+    return this.employeeService.get(user.isAdmin ? data : { ...data, companyId: user.companyId })
   }
 
   @Query(() => [EmployeeEntity])
