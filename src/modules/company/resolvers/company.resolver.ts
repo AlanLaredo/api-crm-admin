@@ -8,11 +8,14 @@ import { DeleteIDInput } from 'src/modules/common/shared/dtos'
 
 import { CreateCompanyInput, UpdateCompanyInput, GetCompanyArgs } from '../shared/dtos/company'
 import { UserEntity } from 'src/entities/user'
-import { CompanyEntity, CompanyGroupEntity, CompanyUserEntity } from 'src/entities/company'
+import { CompanyEntity, CompanyGroupEntity } from 'src/entities/company'
 import { CompanyGroupService, CompanyService, CompanyUserService } from 'src/database/mongoose/services/company'
 import { UserSessionService } from 'src/database/mongoose/services/user'
 import { ConfigService } from '@nestjs/config'
-import { Types } from 'mongoose'
+import { ProcessEntity } from 'src/entities/process'
+import { ProcessService } from 'src/database/mongoose/services/process'
+import { ClientService } from 'src/database/mongoose/services/client'
+import { ClientEntity } from 'src/entities/client'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => CompanyEntity)
@@ -20,20 +23,22 @@ export class CompanyResolver {
   constructor (
     private readonly companyService: CompanyService,
     private readonly companyGroupService: CompanyGroupService,
+    private readonly clientService: ClientService,
     private readonly companyUserService: CompanyUserService,
     private readonly configService: ConfigService,
-    private readonly usersService: UserSessionService) { }
+    private readonly usersService: UserSessionService,
+    private readonly processService: ProcessService) { }
 
   @Query(() => CompanyEntity, { nullable: true })
   async company (@Args() data: GetCompanyArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<CompanyEntity> {
-    return this.companyService.getOne(data)
+    return this.companyService.getOne(user.isAdmin ? data : { ...data, id: user.companyId })
   }
 
   @Query(() => [CompanyEntity])
   async companies (@Args() data: GetCompanyArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<CompanyEntity[]> {
-    return this.companyService.get(data)
+    return this.companyService.get(user.isAdmin ? data : { ...data, id: user.companyId })
   }
 
   @Query(() => [CompanyEntity])
@@ -49,6 +54,16 @@ export class CompanyResolver {
   @ResolveField(() => CompanyEntity)
   async companyParent (data: CompanyEntity) {
     return this.companyService.getById(data.companyId)
+  }
+
+  @ResolveField(() => [ProcessEntity])
+  async processList (data: CompanyEntity) {
+    return this.processService.get({ companyId: data.id })
+  }
+
+  @ResolveField(() => [ClientEntity])
+  async clients (data: CompanyEntity) {
+    return this.clientService.get({ companyId: data.id })
   }
 
   // @ResolveField(() => [UserEntity])

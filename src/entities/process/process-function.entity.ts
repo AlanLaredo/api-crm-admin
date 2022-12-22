@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { Field, ID, ObjectType, ArgsType, InputType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import { Types } from 'mongoose'
@@ -6,6 +6,8 @@ import { Types } from 'mongoose'
 import { IdentityLogEntity } from '../common'
 
 @ObjectType()
+@ArgsType()
+@InputType('ProcessFunctionInput')
 @Schema({
   collection: 'process_functions'
 })

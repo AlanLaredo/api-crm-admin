@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { Field, ID, ObjectType, ArgsType, InputType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
@@ -6,6 +6,8 @@ import { ClientEntity } from '../client'
 
 import { IdentityLogEntity } from '../common'
 
+@ArgsType()
+@InputType('PositionInput')
 @ObjectType()
 @Schema({
   collection: 'positions'

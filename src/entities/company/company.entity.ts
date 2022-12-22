@@ -2,8 +2,10 @@ import { Field, ID, InputType, ObjectType, ArgsType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsMongoId, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
+import { ClientEntity } from '../client'
 
 import { IdentityLogEntity } from '../common'
+import { ProcessEntity } from '../process'
 import { UserEntity } from '../user'
 import { CompanyGroupEntity } from './company-group.entity'
 
@@ -51,6 +53,12 @@ export class CompanyEntity extends IdentityLogEntity {
 
   @Field(() => CompanyEntity, { nullable: true })
     company?: any
+
+  @Field(() => [ProcessEntity], { nullable: true })
+    processList?: any[]
+
+  @Field(() => [ClientEntity], { nullable: true })
+    clients?: any[]
 }
 
 export const CompanySchema = SchemaFactory.createForClass(CompanyEntity)

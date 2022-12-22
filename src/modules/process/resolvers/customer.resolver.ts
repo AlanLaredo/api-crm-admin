@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-constructor */
-import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql'
+import { Resolver, Query, Args, Mutation, Context, ResolveField, Parent } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 
 import { JwtAuthGuard } from 'src/modules/auth/shared/guards'
@@ -8,14 +8,18 @@ import { DeleteIDInput } from 'src/modules/common/shared/dtos'
 
 import { CreateCustomerInput, UpdateCustomerInput, GetCustomerArgs } from '../shared/dtos/customer'
 import { UserEntity } from 'src/entities/user'
-import { CustomerEntity } from 'src/entities/process'
-import { CustomerService } from 'src/database/mongoose/services/process'
+import { CustomerEntity, ProcessEntity } from 'src/entities/process'
+import { CustomerService, ProcessService } from 'src/database/mongoose/services/process'
+import { ClientEntity } from 'src/entities/client'
+import { ClientService } from 'src/database/mongoose/services/client'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => CustomerEntity)
 export class CustomerResolver {
   constructor (
-    private readonly customerService: CustomerService) { }
+    private readonly customerService: CustomerService,
+    private readonly clientService: ClientService,
+    private readonly processService: ProcessService) { }
 
   @Query(() => CustomerEntity, { nullable: true })
   async customer (@Args() data: GetCustomerArgs,
@@ -32,6 +36,16 @@ export class CustomerResolver {
   @Query(() => [CustomerEntity])
   async getCustomerFind (@Args() data: GetCustomerArgs): Promise<CustomerEntity[]> {
     return this.customerService.find(data)
+  }
+
+  @ResolveField(() => ClientEntity)
+  async client (data: CustomerEntity) {
+    return this.clientService.getById(data.clientId)
+  }
+
+  @ResolveField(() => ProcessEntity)
+  async process (@Parent() data: CustomerEntity) {
+    return this.processService.getById(data.processId)
   }
 
   @Mutation(() => CustomerEntity)

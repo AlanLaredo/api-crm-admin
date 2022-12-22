@@ -14,6 +14,8 @@ import { CompanyEntity } from 'src/entities/company'
 import { CompanyService } from 'src/database/mongoose/services/company'
 import { ClientEntity } from 'src/entities/client'
 import { ClientService } from 'src/database/mongoose/services/client'
+import { PositionEntity } from 'src/entities/recruiment'
+import { PositionService } from 'src/database/mongoose/services/recruiment'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => EmployeeEntity)
@@ -21,6 +23,7 @@ export class EmployeeResolver {
   constructor (
     private readonly employeeService: EmployeeService,
     private readonly companyService: CompanyService,
+    private readonly positionService: PositionService,
     private readonly clientService: ClientService) { }
 
   @Query(() => EmployeeEntity, { nullable: true })
@@ -48,6 +51,11 @@ export class EmployeeResolver {
   @ResolveField(() => ClientEntity, { nullable: true })
   async client (data: EmployeeEntity) {
     return this.clientService.getById(data.clientId)
+  }
+
+  @ResolveField(() => PositionEntity, { nullable: true })
+  async position (data: EmployeeEntity) {
+    return this.positionService.getById(data.positionId)
   }
 
   @Mutation(() => EmployeeEntity)
