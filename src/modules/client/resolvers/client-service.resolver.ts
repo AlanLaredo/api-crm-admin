@@ -8,13 +8,16 @@ import { DeleteIDInput } from 'src/modules/common/shared/dtos'
 
 import { CreateClientServiceInput, UpdateClientServiceInput, GetClientServiceArgs } from '../shared/dtos/client-service'
 import { UserEntity } from 'src/entities/user'
-import { ClientServiceEntity } from 'src/entities/client'
-import { ClientServiceService } from 'src/database/mongoose/services/client'
+import { ClientEntity, ClientServiceEntity } from 'src/entities/client'
+import { ClientServiceService, ClientService } from 'src/database/mongoose/services/client'
+import { EMailService } from 'src/modules/core/services'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => ClientServiceEntity)
 export class ClientServiceResolver {
   constructor (
+    private readonly eMailService: EMailService,
+    private readonly _clientService: ClientService,
     private readonly clientServiceService: ClientServiceService) { }
 
   @Query(() => ClientServiceEntity, { nullable: true })
@@ -37,7 +40,15 @@ export class ClientServiceResolver {
   @Mutation(() => ClientServiceEntity)
   async createClientService (@Args('createClientServiceData') createClientServiceData: CreateClientServiceInput,
   @Context(UserDataPipe) user: UserEntity): Promise<ClientServiceEntity> {
-    return this.clientServiceService.create({ ...createClientServiceData, createdBy: user.id, createdAt: new Date() })
+    const result = await this.clientServiceService.create({ ...createClientServiceData, createdBy: user.id, createdAt: new Date() })
+    const client: ClientEntity = await this._clientService.getById(result.clientId)
+    const users: UserEntity[] = await this.eMailService.getUsersForPermissionTagNotification('admin.emailNotification.newClientService', client.companyId)
+    if (result && users && users.length > 0) {
+      const message: string = 'Se ha creado un nuevo servicio, ' + createClientServiceData.name
+      const subject: string = 'Creación de nuevo servicio'
+      await Promise.all(users.map(user => this.eMailService.send(user.email, subject, 'general.pug', { message, userName: user.firstName, subject })))
+    }
+    return result
   }
 
   @Mutation(() => ClientServiceEntity)

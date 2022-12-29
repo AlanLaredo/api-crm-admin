@@ -1,12 +1,13 @@
 import { Module, Global } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Types } from 'mongoose'
-import { UserRoleService, UserService } from 'src/database/mongoose/services/user'
-import { UserEntity, UserRoleEntity } from 'src/entities/user'
+import { RolePermissionService, UserRoleService, UserService } from 'src/database/mongoose/services/user'
+import { RolePermissionEntity, UserEntity, UserRoleEntity } from 'src/entities/user'
 import { AuthService } from '../auth/services'
 
 import { CommonModule } from '../common/common.module'
 import { USER_RESOLVERS } from './resolvers'
+import { ROLE_PERMISSIONS } from './shared/data'
 
 @Global()
 @Module({
@@ -22,6 +23,7 @@ export class UserModule {
   constructor (private userService: UserService,
     private userRoleService: UserRoleService,
     private authService: AuthService,
+    private rolePermissionService: RolePermissionService,
     private configService: ConfigService) {
     console.log('User module sucessfully initialized.')
     this.initialConfiguration()
@@ -40,9 +42,25 @@ export class UserModule {
       roleAccessId: userRoleAdmin.id
     })
 
+    this.checkPermissions()
+
     if (!adminUser) {
       this.createAdminUser(userRoleAdmin.id)
     }
+  }
+
+  async checkPermissions () {
+    const systemId: string = this.configService.get<string>('config.mongo.systemId')
+
+    const permissions: RolePermissionEntity[] = await Promise.all(ROLE_PERMISSIONS.map((permission: Partial<RolePermissionEntity>) => this.rolePermissionService.getOne(permission)))
+    const newRolePermissionPromises: Promise<RolePermissionEntity>[] = []
+    ROLE_PERMISSIONS.forEach((permission: Partial<RolePermissionEntity>) => {
+      if (!permissions.find(p => p && p.tag && p.tag === permission.tag)) {
+        newRolePermissionPromises.push(this.rolePermissionService.create({ ...permission, createdBy: systemId, createdAt: new Date() }))
+      }
+    })
+
+    return Promise.all(newRolePermissionPromises)
   }
 
   async createUserRole () {

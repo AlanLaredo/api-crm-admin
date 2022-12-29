@@ -5,6 +5,7 @@ import mongoose, { Types } from 'mongoose'
 
 import { AddressEntity, AddressSchema, IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
 import { CompanyEntity } from '../company'
+import { CustomerEntity } from '../process'
 
 @ObjectType()
 @ArgsType()
@@ -58,6 +59,9 @@ export class ClientEntity extends IdentityLogEntity {
 
   @Field(() => CompanyEntity, { nullable: true })
     company?: CompanyEntity
+
+  @Field(() => CustomerEntity, { nullable: true })
+    customer?: CustomerEntity
 }
 
 export const ClientSchema = SchemaFactory.createForClass(ClientEntity)

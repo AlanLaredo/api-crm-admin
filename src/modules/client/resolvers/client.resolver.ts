@@ -12,12 +12,15 @@ import { ClientService } from 'src/database/mongoose/services/client'
 import { ClientEntity } from 'src/entities/client'
 import { CompanyEntity } from 'src/entities/company'
 import { CompanyService } from 'src/database/mongoose/services/company'
+import { CustomerEntity } from 'src/entities/process'
+import { CustomerService } from 'src/database/mongoose/services/process'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => ClientEntity)
 export class ClientResolver {
   constructor (
     private readonly clientService: ClientService,
+    private readonly customerService: CustomerService,
     private readonly companyService: CompanyService) { }
 
   @Query(() => ClientEntity, { nullable: true })
@@ -40,6 +43,11 @@ export class ClientResolver {
   @ResolveField(() => CompanyEntity)
   async company (@Parent() data: ClientEntity) {
     return this.companyService.getById(data.companyId)
+  }
+
+  @ResolveField(() => CustomerEntity)
+  async customer (@Parent() data: ClientEntity) {
+    return this.customerService.getOne({ clientId: data.id })
   }
 
   @Mutation(() => ClientEntity)

@@ -25,19 +25,40 @@ export class ProcessModule {
   }
 
   async initialConfiguration () {
-    const rows = await this.processFunctionService.get()
-    if (rows.length === 0) {
-      const emailFunction: any = {
-        name: 'Enviar email a CrmAdmin',
-        description: 'Enviar email a personal con notificación de actualización de proceso',
-        key: 'send-email-to-admin'
-      }
-      const createClientFromCustomer: any = {
+    const functions = await this.processFunctionService.get({
+      $or: [
+        { key: 'send-email' },
+        { key: 'register-client-from-customer-to-client' },
+        { key: 'quote-required' }
+      ]
+    })
+    const functionsPromises = []
+    if (!functions.find(f => f.key === 'send-email')) {
+      functionsPromises.push(this.createProcessFunction({
+        name: 'Enviar email',
+        description: 'Enviar email a lista libre de email',
+        key: 'send-email'
+      }))
+    }
+
+    if (!functions.find(f => f.key === 'quote-required')) {
+      functionsPromises.push(this.createProcessFunction({
+        name: 'Exigir cotización',
+        description: 'Exije un cotización',
+        key: 'quote-required'
+      }))
+    }
+
+    if (!functions.find(f => f.key === 'register-client-from-customer-to-client')) {
+      functionsPromises.push(this.createProcessFunction({
         name: 'Crear cliente',
         description: 'Crea un cliente a partir de un customer',
         key: 'register-client-from-customer-to-client'
-      }
-      Promise.all([this.createProcessFunction(emailFunction), this.createProcessFunction(createClientFromCustomer)])
+      }))
+    }
+
+    if (functionsPromises && functionsPromises.length > 0) {
+      await Promise.all(functionsPromises)
     }
   }
 

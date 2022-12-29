@@ -23,8 +23,8 @@ export default registerAs('config', () => {
     mailing: {
       templateFolder: process.env.MAILER_DIR_TEMPLATE,
       transportConfiguration: process.env.TRANSPORT_CONFIGURATION,
-      incomingPasswordUsers: process.env.MAILDEV_INCOMING_USER,
-      incomingPasswordPassword: process.env.MAILDEV_INCOMING_PASS
+      incomingUser: process.env.MAILDEV_INCOMING_USER,
+      incomingPassword: process.env.MAILDEV_INCOMING_PASS
     }
   }
 })
