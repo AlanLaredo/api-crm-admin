@@ -8,18 +8,22 @@ import { DeleteIDInput } from 'src/modules/common/shared/dtos'
 
 import { CreateClientInput, UpdateClientInput, GetClientArgs } from '../shared/dtos/client'
 import { UserEntity } from 'src/entities/user'
-import { ClientService } from 'src/database/mongoose/services/client'
-import { ClientEntity } from 'src/entities/client'
+import { ClientService, ClientServiceService } from 'src/database/mongoose/services/client'
+import { ClientEntity, ClientServiceEntity } from 'src/entities/client'
 import { CompanyEntity } from 'src/entities/company'
 import { CompanyService } from 'src/database/mongoose/services/company'
 import { CustomerEntity } from 'src/entities/process'
 import { CustomerService } from 'src/database/mongoose/services/process'
+import { PositionService } from 'src/database/mongoose/services/recruiment'
+import { PositionEntity } from 'src/entities/recruiment'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => ClientEntity)
 export class ClientResolver {
   constructor (
     private readonly clientService: ClientService,
+    private readonly clientServiceService: ClientServiceService,
+    private readonly positionService: PositionService,
     private readonly customerService: CustomerService,
     private readonly companyService: CompanyService) { }
 
@@ -48,6 +52,16 @@ export class ClientResolver {
   @ResolveField(() => CustomerEntity)
   async customer (@Parent() data: ClientEntity) {
     return this.customerService.getOne({ clientId: data.id })
+  }
+
+  @ResolveField(() => [PositionEntity])
+  async positions (@Parent() data: ClientEntity) {
+    return this.positionService.get({ clientId: data.id })
+  }
+
+  @ResolveField(() => [ClientServiceEntity])
+  async clientServices (@Parent() data: ClientEntity) {
+    return this.clientServiceService.get({ clientId: data.id })
   }
 
   @Mutation(() => ClientEntity)

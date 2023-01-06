@@ -4,5 +4,5 @@ import { IdentityLogEntityProps } from 'src/entities/common/'
 import { ClientEntity } from 'src/entities/client'
 
 @InputType()
-export class CreateClientInput extends OmitType(ClientEntity, IdentityLogEntityProps, InputType) {
+export class CreateClientInput extends OmitType(ClientEntity, [...IdentityLogEntityProps, 'company', 'customer', 'clientServices', 'positions'], InputType) {
 }

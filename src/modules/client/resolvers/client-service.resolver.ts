@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-constructor */
-import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql'
+import { Resolver, Query, Args, Mutation, Context, ResolveField } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 
 import { JwtAuthGuard } from 'src/modules/auth/shared/guards'
@@ -35,6 +35,11 @@ export class ClientServiceResolver {
   @Query(() => [ClientServiceEntity])
   async getClientServiceFind (@Args() data: GetClientServiceArgs): Promise<ClientServiceEntity[]> {
     return this.clientServiceService.find(data)
+  }
+
+  @ResolveField(() => ClientEntity)
+  async client (data: ClientServiceEntity) {
+    return this._clientService.getById(data.clientId)
   }
 
   @Mutation(() => ClientServiceEntity)

@@ -16,6 +16,7 @@ import { ClientEntity } from 'src/entities/client'
 import { ClientService } from 'src/database/mongoose/services/client'
 import { PositionEntity } from 'src/entities/recruiment'
 import { PositionService } from 'src/database/mongoose/services/recruiment'
+import { EMailService } from 'src/modules/core/services'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => EmployeeEntity)
@@ -23,6 +24,7 @@ export class EmployeeResolver {
   constructor (
     private readonly employeeService: EmployeeService,
     private readonly companyService: CompanyService,
+    private readonly eMailService: EMailService,
     private readonly positionService: PositionService,
     private readonly clientService: ClientService) { }
 
@@ -61,7 +63,15 @@ export class EmployeeResolver {
   @Mutation(() => EmployeeEntity)
   async createEmployee (@Args('createEmployeeData') createEmployeeData: CreateEmployeeInput,
   @Context(UserDataPipe) user: UserEntity): Promise<EmployeeEntity> {
-    return this.employeeService.create({ ...createEmployeeData, createdBy: user.id, createdAt: new Date() })
+    const result = await this.employeeService.create({ ...createEmployeeData, createdBy: user.id, createdAt: new Date() })
+    const client: ClientEntity = await this.clientService.getById(result.clientId)
+    const users: UserEntity[] = await this.eMailService.getUsersForPermissionTagNotification('admin.emailNotification.newEmployee', client.companyId)
+    if (result && users && users.length > 0) {
+      const message: string = 'Se ha registrado un nuevo empleado, ' + createEmployeeData.person.name + ' ' + (createEmployeeData.person.lastName ? createEmployeeData.person.lastName : '')
+      const subject: string = 'Registro de nuevo empleado'
+      await Promise.all(users.map(user => this.eMailService.send(user.email, subject, 'general.pug', { message, userName: user.firstName, subject })))
+    }
+    return result
   }
 
   @Mutation(() => EmployeeEntity)

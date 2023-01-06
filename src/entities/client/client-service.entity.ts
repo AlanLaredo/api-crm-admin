@@ -1,11 +1,14 @@
-import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql'
+import { Field, Float, ID, Int, ObjectType, ArgsType, InputType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsDate, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
+import { ClientEntity } from './client.entity'
 
 @ObjectType()
+@ArgsType()
+@InputType('ClientServiceInput')
 @Schema({
   collection: 'client_services'
 })
@@ -177,6 +180,9 @@ export class ClientServiceEntity extends IdentityLogEntity {
   @Field({ nullable: true })
   @Prop({ nullable: true })
     paymentForm?: string
+
+  @Field(() => ClientEntity, { nullable: true })
+    client?: ClientEntity
 }
 
 export const ClientServiceSchema = SchemaFactory.createForClass(ClientServiceEntity)

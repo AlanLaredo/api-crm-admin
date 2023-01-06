@@ -1,11 +1,16 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { Field, ID, ObjectType, ArgsType, InputType, Float, Int } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsArray, IsMongoId, IsNotEmpty, IsNumber, IsOptional } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
+import { ClientServiceEntity } from '../client'
 
 import { IdentityLogEntity } from '../common'
+import { PositionEntity } from './position.entity'
+import { RecruitEntity } from './recruit.entity'
 
 @ObjectType()
+@ArgsType()
+@InputType('JobVacancyInput')
 @Schema({
   collection: 'job_vacancies'
 })
@@ -13,15 +18,15 @@ export class JobVacancyEntity extends IdentityLogEntity {
   @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
-  @IsNotEmpty()
-  @Field()
-  @Prop({ required: true })
-    name!: string
+  @IsMongoId()
+  @Field(() => ID)
+  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
+    clientServiceId!: Types.ObjectId
 
   @IsMongoId()
   @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    clientId!: Types.ObjectId
+    positionId!: Types.ObjectId
 
   @IsNumber()
   @Field()
@@ -34,10 +39,25 @@ export class JobVacancyEntity extends IdentityLogEntity {
   @Prop({ type: [String] })
     requiredDocumentsPaths?: string[]
 
+  @IsNotEmpty()
+  @IsNumber()
+  @Field(() => Int, { nullable: false })
+  @Prop({ required: true })
+    jobVacanciesStatus!: number
+
   @IsMongoId()
   @Field(() => ID)
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    jobVacanciesStatusId!: Types.ObjectId
+    companyId!: Types.ObjectId
+
+  @Field(() => ClientServiceEntity, { nullable: true })
+    clientService?: ClientServiceEntity
+
+  @Field(() => PositionEntity, { nullable: true })
+    position?: PositionEntity
+
+  @Field(() => [RecruitEntity], { nullable: true })
+    recruits?: RecruitEntity[]
 }
 
 export const JobVacancySchema = SchemaFactory.createForClass(JobVacancyEntity)

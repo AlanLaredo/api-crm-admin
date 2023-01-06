@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, ArgsType, InputType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { IsDate, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsDate, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 import { ClientEntity } from '../client'
 
@@ -61,6 +61,12 @@ export class EmployeeEntity extends IdentityLogEntity {
   @Field(() => AddressEntity, { nullable: true })
   @Prop({ type: AddressSchema })
     address?: AddressEntity
+
+  @IsOptional()
+  @IsArray()
+  @Field(() => [String], { nullable: true })
+  @Prop({ type: [String] })
+    attachedQuotePath?: string[]
 
   @Field(() => CompanyEntity, { nullable: true })
     company?: CompanyEntity

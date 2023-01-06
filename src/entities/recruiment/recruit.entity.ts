@@ -1,11 +1,13 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { Field, ID, ObjectType, ArgsType, InputType, Float, Int } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { IsArray, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
 
 @ObjectType()
+@ArgsType()
+@InputType('RecruitInput')
 @Schema({
   collection: 'recruits'
 })
@@ -13,9 +15,10 @@ export class RecruitEntity extends IdentityLogEntity {
   @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
-  @Field(() => PersonEntity)
+  @IsOptional()
+  @Field(() => PersonEntity, { nullable: true })
   @Prop({ type: PersonSchema, required: true })
-    data!: PersonEntity
+    data: PersonEntity
 
   @IsMongoId()
   @Field(() => ID)
@@ -40,10 +43,11 @@ export class RecruitEntity extends IdentityLogEntity {
   @Prop()
     requiredInfo?: string
 
-  @IsMongoId()
-  @Field(() => ID)
-  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
-    statusApplicantId!: Types.ObjectId
+  @IsNotEmpty()
+  @IsNumber()
+  @Field(() => Int, { nullable: false })
+  @Prop({ required: true })
+    statusApplicant!: number
 }
 
 export const RecruitSchema = SchemaFactory.createForClass(RecruitEntity)
