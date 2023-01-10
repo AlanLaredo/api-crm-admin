@@ -1,12 +1,15 @@
 import { EmployeeReassignmentService } from './employee-reassignment.service'
 import { EmployeeService } from './employee.service'
+import { OperationService } from './operation.service'
 
 export const EMPLOYEE_SERVICES = [
   EmployeeReassignmentService,
-  EmployeeService
+  EmployeeService,
+  OperationService
 ]
 
 export {
   EmployeeReassignmentService,
-  EmployeeService
+  EmployeeService,
+  OperationService
 }

@@ -6,6 +6,7 @@ import { ClientEntity } from '../client'
 
 import { AddressEntity, AddressSchema, IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
 import { CompanyEntity } from '../company'
+import { OperationEntity } from './operation.entity'
 
 @ObjectType()
 @ArgsType()
@@ -67,6 +68,9 @@ export class EmployeeEntity extends IdentityLogEntity {
   @Field(() => [String], { nullable: true })
   @Prop({ type: [String] })
     attachedQuotePath?: string[]
+
+  @Field(() => [OperationEntity], { nullable: true })
+    operations?: OperationEntity[]
 
   @Field(() => CompanyEntity, { nullable: true })
     company?: CompanyEntity

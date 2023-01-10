@@ -8,8 +8,8 @@ import { DeleteIDInput } from 'src/modules/common/shared/dtos'
 
 import { CreateEmployeeInput, UpdateEmployeeInput, GetEmployeeArgs } from '../shared/dtos/employee'
 import { UserEntity } from 'src/entities/user'
-import { EmployeeEntity } from 'src/entities/employee'
-import { EmployeeService } from 'src/database/mongoose/services/employee'
+import { EmployeeEntity, OperationEntity } from 'src/entities/employee'
+import { EmployeeService, OperationService } from 'src/database/mongoose/services/employee'
 import { CompanyEntity } from 'src/entities/company'
 import { CompanyService } from 'src/database/mongoose/services/company'
 import { ClientEntity } from 'src/entities/client'
@@ -26,7 +26,8 @@ export class EmployeeResolver {
     private readonly companyService: CompanyService,
     private readonly eMailService: EMailService,
     private readonly positionService: PositionService,
-    private readonly clientService: ClientService) { }
+    private readonly clientService: ClientService,
+    private readonly operationService: OperationService) { }
 
   @Query(() => EmployeeEntity, { nullable: true })
   async employee (@Args() data: GetEmployeeArgs,
@@ -36,6 +37,12 @@ export class EmployeeResolver {
 
   @Query(() => [EmployeeEntity])
   async employees (@Args() data: GetEmployeeArgs,
+  @Context(UserDataPipe) user: UserEntity): Promise<EmployeeEntity[]> {
+    return this.employeeService.get(user.isAdmin ? data : { ...data, companyId: user.companyId })
+  }
+
+  @Query(() => [EmployeeEntity])
+  async employeesInOperation (@Args() data: GetEmployeeArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<EmployeeEntity[]> {
     return this.employeeService.get(user.isAdmin ? data : { ...data, companyId: user.companyId })
   }
@@ -58,6 +65,11 @@ export class EmployeeResolver {
   @ResolveField(() => PositionEntity, { nullable: true })
   async position (data: EmployeeEntity) {
     return this.positionService.getById(data.positionId)
+  }
+
+  @ResolveField(() => [OperationEntity], { nullable: true })
+  async operations (data: EmployeeEntity) {
+    return this.operationService.get({ employeeId: data.id })
   }
 
   @Mutation(() => EmployeeEntity)
