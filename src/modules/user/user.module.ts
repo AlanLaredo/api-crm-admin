@@ -30,6 +30,8 @@ export class UserModule {
   }
 
   async initialConfiguration () {
+    await this.checkPermissions()
+
     let userRoleAdmin = await this.userRoleService.getOne({
       name: 'CrmAdmin'
     })
@@ -42,11 +44,8 @@ export class UserModule {
       roleAccessId: userRoleAdmin.id
     })
 
-    await this.checkPermissions()
-
     if (!adminUser) {
       this.createAdminUser(userRoleAdmin.id)
-      // this.createAdminUser(userRoleAdmin.id)
       // add some default permissions to the user role admin
     }
   }
@@ -67,16 +66,42 @@ export class UserModule {
 
   async createUserRole () {
     const systemId: string = this.configService.get<string>('config.mongo.systemId')
-    const userRole: any = {
+    let permissionsToCrmAdmin: RolePermissionEntity[] = []
+
+    console.log('permissionsToCrmAdmin')
+    console.log(permissionsToCrmAdmin)
+
+    const tags: string[] = ['company',
+      'company.set',
+      'company.delete',
+      'companyGroups',
+      'companyGroups.set',
+      'companyGroups.delete',
+      'users',
+      'users.set',
+      'users.delete',
+      'roles',
+      'roles.set',
+      'roles.delete',
+      'home'
+    ]
+
+    permissionsToCrmAdmin = await this.rolePermissionService.getWhereIn({}, 'tag', tags)
+
+    console.log('permissionsToCrmAdmin')
+    console.log(permissionsToCrmAdmin)
+
+    const userRole: UserRoleEntity = {
       name: 'CrmAdmin',
       description: 'Este rol es solo para usuarios administradores de CRM. No se puede editar.',
+      permissionsIds: permissionsToCrmAdmin.map(permission => new Types.ObjectId(permission.id)),
       createdAt: new Date(),
       createdBy: new Types.ObjectId(systemId)
     }
     return this.userRoleService.create(userRole)
   }
 
-  async createAdminUser (id: Types.ObjectId) {
+  async createAdminUser (roleAccessId: Types.ObjectId) {
     const systemId: string = this.configService.get<string>('config.mongo.systemId')
     const defaultPassword: string = this.configService.get<string>('config.mongo.defaultPassword')
     const hashedPassword: string = await this.authService.getHashPassword(defaultPassword)
@@ -86,7 +111,7 @@ export class UserModule {
       firstName: 'CrmAdmin',
       password: hashedPassword, // changue this, pls
       email: 'admin@crm.com',
-      roleAccessId: id,
+      roleAccessId,
       createdBy: new Types.ObjectId(systemId),
       createdAt: new Date()
     }
