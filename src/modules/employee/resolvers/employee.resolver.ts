@@ -12,8 +12,8 @@ import { EmployeeEntity, OperationEntity } from 'src/entities/employee'
 import { EmployeeService, OperationService } from 'src/database/mongoose/services/employee'
 import { CompanyEntity } from 'src/entities/company'
 import { CompanyService } from 'src/database/mongoose/services/company'
-import { ClientEntity } from 'src/entities/client'
-import { ClientService } from 'src/database/mongoose/services/client'
+import { ClientEntity, ClientServiceEntity } from 'src/entities/client'
+import { ClientService, ClientServiceService } from 'src/database/mongoose/services/client'
 import { PositionEntity } from 'src/entities/recruiment'
 import { PositionService } from 'src/database/mongoose/services/recruiment'
 import { EMailService } from 'src/modules/core/services'
@@ -26,7 +26,8 @@ export class EmployeeResolver {
     private readonly companyService: CompanyService,
     private readonly eMailService: EMailService,
     private readonly positionService: PositionService,
-    private readonly clientService: ClientService,
+    private readonly clientService_: ClientService,
+    private readonly clientServiceService: ClientServiceService,
     private readonly operationService: OperationService) { }
 
   @Query(() => EmployeeEntity, { nullable: true })
@@ -59,7 +60,12 @@ export class EmployeeResolver {
 
   @ResolveField(() => ClientEntity, { nullable: true })
   async client (data: EmployeeEntity) {
-    return this.clientService.getById(data.clientId)
+    return this.clientService_.getById(data.clientId)
+  }
+
+  @ResolveField(() => ClientServiceEntity, { nullable: true })
+  async clientService (data: EmployeeEntity) {
+    return this.clientServiceService.getById(data.clientId)
   }
 
   @ResolveField(() => PositionEntity, { nullable: true })
@@ -76,7 +82,7 @@ export class EmployeeResolver {
   async createEmployee (@Args('createEmployeeData') createEmployeeData: CreateEmployeeInput,
   @Context(UserDataPipe) user: UserEntity): Promise<EmployeeEntity> {
     const result = await this.employeeService.create({ ...createEmployeeData, createdBy: user.id, createdAt: new Date() })
-    const client: ClientEntity = await this.clientService.getById(result.clientId)
+    const client: ClientEntity = await this.clientService_.getById(result.clientId)
     const users: UserEntity[] = await this.eMailService.getUsersForPermissionTagNotification('admin.emailNotification.newEmployee', client.companyId)
     if (result && users && users.length > 0) {
       const message: string = 'Se ha registrado un nuevo empleado, ' + createEmployeeData.person.name + ' ' + (createEmployeeData.person.lastName ? createEmployeeData.person.lastName : '')

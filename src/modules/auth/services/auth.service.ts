@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-import { UserRoleService, UserService } from 'src/database/mongoose/services/user'
+import { RolePermissionService, UserRoleService, UserService } from 'src/database/mongoose/services/user'
 
 import { RolePermissionEntity, UserEntity, UserRoleEntity } from 'src/entities/user'
 import { IToken } from '../shared/interfaces'
@@ -12,6 +12,7 @@ export class AuthService {
   constructor (
     private jwtService: JwtService,
     private userService: UserService,
+    private rolePermissionService: RolePermissionService,
     private userRoleService: UserRoleService) { }
 
   public async getHashPassword (password: string): Promise<string> {
@@ -39,7 +40,7 @@ export class AuthService {
 
   public async generateToken (user: UserEntity) {
     const userRole: UserRoleEntity = await this.userRoleService.getById(user.roleAccessId)
-    const permissions: RolePermissionEntity[] = await this.getPermissions(user)
+    const permissions: RolePermissionEntity[] = await this.getPermissions(userRole)
     const { _id } = { ...user } as any
     const payload: IToken = {
       userId: _id,
@@ -57,7 +58,8 @@ export class AuthService {
     }
   }
 
-  private async getPermissions (user: UserEntity) : Promise<RolePermissionEntity[]> {
+  private async getPermissions (role: UserRoleEntity) : Promise<RolePermissionEntity[]> {
+    return this.rolePermissionService.getByIds(role.permissionsIds)
     // const _ = require('lodash')
     // const role: RoleAccessEntity = await this.roleService.getById(user.roleAccessId)
     // let permissionIds = []

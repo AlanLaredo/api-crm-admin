@@ -16,6 +16,12 @@ export class ClientServiceEntity extends IdentityLogEntity {
   @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
+  @IsOptional()
+  @IsString()
+  @Field({ nullable: true })
+  @Prop()
+    keycode?: string
+
   @IsMongoId()
   @Field(() => ID, { nullable: false })
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })

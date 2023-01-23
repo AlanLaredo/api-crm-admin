@@ -31,6 +31,14 @@ export class OperationResolver {
     return this.operationService.get(data)
   }
 
+  @Query(() => Boolean)
+  async operationSendEmail (@Args('message') message: string,
+  @Context(UserDataPipe) user: UserEntity): Promise<boolean> {
+    const subject: string = 'CRM Admin - Nueva Incidencia'
+    this.eMailService.send('santiagoalan1@gmail.com', subject, 'general.pug', { message, userName: 'Administrador', subject })
+    return true
+  }
+
   @Query(() => [OperationEntity])
   async operationsInOperation (@Args() data: GetOperationArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<OperationEntity[]> {

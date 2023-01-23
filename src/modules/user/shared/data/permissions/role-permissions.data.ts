@@ -9,11 +9,11 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   description: 'Recepción de email al momento de que un colaborador completa el registro de un nuevo empleado.',
   tag: 'admin.emailNotification.newEmployee'
 }, {
-  name: 'users',
-  description: 'users',
+  name: 'Módulo usuarios',
+  description: 'Listado de usuarios',
   tag: 'users'
 }, {
-  name: 'users.set',
+  name: 'Creación/Modificación de usuarios',
   description: 'users.set',
   tag: 'users.set'
 }, {
@@ -73,26 +73,6 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   description: 'operations',
   tag: 'operations'
 }, {
-  name: 'operations.set',
-  description: 'operations.set',
-  tag: 'operations.set'
-}, {
-  name: 'operations.delete',
-  description: 'operations.delete',
-  tag: 'operations.delete'
-}, {
-  name: 'clients',
-  description: 'clients',
-  tag: 'clients'
-}, {
-  name: 'clients.set',
-  description: 'clients.set',
-  tag: 'clients.set'
-}, {
-  name: 'clients.delete',
-  description: 'clients.delete',
-  tag: 'clients.delete'
-}, {
   name: 'clients',
   description: 'clients',
   tag: 'clients'
@@ -140,4 +120,24 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   name: 'positions.delete',
   description: 'positions.delete',
   tag: 'positions.delete'
+}, {
+  name: 'prenominal',
+  description: 'prenominal',
+  tag: 'prenominal'
+}, {
+  name: 'prenominal.set',
+  description: 'prenominal.set',
+  tag: 'prenominal.set'
+}, {
+  name: 'prenominal.delete',
+  description: 'prenominal.delete',
+  tag: 'prenominal.delete'
+}, {
+  name: 'Bitácora operativa',
+  description: 'Registro de trabajo diario',
+  tag: 'operation-binnacle'
+}, {
+  name: 'Home',
+  description: 'Pantalla Home',
+  tag: 'home'
 }]

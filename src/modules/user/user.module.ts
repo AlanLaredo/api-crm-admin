@@ -42,10 +42,12 @@ export class UserModule {
       roleAccessId: userRoleAdmin.id
     })
 
-    this.checkPermissions()
+    await this.checkPermissions()
 
     if (!adminUser) {
       this.createAdminUser(userRoleAdmin.id)
+      // this.createAdminUser(userRoleAdmin.id)
+      // add some default permissions to the user role admin
     }
   }
 

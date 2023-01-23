@@ -23,7 +23,7 @@ export class OperationEntity extends IdentityLogEntity {
   @IsMongoId()
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   @Field(() => ID, { nullable: false })
-    employeeId?: Types.ObjectId
+    employeeId!: Types.ObjectId
 
   @IsOptional()
   @IsString()
