@@ -94,3 +94,17 @@ npx graphql-code-generator init
 
 # Documentation
 https://github.com/dotansimha/graphql-code-generator/issues/2043
+Requerimientos
+  - Usa nodejs 140
+  - Instala pm2
+  - Conexión a base de datos en mongo
+
+1 Descarga el repositorio
+2 Configuración de entorno
+3 Crea un archivo ecosystem.config.js
+4 Agrega las variables en este archivo tal como se muestra en el ecosystem.config.js.example
+5 ejecutar npm run nest build 
+6 ejecuta pm2 start ecosystem
+
+
+
