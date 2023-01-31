@@ -99,12 +99,14 @@ Requerimientos
   - Instala pm2
   - Conexión a base de datos en mongo
 
+/* Despliegue productivo */
 1 Descarga el repositorio
-2 Configuración de entorno
+2 Instalación librerías (npm install)
 3 Crea un archivo ecosystem.config.js
 4 Agrega las variables en este archivo tal como se muestra en el ecosystem.config.js.example
 5 ejecutar npm run nest build 
 6 ejecuta pm2 start ecosystem
+7 puedes ver info adicional con comando pm2 monit
 
 
 
