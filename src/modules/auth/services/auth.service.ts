@@ -40,7 +40,7 @@ export class AuthService {
 
   public async generateToken (user: UserEntity) {
     const userRole: UserRoleEntity = await this.userRoleService.getById(user.roleAccessId)
-    const permissions: RolePermissionEntity[] = await this.getPermissions(userRole)
+    const permissions: RolePermissionEntity[] = userRole && userRole.permissionsIds ? await this.getPermissions(userRole) : []
     const { _id } = { ...user } as any
     const payload: IToken = {
       userId: _id,

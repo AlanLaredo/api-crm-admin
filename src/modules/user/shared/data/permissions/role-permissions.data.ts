@@ -14,123 +14,123 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   tag: 'users'
 }, {
   name: 'Creación/Modificación de usuarios',
-  description: 'users.set',
+  description: 'Administración usuarios',
   tag: 'users.set'
 }, {
-  name: 'users.delete',
-  description: 'users.delete',
+  name: 'Eliminar usuarios',
+  description: 'Remueve un usuario',
   tag: 'users.delete'
 }, {
-  name: 'roles',
-  description: 'roles',
+  name: 'Módulo de roles',
+  description: 'Listado de módulos',
   tag: 'roles'
 }, {
-  name: 'roles.set',
-  description: 'roles.set',
+  name: 'Creación/Modificación de roles',
+  description: 'Administración de roles',
   tag: 'roles.set'
 }, {
-  name: 'roles.delete',
-  description: 'roles.delete',
+  name: 'Eliminar roles',
+  description: 'Remueve un rol',
   tag: 'roles.delete'
 }, {
   name: 'companyGroups',
   description: 'companyGroups',
   tag: 'companyGroups'
 }, {
-  name: 'companyGroups.set',
-  description: 'companyGroups.set',
+  name: 'Creación/Modificación de grupos',
+  description: 'Administración de grupos',
   tag: 'companyGroups.set'
 }, {
-  name: 'companyGroups.delete',
-  description: 'companyGroups.delete',
+  name: 'Eliminar grupos',
+  description: 'Remueve un grupo',
   tag: 'companyGroups.delete'
 }, {
-  name: 'company',
-  description: 'company',
+  name: 'Módulo de compañías',
+  description: 'Acceso a compañías',
   tag: 'company'
 }, {
-  name: 'company.set',
-  description: 'company.set',
+  name: 'Creación/Modificación de compañías',
+  description: 'Administración de compañías',
   tag: 'company.set'
 }, {
-  name: 'company.delete',
-  description: 'company.delete',
+  name: 'Eliminar compañías',
+  description: 'Remueve una compañía',
   tag: 'company.delete'
 }, {
   name: 'customers',
   description: 'customers',
   tag: 'customers'
 }, {
-  name: 'operations.set',
-  description: 'operations.set',
+  name: 'Creación/Modificación de procesos',
+  description: 'Administración de procesos',
   tag: 'operations.set'
 }, {
-  name: 'operations.delete',
-  description: 'operations.delete',
+  name: 'Eliminar procesos',
+  description: 'Remueve un proceso',
   tag: 'operations.delete'
 }, {
-  name: 'operations',
-  description: 'operations',
+  name: 'Módulo de procesos',
+  description: 'Acceso a procesos',
   tag: 'operations'
 }, {
-  name: 'clients',
-  description: 'clients',
+  name: 'Módulo de clientes',
+  description: 'Acceso a clientes',
   tag: 'clients'
 }, {
-  name: 'clients.set',
-  description: 'clients.set',
+  name: 'Creación/Modificación de clientes',
+  description: 'Administración de clientes',
   tag: 'clients.set'
 }, {
-  name: 'clients.delete',
-  description: 'clients.delete',
+  name: 'Eliminar clientes',
+  description: 'Remueve un cliente',
   tag: 'clients.delete'
 }, {
-  name: 'employees',
-  description: 'employees',
+  name: 'Módulo de empleados',
+  description: 'Eliminar empleados',
   tag: 'employees'
 }, {
-  name: 'employees.set',
-  description: 'employees.set',
+  name: 'Creación/Modificación de empleados',
+  description: 'Administración de empleados',
   tag: 'employees.set'
 }, {
-  name: 'employees.delete',
-  description: 'employees.delete',
+  name: 'Eliminar empleados',
+  description: 'Remueve empleados',
   tag: 'employees.delete'
 }, {
-  name: 'jobVavancy',
-  description: 'jobVavancy',
+  name: 'Módulo vacantes',
+  description: 'Acceso a vacantes',
   tag: 'jobVavancy'
 }, {
-  name: 'jobVavancy.set',
-  description: 'jobVavancy.set',
+  name: 'Creación/Modificación de Vacantes',
+  description: 'Administración de vacantes',
   tag: 'jobVavancy.set'
 }, {
-  name: 'jobVavancy.delete',
-  description: 'jobVavancy.delete',
+  name: 'Eliminar vacantes',
+  description: 'Remueve vacantes',
   tag: 'jobVavancy.delete'
 }, {
-  name: 'positions',
-  description: 'positions',
+  name: 'Módulo de puestos',
+  description: 'Aceso a puestos',
   tag: 'positions'
 }, {
-  name: 'positions.set',
-  description: 'positions.set',
+  name: 'Creación/Modificación de puestos',
+  description: 'Administración de puestos',
   tag: 'positions.set'
 }, {
-  name: 'positions.delete',
-  description: 'positions.delete',
+  name: 'Eliminar puestos',
+  description: 'Remueve puestos',
   tag: 'positions.delete'
 }, {
-  name: 'prenominal',
-  description: 'prenominal',
+  name: 'Módulo prenómina',
+  description: 'Acceso prenómina',
   tag: 'prenominal'
 }, {
-  name: 'prenominal.set',
-  description: 'prenominal.set',
+  name: 'Creación/Modificación de prenómina',
+  description: 'Administración de prenómina',
   tag: 'prenominal.set'
 }, {
-  name: 'prenominal.delete',
-  description: 'prenominal.delete',
+  name: 'Eliminar prenómina',
+  description: 'Remueve prenómina',
   tag: 'prenominal.delete'
 }, {
   name: 'Bitácora operativa',

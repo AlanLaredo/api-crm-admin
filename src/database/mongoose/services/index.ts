@@ -2,6 +2,7 @@ import { CLIENT_SERVICES } from './client'
 import { COMPANY_SERVICES } from './company'
 import { CORE_SERVICES } from './core'
 import { EMPLOYEE_SERVICES } from './employee'
+import { PRENOMINA_SERVICES } from './prenomina'
 import { PROCESS_SERVICES } from './process'
 import { RECRUIMENT_SERVICES } from './recruiment'
 import { USER_SERVICES } from './user'
@@ -13,5 +14,6 @@ export const MONGOOSE_SERVICES = [
   ...EMPLOYEE_SERVICES,
   ...PROCESS_SERVICES,
   ...RECRUIMENT_SERVICES,
-  ...USER_SERVICES
+  ...USER_SERVICES,
+  ...PRENOMINA_SERVICES
 ]

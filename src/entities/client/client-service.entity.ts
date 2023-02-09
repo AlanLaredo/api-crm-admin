@@ -187,6 +187,12 @@ export class ClientServiceEntity extends IdentityLogEntity {
   @Prop({ nullable: true })
     paymentForm?: string
 
+  @IsOptional()
+  @IsString()
+  @Field({ nullable: true })
+  @Prop()
+    description?: string
+
   @Field(() => ClientEntity, { nullable: true })
     client?: ClientEntity
 }

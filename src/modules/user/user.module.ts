@@ -31,14 +31,11 @@ export class UserModule {
 
   async initialConfiguration () {
     await this.checkPermissions()
-
-    let userRoleAdmin = await this.userRoleService.getOne({
+    let userRoleAdmin: UserRoleEntity = await this.userRoleService.getOne({
       name: 'CrmAdmin'
     })
 
-    if (!userRoleAdmin) {
-      userRoleAdmin = await this.createUserRole()
-    }
+    userRoleAdmin = await this.createOrUpdateUserRole(userRoleAdmin)
 
     const adminUser = await this.userService.getOne({
       roleAccessId: userRoleAdmin.id
@@ -53,23 +50,24 @@ export class UserModule {
   async checkPermissions () {
     const systemId: string = this.configService.get<string>('config.mongo.systemId')
 
-    const permissions: RolePermissionEntity[] = await Promise.all(ROLE_PERMISSIONS.map((permission: Partial<RolePermissionEntity>) => this.rolePermissionService.getOne(permission)))
+    const permissions: RolePermissionEntity[] = await Promise.all(ROLE_PERMISSIONS.map((permission: Partial<RolePermissionEntity>) => this.rolePermissionService.getOne({ tag: permission.tag })))
+
     const newRolePermissionPromises: Promise<RolePermissionEntity>[] = []
     ROLE_PERMISSIONS.forEach((permission: Partial<RolePermissionEntity>) => {
-      if (!permissions.find(p => p && p.tag && p.tag === permission.tag)) {
+      const foundPermission: RolePermissionEntity = permissions.find(p => p && p.tag && p.tag === permission.tag)
+      if (!foundPermission) {
         newRolePermissionPromises.push(this.rolePermissionService.create({ ...permission, createdBy: systemId, createdAt: new Date() }))
+      } else {
+        newRolePermissionPromises.push(this.rolePermissionService.update(foundPermission.id, { ...permission }))
       }
     })
 
     return Promise.all(newRolePermissionPromises)
   }
 
-  async createUserRole () {
+  async createOrUpdateUserRole (userRole: UserRoleEntity) {
     const systemId: string = this.configService.get<string>('config.mongo.systemId')
     let permissionsToCrmAdmin: RolePermissionEntity[] = []
-
-    console.log('permissionsToCrmAdmin')
-    console.log(permissionsToCrmAdmin)
 
     const tags: string[] = ['company',
       'company.set',
@@ -87,18 +85,15 @@ export class UserModule {
     ]
 
     permissionsToCrmAdmin = await this.rolePermissionService.getWhereIn({}, 'tag', tags)
-
-    console.log('permissionsToCrmAdmin')
-    console.log(permissionsToCrmAdmin)
-
-    const userRole: UserRoleEntity = {
+    const id = userRole && userRole.id ? userRole.id : null
+    userRole = {
       name: 'CrmAdmin',
       description: 'Este rol es solo para usuarios administradores de CRM. No se puede editar.',
       permissionsIds: permissionsToCrmAdmin.map(permission => new Types.ObjectId(permission.id)),
       createdAt: new Date(),
       createdBy: new Types.ObjectId(systemId)
     }
-    return this.userRoleService.create(userRole)
+    return id ? this.userRoleService.update(id, userRole) : this.userRoleService.create(userRole)
   }
 
   async createAdminUser (roleAccessId: Types.ObjectId) {
