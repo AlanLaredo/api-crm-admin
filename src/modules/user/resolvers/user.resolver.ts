@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-constructor */
-import { Resolver, Query, Args, Mutation, Context, ResolveField, ID } from '@nestjs/graphql'
+import { Resolver, Query, Args, Mutation, Context, ResolveField } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
 
 // import { DeleteIDInput } from 'src/common/shared/dtos'

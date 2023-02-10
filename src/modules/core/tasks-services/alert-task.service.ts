@@ -60,7 +60,6 @@ export class AlertTaskService {
       // send email
       updateCustomerPromises.push(this.customerService.update(customer.id, { remindDate: null, modifiedBy: systemId, modifiedAt: new Date() }))
     })
-    const emailSendPromisesResult = await Promise.all(emailSendPromises)
-    const updateCustomerResult = await Promise.all(updateCustomerPromises)
+    await Promise.all([...emailSendPromises, ...updateCustomerPromises])
   }
 }

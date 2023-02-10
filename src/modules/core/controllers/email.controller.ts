@@ -1,7 +1,5 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common'
 import { MailerService } from '@nestjs-modules/mailer'
-import { DateTime } from 'luxon'
-import { Types } from 'mongoose'
 
 import { JwtAuthGuard } from 'src/modules/auth/shared/guards'
 

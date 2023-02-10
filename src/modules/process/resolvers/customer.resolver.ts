@@ -12,7 +12,6 @@ import { CustomerEntity, ProcessEntity, ProcessFunctionEntity } from 'src/entiti
 import { CustomerService, ProcessFunctionService, ProcessService } from 'src/database/mongoose/services/process'
 import { ClientEntity } from 'src/entities/client'
 import { ClientService } from 'src/database/mongoose/services/client'
-import { Types } from 'mongoose'
 import { EMailService } from 'src/modules/core/services'
 
 @UseGuards(JwtAuthGuard)

@@ -60,23 +60,5 @@ export class AuthService {
 
   private async getPermissions (role: UserRoleEntity) : Promise<RolePermissionEntity[]> {
     return this.rolePermissionService.getByIds(role.permissionsIds)
-    // const _ = require('lodash')
-    // const role: RoleAccessEntity = await this.roleService.getById(user.roleAccessId)
-    // let permissionIds = []
-    // if (role) {
-    //   const denyPermissionIds = []
-    //   user.permissionsConfig.forEach((permission: UserPermissionEntity) => {
-    //     if (!permission.deny) {
-    //       permissionIds.push(permission.permissionId)
-    //     } else {
-    //       denyPermissionIds.push(permission.permissionId)
-    //     }
-    //   })
-    //   permissionIds = _.merge(permissionIds, role.permissionIds)
-    //   permissionIds = _.filter(permissionIds, permission => denyPermissionIds.indexOf(permission) === -1)
-    // }
-    // const permissions = await this.permissionService.getByIds(permissionIds)
-    // return permissions
-    return []
   }
 }

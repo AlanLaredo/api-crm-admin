@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType, ArgsType, InputType, Float, Int } from '@nestjs/graphql'
+import { Field, ID, ObjectType, ArgsType, InputType, Int } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsArray, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
