@@ -4,6 +4,8 @@ import { IsArray, IsMongoId, IsNumber, IsOptional, IsString } from 'class-valida
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
+import { EmployeeEntity } from '../employee'
+import { PrenominaPeriodEmployeeDayEntity } from './prenomina-period-employee-day.entity'
 
 @ArgsType()
 @InputType('PrenominaPeriodEmployeeInput')
@@ -128,6 +130,12 @@ export class PrenominaPeriodEmployeeEntity extends IdentityLogEntity {
   @Field(() => Float, { nullable: true })
   @Prop()
     total?: number
+
+  @Field(() => EmployeeEntity, { nullable: true })
+    employee?: EmployeeEntity
+
+  @Field(() => [PrenominaPeriodEmployeeDayEntity], { nullable: true })
+    prenominaPeriodEmployeeDays?: PrenominaPeriodEmployeeDayEntity[]
 }
 
 export const PrenominaPeriodEmployeeSchema = SchemaFactory.createForClass(PrenominaPeriodEmployeeEntity)

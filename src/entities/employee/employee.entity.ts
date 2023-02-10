@@ -78,7 +78,7 @@ export class EmployeeEntity extends IdentityLogEntity {
   @IsOptional()
   @IsArray()
   @Field(() => [String], { nullable: true })
-  @Prop({ type: [String] }) 
+  @Prop({ type: [String] })
     attachedQuotePath?: string[]
 
   @Field(() => [OperationEntity], { nullable: true })

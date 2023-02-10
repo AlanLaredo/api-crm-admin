@@ -1,11 +1,10 @@
 import { InputType, Field, ID, PartialType } from '@nestjs/graphql'
 import { IsMongoId } from 'class-validator'
 import { Types } from 'mongoose'
-
-import { CreatePrenominaInput } from './create-prenomina.input'
+import { CreatePrenominaPeriodEmployeeDayInput } from '.'
 
 @InputType()
-export class UpdatePrenominaInput extends PartialType(CreatePrenominaInput) {
+export class UpdatePrenominaPeriodEmployeeDayInput extends PartialType(CreatePrenominaPeriodEmployeeDayInput) {
   @IsMongoId()
   @Field(() => ID)
     id!: Types.ObjectId

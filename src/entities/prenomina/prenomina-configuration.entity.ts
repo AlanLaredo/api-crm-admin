@@ -35,7 +35,7 @@ export class PrenominaConfigurationEntity extends IdentityLogEntity {
     billingPeriod!: string
 
   @Field(() => [PrenominaPeriodEntity], { nullable: true })
-    prenominaPeriods?: any[]
+    prenominaPeriods?: PrenominaPeriodEntity[]
 }
 
 export const PrenominaConfigurationSchema = SchemaFactory.createForClass(PrenominaConfigurationEntity)

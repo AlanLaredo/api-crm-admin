@@ -1,7 +1,7 @@
 import { Module, Global } from '@nestjs/common'
 
 import { CommonModule } from '../common/common.module'
-// import { PRENOMIONA_RESOLVERS } from './resolvers'
+import { PRENOMINA_RESOLVERS } from './resolvers'
 
 @Global()
 @Module({
@@ -9,7 +9,7 @@ import { CommonModule } from '../common/common.module'
     CommonModule
   ],
   providers: [
-    // ...PRENOMIONA_RESOLVERS
+    ...PRENOMINA_RESOLVERS
   ],
   exports: []
 })

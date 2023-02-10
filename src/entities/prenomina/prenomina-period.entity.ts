@@ -4,7 +4,7 @@ import { IsBoolean, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-va
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
-import { EmployeeEntity } from '../employee'
+import { PrenominaPeriodEmployeeEntity } from './prenomina-period-employee.entity'
 
 @ArgsType()
 @InputType('PrenominaPeriodInput')
@@ -34,8 +34,8 @@ export class PrenominaPeriodEntity extends IdentityLogEntity {
   @Prop({ type: Boolean, default: false })
     completed?: boolean
 
-  @Field(() => [EmployeeEntity], { nullable: true })
-    employees?: any[]
+  @Field(() => [PrenominaPeriodEmployeeEntity], { nullable: true })
+    prenominaPeriodEmployees?: PrenominaPeriodEmployeeEntity[]
 }
 
 export const PrenominaPeriodSchema = SchemaFactory.createForClass(PrenominaPeriodEntity)
