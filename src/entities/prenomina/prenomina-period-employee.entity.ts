@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, ArgsType, InputType, Float } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { IsArray, IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator'
+import { IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
@@ -11,7 +11,7 @@ import { PrenominaPeriodEmployeeDayEntity } from './prenomina-period-employee-da
 @InputType('PrenominaPeriodEmployeeInput')
 @ObjectType()
 @Schema({
-  collection: 'prenominaPeriodEmployees'
+  collection: 'prenomina_period_employees'
 })
 export class PrenominaPeriodEmployeeEntity extends IdentityLogEntity {
   @Field(() => ID, { nullable: true })
@@ -46,12 +46,6 @@ export class PrenominaPeriodEmployeeEntity extends IdentityLogEntity {
   @Field({ nullable: true })
   @Prop()
     clientName?: string
-
-  @IsOptional()
-  @IsArray()
-  @Field(() => [ID], { nullable: true })
-  @Prop({ type: [mongoose.Schema.Types.ObjectId] })
-    prenominaPeriodEmployeeDaysIds?: Types.ObjectId[]
 
   @IsOptional()
   @IsNumber()

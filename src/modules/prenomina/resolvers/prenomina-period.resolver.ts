@@ -12,12 +12,15 @@ import { PrenominaPeriodEmployeeEntity, PrenominaPeriodEntity } from 'src/entiti
 import { PrenominaPeriodEmployeeService, PrenominaPeriodService } from 'src/database/mongoose/services/prenomina'
 import { ResolveField } from '@nestjs/graphql/dist/decorators'
 
+import { PrenominaService } from '../services'
+
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PrenominaPeriodEntity)
 export class PrenominaPeriodResolver {
   constructor (
     private readonly prenominaPeriodService: PrenominaPeriodService,
-    private readonly prenominaPeriodEmployeeService: PrenominaPeriodEmployeeService) { }
+    private readonly prenominaPeriodEmployeeService: PrenominaPeriodEmployeeService,
+    private readonly prenominaService: PrenominaService) { }
 
   @Query(() => PrenominaPeriodEntity, { nullable: true })
   async prenominaPeriod (@Args() data: GetPrenominaPeriodArgs,
@@ -41,10 +44,17 @@ export class PrenominaPeriodResolver {
     return this.prenominaPeriodEmployeeService.get({ prenominaPeriodId: data.id })
   }
 
+  // @ResolveField(() => [OperationEntity], { nullable: true })
+  // async operations (data: PrenominaPeriodEntity) {
+  //   return this.getOperations(data)
+  // }
+
   @Mutation(() => PrenominaPeriodEntity)
   async createPrenominaPeriod (@Args('createPrenominaPeriodData') createPrenominaPeriodData: CreatePrenominaPeriodInput,
   @Context(UserDataPipe) user: UserEntity): Promise<PrenominaPeriodEntity> {
-    return this.prenominaPeriodService.create({ ...createPrenominaPeriodData, createdBy: user.id, createdAt: new Date() })
+    const prenominaPeriod: PrenominaPeriodEntity = await this.prenominaPeriodService.create({ ...createPrenominaPeriodData, createdBy: user.id, createdAt: new Date() })
+    await this.prenominaService.generate(prenominaPeriod, user)
+    return prenominaPeriod
   }
 
   @Mutation(() => PrenominaPeriodEntity)

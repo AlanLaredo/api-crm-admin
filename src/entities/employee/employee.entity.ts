@@ -6,6 +6,7 @@ import { ClientEntity, ClientServiceEntity } from '../client'
 
 import { AddressEntity, AddressSchema, IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
 import { CompanyEntity } from '../company'
+import { PositionEntity } from '../recruiment'
 import { OperationEntity } from './operation.entity'
 
 @ObjectType()
@@ -29,6 +30,12 @@ export class EmployeeEntity extends IdentityLogEntity {
   @Field({ nullable: true })
   @Prop()
     bankAccount?: string
+
+  @IsOptional()
+  @IsString()
+  @Field({ nullable: true })
+  @Prop()
+    schoolName?: string
 
   @IsNotEmpty()
   @Field(() => PersonEntity)
@@ -92,6 +99,9 @@ export class EmployeeEntity extends IdentityLogEntity {
 
   @Field(() => ClientServiceEntity, { nullable: true })
     clientService?: ClientServiceEntity
+
+  @Field(() => PositionEntity, { nullable: true })
+    position?: PositionEntity
 }
 
 export const EmployeeSchema = SchemaFactory.createForClass(EmployeeEntity)

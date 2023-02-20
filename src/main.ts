@@ -20,6 +20,22 @@ async function bootstrap () {
   }))
 
   const configService = app.get(ConfigService)
+  // const server = app.getHttpServer()
+  // const router = server._events.request._router
+
+  // const availableRoutes: [] = router.stack.map(
+  //   (layer: any) => {
+  //     if (layer.route) {
+  //       return {
+  //         route: {
+  //           path: layer.route?.path,
+  //           method: layer.route?.stack[0].method
+  //         }
+  //       }
+  //     }
+  //   }).filter(item => item !== undefined)
+  // console.log(availableRoutes)
+
   await app.listen(configService.get('SYSTEM_PORT'))
 }
 bootstrap()

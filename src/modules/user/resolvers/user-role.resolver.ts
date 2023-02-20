@@ -25,7 +25,7 @@ export class UserRoleResolver {
   @Query(() => [UserRoleEntity])
   async userRoles (@Args() data: GetUserRoleArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<UserRoleEntity[]> {
-    let userRoles = await this.userRoleService.get(data)
+    let userRoles = await this.userRoleService.get(user.isAdmin ? data : { ...data, companyId: user.companyId })
     if (!user.isAdmin) {
       userRoles = userRoles.filter(role => role.name !== 'CrmAdmin')
     }

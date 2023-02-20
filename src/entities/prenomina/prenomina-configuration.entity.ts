@@ -2,6 +2,7 @@ import { Field, ID, ObjectType, ArgsType, InputType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
+import { ClientEntity } from '../client'
 
 import { IdentityLogEntity } from '../common'
 import { PrenominaPeriodEntity } from './prenomina-period.entity'
@@ -10,7 +11,7 @@ import { PrenominaPeriodEntity } from './prenomina-period.entity'
 @InputType('PrenominaConfigurationInput')
 @ObjectType()
 @Schema({
-  collection: 'prenominaConfigurations'
+  collection: 'prenomina_configurations'
 })
 export class PrenominaConfigurationEntity extends IdentityLogEntity {
   @Field(() => ID, { nullable: true })
@@ -36,6 +37,9 @@ export class PrenominaConfigurationEntity extends IdentityLogEntity {
 
   @Field(() => [PrenominaPeriodEntity], { nullable: true })
     prenominaPeriods?: PrenominaPeriodEntity[]
+
+  @Field(() => [ClientEntity], { nullable: true })
+    clients?: ClientEntity[]
 }
 
 export const PrenominaConfigurationSchema = SchemaFactory.createForClass(PrenominaConfigurationEntity)

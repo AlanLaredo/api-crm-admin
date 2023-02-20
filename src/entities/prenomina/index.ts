@@ -2,6 +2,7 @@ import { PrenominaConfigurationEntity, PrenominaConfigurationSchema } from './pr
 import { PrenominaPeriodEntity, PrenominaPeriodSchema } from './prenomina-period.entity'
 import { PrenominaPeriodEmployeeEntity, PrenominaPeriodEmployeeSchema } from './prenomina-period-employee.entity'
 import { PrenominaPeriodEmployeeDayEntity, PrenominaPeriodEmployeeDaySchema } from './prenomina-period-employee-day.entity'
+import { PrenomionaPeriodVacanciesConfigurationEntity, PrenomionaPeriodVacanciesConfigurationSchema } from './prenomina-period-vacancies-configuration.entity'
 
 export {
   PrenominaConfigurationEntity,
@@ -11,5 +12,7 @@ export {
   PrenominaPeriodEmployeeEntity,
   PrenominaPeriodEmployeeSchema,
   PrenominaPeriodEmployeeDayEntity,
-  PrenominaPeriodEmployeeDaySchema
+  PrenominaPeriodEmployeeDaySchema,
+  PrenomionaPeriodVacanciesConfigurationEntity,
+  PrenomionaPeriodVacanciesConfigurationSchema
 }

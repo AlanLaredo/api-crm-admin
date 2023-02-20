@@ -9,7 +9,7 @@ import { IdentityLogEntity } from '../common'
 @InputType('PrenominaPeriodEmployeeDayInput')
 @ObjectType()
 @Schema({
-  collection: 'prenominaPeriodEmployeeDays'
+  collection: 'prenomina_period_employee_days'
 })
 export class PrenominaPeriodEmployeeDayEntity extends IdentityLogEntity {
   @Field(() => ID, { nullable: true })

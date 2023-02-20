@@ -4,6 +4,7 @@ import { IsDate, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'c
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
+import { EmployeeEntity } from '../employee'
 import { ClientEntity } from './client.entity'
 
 @ObjectType()
@@ -195,6 +196,9 @@ export class ClientServiceEntity extends IdentityLogEntity {
 
   @Field(() => ClientEntity, { nullable: true })
     client?: ClientEntity
+
+  @Field(() => [EmployeeEntity], { nullable: true })
+    employees?: EmployeeEntity[]
 }
 
 export const ClientServiceSchema = SchemaFactory.createForClass(ClientServiceEntity)

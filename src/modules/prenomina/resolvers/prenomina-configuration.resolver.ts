@@ -10,12 +10,16 @@ import { CreatePrenominaConfigurationInput, UpdatePrenominaConfigurationInput, G
 import { UserEntity } from 'src/entities/user'
 import { PrenominaConfigurationEntity, PrenominaPeriodEntity } from 'src/entities/prenomina'
 import { PrenominaConfigurationService, PrenominaPeriodService } from 'src/database/mongoose/services/prenomina'
+import { ClientEntity } from 'src/entities/client'
+import { ClientService } from 'src/database/mongoose/services/client'
+import { OperationService } from 'src/database/mongoose/services/employee'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PrenominaConfigurationEntity)
 export class PrenominaConfigurationResolver {
   constructor (private readonly prenominaConfigurationService: PrenominaConfigurationService,
-    private readonly prenominaPeriodService: PrenominaPeriodService) { }
+    private readonly prenominaPeriodService: PrenominaPeriodService,
+    private readonly clientService: ClientService) { }
 
   @Query(() => PrenominaConfigurationEntity, { nullable: true })
   async prenominaConfiguration (@Args() data: GetPrenominaConfigurationArgs,
@@ -37,6 +41,11 @@ export class PrenominaConfigurationResolver {
   @ResolveField(() => [PrenominaPeriodEntity], { nullable: true })
   async prenominaPeriods (data: PrenominaConfigurationEntity) {
     return this.prenominaPeriodService.get({ prenominaConfigurationId: data.id })
+  }
+
+  @ResolveField(() => [ClientEntity], { nullable: true })
+  async clients (data: PrenominaConfigurationEntity) {
+    return this.clientService.getByIds(data.clientsIds)
   }
 
   @Mutation(() => PrenominaConfigurationEntity)

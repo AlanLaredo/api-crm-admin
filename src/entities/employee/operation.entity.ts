@@ -4,6 +4,7 @@ import { IsDate, IsMongoId, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
+import { EmployeeEntity } from './employee.entity'
 
 @ObjectType()
 @ArgsType()
@@ -78,6 +79,9 @@ export class OperationEntity extends IdentityLogEntity {
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   @Field(() => ID, { nullable: true })
     operationConfirmModifiedBy?: Types.ObjectId
+
+  @Field(() => EmployeeEntity, { nullable: true })
+    employee?: EmployeeEntity
 }
 
 export const OperationSchema = SchemaFactory.createForClass(OperationEntity)

@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-constructor */
 import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql'
 import { UseGuards } from '@nestjs/common'
+import { Parent, ResolveField } from '@nestjs/graphql/dist/decorators'
 
 import { JwtAuthGuard } from 'src/modules/auth/shared/guards'
 import { UserDataPipe } from 'src/modules/common/shared/pipes'
@@ -10,6 +11,7 @@ import { CreatePrenominaPeriodEmployeeDayInput, UpdatePrenominaPeriodEmployeeDay
 import { UserEntity } from 'src/entities/user'
 import { PrenominaPeriodEmployeeDayEntity } from 'src/entities/prenomina'
 import { PrenominaPeriodEmployeeDayService } from 'src/database/mongoose/services/prenomina'
+import { EmployeeEntity } from 'src/entities/employee'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PrenominaPeriodEmployeeDayEntity)

@@ -67,8 +67,6 @@ export class ClientResolver {
   @Mutation(() => ClientEntity)
   async createClient (@Args('createClientData') createClientData: CreateClientInput,
   @Context(UserDataPipe) user: UserEntity): Promise<ClientEntity> {
-    console.log(createClientData)
-
     return this.clientService.create({ ...createClientData, createdBy: user.id, createdAt: new Date() })
   }
 

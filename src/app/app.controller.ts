@@ -35,6 +35,6 @@ export class AppController {
 
     // const result = await this.userService.create(newUser)
     // const result2 = await this.userService.create(newUser2)
-    return {}
+    return { message: 'API working' }
   }
 }

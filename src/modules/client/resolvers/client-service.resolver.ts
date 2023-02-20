@@ -11,6 +11,8 @@ import { UserEntity } from 'src/entities/user'
 import { ClientEntity, ClientServiceEntity } from 'src/entities/client'
 import { ClientServiceService, ClientService } from 'src/database/mongoose/services/client'
 import { EMailService } from 'src/modules/core/services'
+import { EmployeeEntity } from 'src/entities/employee'
+import { EmployeeService } from 'src/database/mongoose/services/employee'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => ClientServiceEntity)
@@ -18,6 +20,7 @@ export class ClientServiceResolver {
   constructor (
     private readonly eMailService: EMailService,
     private readonly _clientService: ClientService,
+    private readonly employeeService: EmployeeService,
     private readonly clientServiceService: ClientServiceService) { }
 
   @Query(() => ClientServiceEntity, { nullable: true })
@@ -40,6 +43,11 @@ export class ClientServiceResolver {
   @ResolveField(() => ClientEntity)
   async client (data: ClientServiceEntity) {
     return this._clientService.getById(data.clientId)
+  }
+
+  @ResolveField(() => [EmployeeEntity])
+  async employees (data: ClientServiceEntity) {
+    return this.employeeService.get({ clientServiceId: data.id })
   }
 
   @Mutation(() => ClientServiceEntity)

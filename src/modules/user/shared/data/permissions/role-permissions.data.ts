@@ -57,7 +57,7 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   description: 'Remueve una compañía',
   tag: 'company.delete'
 }, {
-  name: 'customers',
+  name: 'Prospectos',
   description: 'customers',
   tag: 'customers'
 }, {
@@ -69,7 +69,7 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   description: 'Remueve un proceso',
   tag: 'operations.delete'
 }, {
-  name: 'Módulo de procesos',
+  name: 'Módulo de procesos y prospectos',
   description: 'Acceso a procesos',
   tag: 'operations'
 }, {
@@ -136,7 +136,22 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   name: 'Bitácora operativa',
   description: 'Registro de trabajo diario',
   tag: 'operation-binnacle'
+},
+{
+  name: 'Bitácora - Operación de empleado',
+  description: 'Marcar la operación del empleado en el calendario',
+  tag: 'operation-binnacle-operation'
+},
+{
+  name: 'Bitácora - Confirmar operación de empleado',
+  description: 'Marcar la operación del empleado en el calendario',
+  tag: 'operation-binnacle-operation-confirmation'
 }, {
+  name: 'Proyectado',
+  description: 'Acceso a menú proyectado',
+  tag: 'projected-data'
+},
+{
   name: 'Home',
   description: 'Pantalla Home',
   tag: 'home'
