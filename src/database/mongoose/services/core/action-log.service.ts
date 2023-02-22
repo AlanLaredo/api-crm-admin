@@ -36,8 +36,6 @@ export class ActionLogService extends BaseServiceMongoose<ActionLogEntity> {
     const result: any = diffObjects.map(original, afterUpdated)
 
     const transpilation = this.objectToArray(result)
-    console.log(result)
-    console.log(transpilation)
   }
 
   objectToArray (object: any, parentKey: string = '') {

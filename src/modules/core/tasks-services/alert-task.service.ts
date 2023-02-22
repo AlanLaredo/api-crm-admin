@@ -67,7 +67,6 @@ export class AlertTaskService {
 
   @Cron('*/10 * * * * *')
   async handleCronEveryMinuteSync () {
-    console.log('=')
     await this.blProjectedDataService.syncAll()
   }
 }
