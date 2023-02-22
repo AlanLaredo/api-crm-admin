@@ -21,5 +21,7 @@ export const JOI_VALIDATION_SCHEMA = Joi.object({
   MAILER_DIR_TEMPLATE: Joi.string().required(),
   TRANSPORT_CONFIGURATION: Joi.string().required(),
   MAILDEV_INCOMING_USER: Joi.string().required(),
-  MAILDEV_INCOMING_PASS: Joi.string().required()
+  MAILDEV_INCOMING_PASS: Joi.string().required(),
+
+  SYSTEM_BILLING_PATH: Joi.string().required()
 })

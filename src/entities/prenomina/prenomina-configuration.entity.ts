@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, ArgsType, InputType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 import { ClientEntity } from '../client'
 
@@ -34,6 +34,12 @@ export class PrenominaConfigurationEntity extends IdentityLogEntity {
   @Field()
   @Prop({ required: true })
     billingPeriod!: string
+
+  @IsOptional()
+  @IsMongoId()
+  @Field(() => ID, { nullable: true })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
+    companyId?: Types.ObjectId
 
   @Field(() => [PrenominaPeriodEntity], { nullable: true })
     prenominaPeriods?: PrenominaPeriodEntity[]

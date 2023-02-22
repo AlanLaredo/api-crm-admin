@@ -11,4 +11,26 @@ export class ClientService extends BaseServiceMongoose<ClientEntity> {
     @InjectModel(ClientEntity.name) private mainModel: Model<ClientEntity>) {
     super(mainModel)
   }
+
+  clientWithClientServices () {
+    // const ClientService = require('./models/clientService');
+    return this.mainModel.aggregate([
+      {
+        $lookup: {
+          from: 'client_services',
+          let: { clientId: '$_id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ['$clientId', '$$clientId']
+                }
+              }
+            }
+          ],
+          as: 'clientServices'
+        }
+      }
+    ])
+  }
 }

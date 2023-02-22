@@ -9,6 +9,7 @@ import { CustomerService, ProcessService } from 'src/database/mongoose/services/
 import { UserService } from 'src/database/mongoose/services/user'
 import { CustomerEntity, ProcessEntity } from 'src/entities/process'
 import { UserEntity } from 'src/entities/user'
+import { BlProjectedDataService } from 'src/modules/client/services'
 import { EMailService } from '../services'
 @Injectable()
 export class AlertTaskService {
@@ -18,10 +19,11 @@ export class AlertTaskService {
     private customerService: CustomerService,
     private emailService: EMailService,
     private userService: UserService,
-    private processService: ProcessService) { }
+    private processService: ProcessService,
+    private blProjectedDataService: BlProjectedDataService) { }
 
   @Cron('*/10 * * * * *')
-  async handleCronEveryMinute () {
+  async handleCronEveryMinuteEmail () {
     const systemId: Types.ObjectId = this.configService.get<Types.ObjectId>('config.mongo.systemId')
 
     const dateStart = DateTime.now()
@@ -61,5 +63,11 @@ export class AlertTaskService {
       updateCustomerPromises.push(this.customerService.update(customer.id, { remindDate: null, modifiedBy: systemId, modifiedAt: new Date() }))
     })
     await Promise.all([...emailSendPromises, ...updateCustomerPromises])
+  }
+
+  @Cron('*/10 * * * * *')
+  async handleCronEveryMinuteSync () {
+    console.log('=')
+    await this.blProjectedDataService.syncAll()
   }
 }

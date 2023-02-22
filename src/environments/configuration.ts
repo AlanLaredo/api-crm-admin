@@ -25,6 +25,9 @@ export default registerAs('config', () => {
       transportConfiguration: process.env.TRANSPORT_CONFIGURATION,
       incomingUser: process.env.MAILDEV_INCOMING_USER,
       incomingPassword: process.env.MAILDEV_INCOMING_PASS
+    },
+    system: {
+      billingPath: process.env.SYSTEM_BILLING_PATH
     }
   }
 })

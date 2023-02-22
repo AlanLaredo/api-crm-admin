@@ -12,7 +12,6 @@ import { PrenominaConfigurationEntity, PrenominaPeriodEntity } from 'src/entitie
 import { PrenominaConfigurationService, PrenominaPeriodService } from 'src/database/mongoose/services/prenomina'
 import { ClientEntity } from 'src/entities/client'
 import { ClientService } from 'src/database/mongoose/services/client'
-import { OperationService } from 'src/database/mongoose/services/employee'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PrenominaConfigurationEntity)
@@ -30,7 +29,7 @@ export class PrenominaConfigurationResolver {
   @Query(() => [PrenominaConfigurationEntity])
   async prenominaConfigurations (@Args() data: GetPrenominaConfigurationArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<PrenominaConfigurationEntity[]> {
-    return this.prenominaConfigurationService.get(data)
+    return this.prenominaConfigurationService.get({ ...data, companyId: user.companyId })
   }
 
   @Query(() => [PrenominaConfigurationEntity])
@@ -51,7 +50,7 @@ export class PrenominaConfigurationResolver {
   @Mutation(() => PrenominaConfigurationEntity)
   async createPrenominaConfiguration (@Args('createPrenominaConfigurationData') createPrenominaConfigurationData: CreatePrenominaConfigurationInput,
   @Context(UserDataPipe) user: UserEntity): Promise<PrenominaConfigurationEntity> {
-    return this.prenominaConfigurationService.create({ ...createPrenominaConfigurationData, createdBy: user.id, createdAt: new Date() })
+    return this.prenominaConfigurationService.create({ ...createPrenominaConfigurationData, companyId: user.companyId, createdBy: user.id, createdAt: new Date() })
   }
 
   @Mutation(() => PrenominaConfigurationEntity)

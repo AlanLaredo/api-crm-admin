@@ -1,12 +1,10 @@
 
-
-import { Field, Float, ID, Int, ObjectType, ArgsType, InputType } from '@nestjs/graphql'
+import { Field, Float, ID, ObjectType, ArgsType, InputType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { IsDate, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
-import { IdentityLogEntity, PersonEntity, PersonSchema } from '../common'
-import { ClientEntity } from './client.entity'
+import { IdentityLogEntity } from '../common'
 
 @ObjectType()
 @ArgsType()
@@ -18,22 +16,33 @@ export class ProjectedDataEntity extends IdentityLogEntity {
   @Field(() => ID, { nullable: true })
     id?: Types.ObjectId
 
-  @IsNotEmpty()
-  @IsString()
-  @Field()
-  @Prop()
-    clientName!: string // (razón social de cliente + nombre de servicio)
+  @IsMongoId()
+  @Field(() => ID)
+  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
+    projectedPeriodId!: Types.ObjectId
 
   @IsNotEmpty()
   @IsString()
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     clientKeycode!: string
+
+  @IsNotEmpty()
+  @IsString()
+  @Field({ nullable: true })
+  @Prop()
+    clientServiceKeycode!: string
 
   @IsDate()
   @Prop()
   @Field({ nullable: false })
     startDate!: Date // inicio del periodo
+
+  @IsNotEmpty()
+  @IsString()
+  @Field({ nullable: true })
+  @Prop()
+    clientName!: string // (razón social de cliente + nombre de servicio)
 
   @IsMongoId()
   @Field(() => ID)
@@ -48,15 +57,15 @@ export class ProjectedDataEntity extends IdentityLogEntity {
 
   @IsNotEmpty()
   @IsString()
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     description!: string
 
   @IsNotEmpty()
   @IsString()
-  @Field()
+  @Field({ nullable: true })
   @Prop()
-    invoiceName!: string
+    invoiceName?: string
 
   @IsNotEmpty()
   @IsNumber()
@@ -66,7 +75,7 @@ export class ProjectedDataEntity extends IdentityLogEntity {
 
   @IsNotEmpty()
   @IsString()
-  @Field()
+  @Field({ nullable: true })
   @Prop()
     invoiceTypePayment!: string
 }

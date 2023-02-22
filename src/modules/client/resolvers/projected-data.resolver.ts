@@ -10,13 +10,12 @@ import { CreateProjectedDataInput, UpdateProjectedDataInput, GetProjectedDataArg
 import { UserEntity } from 'src/entities/user'
 import { ProjectedDataEntity } from 'src/entities/client'
 import { ProjectedDataService } from 'src/database/mongoose/services/client'
-import { EMailService } from 'src/modules/core/services'
+import { BlProjectedDataService } from '../services'
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => ProjectedDataEntity)
 export class ProjectedDataResolver {
-  constructor (
-    private readonly eMailService: EMailService,
+  constructor (private readonly blProjectedDataService: BlProjectedDataService,
     private readonly projectedDataService: ProjectedDataService) { }
 
   @Query(() => ProjectedDataEntity, { nullable: true })
@@ -28,6 +27,7 @@ export class ProjectedDataResolver {
   @Query(() => [ProjectedDataEntity])
   async projectedDatas (@Args() data: GetProjectedDataArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<ProjectedDataEntity[]> {
+    // await this.blProjectedDataService.sync(data.projectedPeriodId)
     return this.projectedDataService.get(data)
   }
 

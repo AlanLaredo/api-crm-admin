@@ -58,7 +58,7 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   tag: 'company.delete'
 }, {
   name: 'Prospectos',
-  description: 'customers',
+  description: 'Prospectos',
   tag: 'customers'
 }, {
   name: 'Creación/Modificación de procesos',
@@ -86,7 +86,7 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   tag: 'clients.delete'
 }, {
   name: 'Módulo de empleados',
-  description: 'Eliminar empleados',
+  description: 'Listado empleados',
   tag: 'employees'
 }, {
   name: 'Creación/Modificación de empleados',
@@ -150,6 +150,14 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   name: 'Proyectado',
   description: 'Acceso a menú proyectado',
   tag: 'projected-data'
+}, {
+  name: 'Eliminar',
+  description: 'Eliminar proyectado',
+  tag: 'projected-data.delete'
+}, {
+  name: 'Administrar proyectado',
+  description: 'Crear',
+  tag: 'projected-data.set'
 },
 {
   name: 'Home',
