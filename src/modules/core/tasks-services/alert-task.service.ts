@@ -11,16 +11,21 @@ import { CustomerEntity, ProcessEntity } from 'src/entities/process'
 import { UserEntity } from 'src/entities/user'
 import { BlProjectedDataService } from 'src/modules/client/services'
 import { EMailService } from '../services'
+import { OperationService } from 'src/database/mongoose/services/employee'
+import { OperationEntity } from 'src/entities/employee'
 @Injectable()
 export class AlertTaskService {
   private readonly logger = new Logger(AlertTaskService.name)
 
   constructor (private configService: ConfigService,
     private customerService: CustomerService,
+    private operationservice: OperationService,
     private emailService: EMailService,
     private userService: UserService,
     private processService: ProcessService,
-    private blProjectedDataService: BlProjectedDataService) { }
+    private blProjectedDataService: BlProjectedDataService) {
+    this.testRemind()
+  }
 
   @Cron('*/10 * * * * *')
   async handleCronEveryMinuteEmail () {
@@ -69,4 +74,50 @@ export class AlertTaskService {
   async handleCronEveryMinuteSync () {
     await this.blProjectedDataService.syncAll()
   }
+
+  @Cron('*/10 * * * * *')
+  async testRemind () {
+    console.log('testRemind')
+    const dTToday = (DateTime.now()).startOf('day')
+    const dTDateLast: DateTime = dTToday.minus({ days: 7 })
+    const dTDateNow: DateTime = dTToday
+    const dTDateNext: DateTime = dTToday.plus({ days: 7 })
+  
+    const validOperations: OperationEntity[] = await this.operationservice.get({ date: { $gte: dTDateLast.toJSDate(), $lte: dTDateNow.toJSDate() } })
+    console.log(validOperations)
+    console.log(dTDateNow.toJSDate())
+    console.log(dTDateNow.toJSDate())
+
+
+
+    /*
+
+  date: 2023-04-14T06:00:00.000Z,
+  employeeId: new ObjectId("6410e7911e382fafbc8e3b55"),
+
+  workshift: 'Trabajemos con este ',
+  hours: '3',
+  restDay: null | DateTime
+
+
+  validate: 
+  que no existas cruce entre employee  y fecha
+  */
+
+  
+  }
+
+
+
+  // @Cron('0 0 22 * * 0')
+  // async processBinnacleOperationData () {
+  //   const dTToday = DateTime.now()
+  //   const dTDateStart: DateTime = dTToday
+  //   const dTDateEnd: DateTime = dTToday.minus({ days: 7 })
+
+  //   const validOperations: OperationEntity[] = await this.operationservice.get({ date: { $gte: dTDateStart.toJSDate(), $lte: dTDateEnd.toJSDate() } })
+  //   console.log(validOperations)
+
+  //   // console.log()
+  // }
 }

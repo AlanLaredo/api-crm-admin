@@ -166,7 +166,8 @@ export class PrenominaService {
   async generate (prenominaPeriod: PrenominaPeriodEntity, user: UserEntity) {
     const prenominaConfiguration: PrenominaConfigurationEntity = await this.prenominaConfigurationService.getById(prenominaPeriod.prenominaConfigurationId)
     const clientServices = await this.clientServiceService.getWhereIn({ }, 'clientId', prenominaConfiguration.clientsIds)
-    const employees: EmployeeEntity[] = await this.getPeriodClientServiceEmployees(prenominaConfiguration.billingPeriod, clientServices)
+    let employees: EmployeeEntity[] = await this.getPeriodClientServiceEmployees(prenominaConfiguration.billingPeriod, clientServices)
+    employees = employees.filter(e => e.person.name !== 'Vacante')
     const { billingPeriod } = prenominaConfiguration
 
     const dayOfPeriod: DateTime = DateTime.fromJSDate(prenominaPeriod.date)

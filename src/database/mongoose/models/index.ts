@@ -2,6 +2,7 @@ import { CLIENT_MODELS } from './client'
 import { COMPANY_MODELS } from './company'
 import { CORE_MODELS } from './core'
 import { EMPLOYEE_MODELS } from './employee'
+import { INVENTORY_MODELS } from './inventory'
 import { PRENOMINA_MODELS } from './prenomina'
 import { PROCESS_MODELS } from './process'
 import { RECRUITMENT_MODELS } from './recruiment'
@@ -15,5 +16,6 @@ export const MONGOOSE_MODELS = [
   ...PROCESS_MODELS,
   ...RECRUITMENT_MODELS,
   ...USER_MODELS,
-  ...PRENOMINA_MODELS
+  ...PRENOMINA_MODELS,
+  ...INVENTORY_MODELS
 ]

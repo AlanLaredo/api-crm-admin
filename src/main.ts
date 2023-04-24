@@ -16,7 +16,7 @@ async function bootstrap () {
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
-    forbidUnknownValues: true
+    forbidUnknownValues: false
   }))
 
   const configService = app.get(ConfigService)

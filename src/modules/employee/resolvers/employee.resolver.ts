@@ -39,6 +39,7 @@ export class EmployeeResolver {
   @Query(() => [EmployeeEntity])
   async employees (@Args() data: GetEmployeeArgs,
   @Context(UserDataPipe) user: UserEntity): Promise<EmployeeEntity[]> {
+    console.log('operation_start_date')
     return this.employeeService.get(user.isAdmin ? data : { ...data, companyId: user.companyId })
   }
 
@@ -65,7 +66,7 @@ export class EmployeeResolver {
 
   @ResolveField(() => ClientServiceEntity, { nullable: true })
   async clientService (data: EmployeeEntity) {
-    return this.clientServiceService.getById(data.clientId)
+    return this.clientServiceService.getById(data.clientServiceId)
   }
 
   @ResolveField(() => PositionEntity, { nullable: true })
@@ -74,7 +75,8 @@ export class EmployeeResolver {
   }
 
   @ResolveField(() => [OperationEntity], { nullable: true })
-  async operations (data: EmployeeEntity) {
+  async operations (
+    data: EmployeeEntity) {
     return this.operationService.get({ employeeId: data.id })
   }
 
@@ -82,8 +84,9 @@ export class EmployeeResolver {
   async createEmployee (@Args('createEmployeeData') createEmployeeData: CreateEmployeeInput,
   @Context(UserDataPipe) user: UserEntity): Promise<EmployeeEntity> {
     const result = await this.employeeService.create({ ...createEmployeeData, createdBy: user.id, createdAt: new Date() })
-    const client: ClientEntity = await this.clientService_.getById(result.clientId)
-    const users: UserEntity[] = await this.eMailService.getUsersForPermissionTagNotification('admin.emailNotification.newEmployee', client.companyId)
+    const client: ClientEntity = result.clientId ? await this.clientService_.getById(result.clientId) : null
+    
+    const users: UserEntity[] = await this.eMailService.getUsersForPermissionTagNotification('admin.emailNotification.newEmployee', client && client.companyId || user.companyId)
     if (result && users && users.length > 0) {
       const message: string = 'Se ha registrado un nuevo empleado, ' + createEmployeeData.person.name + ' ' + (createEmployeeData.person.lastName ? createEmployeeData.person.lastName : '')
       const subject: string = 'Registro de nuevo empleado'

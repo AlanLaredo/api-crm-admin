@@ -158,6 +158,18 @@ export const ROLE_PERMISSIONS: Partial<RolePermissionEntity>[] = [{
   name: 'Administrar proyectado',
   description: 'Crear',
   tag: 'projected-data.set'
+}, {
+  name: 'Módulo de inventarios',
+  description: 'Control de inventario',
+  tag: 'inventory'
+}, {
+  name: 'Administrar productos',
+  description: 'Control de productos',
+  tag: 'inventory.product-management'
+}, {
+  name: 'Administrar existencias',
+  description: 'Control de existencias',
+  tag: 'inventory.stock'
 },
 {
   name: 'Home',
