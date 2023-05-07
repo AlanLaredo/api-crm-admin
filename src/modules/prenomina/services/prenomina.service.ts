@@ -12,6 +12,7 @@ import { EmployeeEntity, OperationEntity } from 'src/entities/employee'
 import { PrenominaConfigurationEntity, PrenominaPeriodEmployeeDayEntity, PrenominaPeriodEmployeeEntity, PrenominaPeriodEntity, PrenomionaPeriodVacanciesConfigurationEntity } from 'src/entities/prenomina'
 import { PositionEntity } from 'src/entities/recruiment'
 import { UserEntity } from 'src/entities/user'
+import { HOLIDAYS_DATA } from '../shared/data/holidays.data'
 
 @Injectable()
 export class PrenominaService {
@@ -248,6 +249,14 @@ export class PrenominaService {
     return billingPeriod === 'weekly' ? 7 : billingPeriod === 'biweekly' ? (dayOfPeriod.day < 15 ? 15 : (dayOfPeriod.endOf('month').day - 15)) : dayOfPeriod.endOf('month').day
   }
 
+  isHoliday (date: Date) {
+    const datetimeDate = DateTime.fromJSDate(new Date(date))
+    return HOLIDAYS_DATA.find(hd => {
+      const dateTimeHd = DateTime.fromJSDate(hd)
+      return datetimeDate.day === dateTimeHd.day && datetimeDate.month === dateTimeHd.month
+    })
+  }
+
   generatePrenominaPeriodEmployees (prenominaConfiguration: PrenominaConfigurationEntity, prenominaPeriod: PrenominaPeriodEntity, employees: EmployeeEntity[], operations: OperationEntity[], positions: PositionEntity[]) {
     const prenominaPeriodEmployees: PrenominaPeriodEmployeeEntity[] = []
     const { totalVacancies, id } = prenominaPeriod
@@ -260,15 +269,21 @@ export class PrenominaService {
       let total = 0
       let salary = 0
       let absences = 0
+      let bonus = 500
       if (employees[index] && employees[index].id) {
         employee = employees[index]
         position = positions.find((position: PositionEntity) => String(position.id) === String(employee.positionId))
         multiplicator = this.getPeriodMultiplicator(prenominaConfiguration.billingPeriod, prenominaPeriod.date)
-        const operationsFiltered = operations.filter((operation: OperationEntity) => operation.operationConfirm === 'F' && String(operation.employeeId) === String(employees[index].id))
-        totalAbscences = operationsFiltered.length || 0
+        const abscencesForBonus = operations.filter((operation: OperationEntity) => operation.operationConfirm === 'F' && String(operation.employeeId) === String(employees[index].id))
+        const operationsFilteredForAbscences = abscencesForBonus.filter((operation: OperationEntity) => !this.isHoliday(operation.date))
+        totalAbscences = operationsFilteredForAbscences.length || 0
+        if (abscencesForBonus && abscencesForBonus.length >= 1) {
+          bonus = bonus - 500
+        }
         salary = position && position.salary ? position.salary * multiplicator : 0
         absences = position && position.salary ? position.salary * totalAbscences : 0
         total = salary - absences
+        total += bonus
       }
 
       const newPrenominaPeriodEmployee: PrenominaPeriodEmployeeEntity = {
@@ -283,7 +298,7 @@ export class PrenominaService {
         uniforms: 0,
         advance: 0,
         double: 0,
-        bonus: 0,
+        bonus,
         holiday: 0,
         infonavit: 0,
         fonacot: 0,
@@ -297,4 +312,5 @@ export class PrenominaService {
     })
     return prenominaPeriodEmployees
   }
+
 }

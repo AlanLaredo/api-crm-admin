@@ -16,14 +16,15 @@ import { OperationEntity } from 'src/entities/employee'
 @Injectable()
 export class AlertTaskService {
   private readonly logger = new Logger(AlertTaskService.name)
-
+  private systemId = null
   constructor (private configService: ConfigService,
     private customerService: CustomerService,
-    private operationservice: OperationService,
+    private operationService: OperationService,
     private emailService: EMailService,
     private userService: UserService,
     private processService: ProcessService,
     private blProjectedDataService: BlProjectedDataService) {
+    this.systemId = this.configService.get<Types.ObjectId>('config.mongo.systemId')
     this.testRemind()
   }
 
@@ -77,47 +78,96 @@ export class AlertTaskService {
 
   @Cron('*/10 * * * * *')
   async testRemind () {
-    console.log('testRemind')
-    const dTToday = (DateTime.now()).startOf('day')
-    const dTDateLast: DateTime = dTToday.minus({ days: 7 })
-    const dTDateNow: DateTime = dTToday
-    const dTDateNext: DateTime = dTToday.plus({ days: 7 })
+    const dTToday = DateTime.now()
+
+    // Encuentra el primer día de esta semana
+    const startOfWeek = dTToday.startOf('week').startOf('day')
+
+    // Encuentra el último día de esta semana
+    const endOfWeek = dTToday.endOf('week').endOf('day')
+
+    // Encuentra el primer día de la semana siguiente
+    const startOfNextWeek = endOfWeek.plus({ days: 1 }).startOf('day')
+
+    // Encuentra el último día de la semana siguiente
+    const endOfNextWeek = startOfNextWeek.endOf('week').endOf('day')
+
+        
   
-    const validOperations: OperationEntity[] = await this.operationservice.get({ date: { $gte: dTDateLast.toJSDate(), $lte: dTDateNow.toJSDate() } })
-    console.log(validOperations)
-    console.log(dTDateNow.toJSDate())
-    console.log(dTDateNow.toJSDate())
+    const validOperations: OperationEntity[] = await this.operationService.get({
+      date: { $gte: startOfWeek.toJSDate(), $lte: endOfNextWeek.toJSDate() }
+    })
+
+    // const lastWeekOperations: any[] = []
+    // const nextWeekOperations: any[] = []
 
 
 
-    /*
+    // Filtra las fechas de esta semana y la semana siguiente
+    const lastWeekOperations = validOperations.filter(operation => {
+      const date = DateTime.fromJSDate(operation.date)
+      return date >= startOfWeek && date <= endOfWeek
+    })
 
-  date: 2023-04-14T06:00:00.000Z,
-  employeeId: new ObjectId("6410e7911e382fafbc8e3b55"),
+    const nextWeekOperations = validOperations.filter(operation => {
+      const date = DateTime.fromJSDate(operation.date)
+      return date >= startOfNextWeek && date <= endOfNextWeek
+    })
 
-  workshift: 'Trabajemos con este ',
-  hours: '3',
-  restDay: null | DateTime
+    const saveOperations: OperationEntity[] = []
+    lastWeekOperations.forEach(
+      (operation: OperationEntity) => {
+
+        const operationDate = DateTime.fromJSDate(operation.date)
+        const employeeId = operation.employeeId
+        const nextWeekDay = operationDate.plus({ days: 7 })
+        if (operation.restDay || operation.workshift || operation.hours) {
+          const foundOnNextWeekOperation: any = nextWeekOperations.find(
+            nwo => DateTime.fromJSDate(nwo.date).equals(nextWeekDay) && String(nwo.employeeId) === String(employeeId))
+
+          const employeeOperations = nextWeekOperations.filter(lWO => String(lWO.employeeId) === String(operation.employeeId))
+          const existsRestDay = employeeOperations.find(eO => eO.restDay)
+
+          let saveOperationObject: Partial<OperationEntity> = {}
+          if (foundOnNextWeekOperation) {
+            saveOperationObject = foundOnNextWeekOperation as OperationEntity
+      
+            if (!foundOnNextWeekOperation.restDay && !existsRestDay) {
+              if (operation.restDay) {
+                saveOperationObject.restDay = nextWeekDay.toJSDate()
+              } else {
+                saveOperationObject.restDay = null
+              }
+            }
+            if (!foundOnNextWeekOperation.workshift) {
+              saveOperationObject.workshift = operation.workshift
+            }
+            if (!foundOnNextWeekOperation.hours) {
+              saveOperationObject.hours = operation.hours
+            }
+
+          } else {
+            saveOperationObject.date = nextWeekDay.toJSDate()
+            saveOperationObject.employeeId = employeeId
+
+            if (operation.restDay && !existsRestDay) {
+              saveOperationObject.restDay = nextWeekDay.toJSDate()
+            } else {
+              saveOperationObject.restDay = null
+            }
+            saveOperationObject.workshift = operation.workshift
+            saveOperationObject.hours = operation.hours
+            saveOperationObject.createdAt = new Date()
+            saveOperationObject.createdBy = new Types.ObjectId(this.systemId)
+          }
 
 
-  validate: 
-  que no existas cruce entre employee  y fecha
-  */
+          saveOperations.push(saveOperationObject as OperationEntity)
+        }
+      }
+    )
 
-  
+    const allPromises = saveOperations.map(operation => operation.id ? this.operationService.update(operation.id, { ...operation }) : this.operationService.create({ ...operation }))
+    return Promise.all(allPromises)
   }
-
-
-
-  // @Cron('0 0 22 * * 0')
-  // async processBinnacleOperationData () {
-  //   const dTToday = DateTime.now()
-  //   const dTDateStart: DateTime = dTToday
-  //   const dTDateEnd: DateTime = dTToday.minus({ days: 7 })
-
-  //   const validOperations: OperationEntity[] = await this.operationservice.get({ date: { $gte: dTDateStart.toJSDate(), $lte: dTDateEnd.toJSDate() } })
-  //   console.log(validOperations)
-
-  //   // console.log()
-  // }
 }

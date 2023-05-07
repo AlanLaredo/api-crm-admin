@@ -1,9 +1,12 @@
+import { PrenominaImportService } from './prenomina-import.service'
 import { PrenominaService } from './prenomina.service'
 
 export const PRENOMINA_SERVICES = [
-  PrenominaService
+  PrenominaService,
+  PrenominaImportService
 ]
 
 export {
-  PrenominaService
+  PrenominaService,
+  PrenominaImportService
 }

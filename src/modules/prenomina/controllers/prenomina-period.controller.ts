@@ -1,20 +1,28 @@
 /* eslint-disable no-useless-constructor */
 
 import { Controller, Res } from '@nestjs/common'
-import { PrenominaPeriodService } from 'src/database/mongoose/services/prenomina'
+import { PrenominaPeriodEmployeeService, PrenominaPeriodService } from 'src/database/mongoose/services/prenomina'
 
 import { Workbook } from 'exceljs'
 import { Response } from 'express'
-
-import { Get, Param } from '@nestjs/common/decorators'
-import { PrenominaService } from '../services'
 import { Types } from 'mongoose'
+import { FileInterceptor } from '@nestjs/platform-express'
+
+
+import { Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common/decorators'
+import { PrenominaImportService, PrenominaService } from '../services'
+import { FileService } from 'src/modules/common/shared/services'
+import { PrenominaPeriodEmployeeEntity, PrenominaPeriodEntity } from 'src/entities/prenomina'
+
 
 @Controller('prenomina')
 export class PrenominaPeriodController {
   constructor (
     private readonly prenominaPeriodService: PrenominaPeriodService,
-    private readonly prenominaService: PrenominaService) {
+    private readonly prenominaPeriodEmployeeService: PrenominaPeriodEmployeeService,
+    private readonly prenominaService: PrenominaService,
+    private readonly prenominaImportService: PrenominaImportService,
+    private readonly fileService: FileService) {
   }
 
   @Get('/generate/:prenominaPeriodId')
@@ -54,4 +62,19 @@ export class PrenominaPeriodController {
     // worksheet.addRow({ id: 2, name: 'Jane Doe', email: 'janedoe@example.com' })
     return workbook.xlsx.writeBuffer()
   }
+
+  @Post('/importExcel/:prenominaPeriodId')
+  @UseInterceptors(FileInterceptor('file'))
+  async importExcel (
+    @Param('prenominaPeriodId') prenominaPeriodId: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response
+  ) {
+
+    console.log('importing file ' + prenominaPeriodId)
+    const filePath = file.path
+    await this.prenominaImportService.importFile(prenominaPeriodId, filePath)
+    return res.status(200).json({ message: 'File imported successfully', success: true })
+  }
 }
+
