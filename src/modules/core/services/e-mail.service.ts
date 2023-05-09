@@ -14,18 +14,24 @@ export class EMailService {
     private readonly userRoleService: UserRoleService,
     private readonly rolePermissionService: RolePermissionService,
     private readonly mailerService: MailerService) { }
-
-  async send (emailTo: string | string[], subject: string, templateName: string, context: any): Promise<any> {
-    const incomingUser: string = this.configService.get<string>('config.mailing.incomingUser')
-
-    return this.mailerService
-      .sendMail({
+    
+  async send(emailTo: string | string[], subject: string, templateName: string, context: any): Promise<any> {
+    try {
+      const incomingUser: string = this.configService.get<string>('config.mailing.incomingUser')
+  
+      await this.mailerService.sendMail({
         from: incomingUser,
         to: emailTo,
         subject,
         template: templateName,
         context
       })
+  
+      return true
+    } catch (error) {
+      console.error('Error sending email:', error)
+      return false
+    }
   }
 
   async getUsersForPermissionTagNotification (tag: string, companyId: Types.ObjectId): Promise<UserEntity[]> {

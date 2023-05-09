@@ -36,6 +36,7 @@ export class OperationResolver {
   async operationSendEmail (@Args('message') message: string,
   @Context(UserDataPipe) user: UserEntity): Promise<boolean> {
     const subject: string = 'CRM Admin - Nueva Incidencia'
+    // TODO: Actualizar este email para las incidencias
     this.eMailService.send('santiagoalan1@gmail.com', subject, 'general.pug', { message, userName: 'Administrador', subject })
     return true
   }

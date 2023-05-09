@@ -70,13 +70,15 @@ export class PrenominaImportService {
         const foundDataForImport = dataImport.find(dI => String(dI.keycode) === String(ppE.keycode))
         let total = (ppE.salary || 0) + (ppE.advance || 0) + (ppE.double || 0) + (ppE.bonus || 0) + (ppE.holiday || 0) - (ppE.saving || 0) - (ppE.absences || 0)
 
-        dataImport.infonavit || (dataImport.infonavit !== null && dataImport.infonavit !== undefined && dataImport.infonavit === 0) ? total = total - dataImport.infonavit : total = total - (ppE.infonavit || 0)
-        dataImport.fonacot || (dataImport.fonacot !== null && dataImport.fonacot !== undefined && dataImport.fonacot === 0) ? total = total - dataImport.fonacot : total = total - (ppE.fonacot || 0)
-        dataImport.loan || (dataImport.loan !== null && dataImport.loan !== undefined && dataImport.loan === 0) ? total = total - dataImport.loan : total = total - (ppE.loan || 0)
-        dataImport.nss || (dataImport.nss !== null && dataImport.nss !== undefined && dataImport.nss === 0) ? total = total - dataImport.nss : total = total - (ppE.nss || 0)
-        dataImport.uniforms || (dataImport.uniforms !== null && dataImport.uniforms !== undefined && dataImport.uniforms === 0) ? total = total - dataImport.uniforms : total = total - (ppE.uniforms || 0)
-
-
+       
+        foundDataForImport.infonavit || (foundDataForImport.infonavit !== null && foundDataForImport.infonavit !== undefined && foundDataForImport.infonavit === 0) ? total = total - foundDataForImport.infonavit : total = total - (ppE.infonavit || 0)
+        foundDataForImport.fonacot || (foundDataForImport.fonacot !== null && foundDataForImport.fonacot !== undefined && foundDataForImport.fonacot === 0) ? total = total - foundDataForImport.fonacot : total = total - (ppE.fonacot || 0)
+        foundDataForImport.loan || (foundDataForImport.loan !== null && foundDataForImport.loan !== undefined && foundDataForImport.loan === 0) ? total = total - foundDataForImport.loan : total = total - (ppE.loan || 0)
+        foundDataForImport.nss || (foundDataForImport.nss !== null && foundDataForImport.nss !== undefined && foundDataForImport.nss === 0) ? total = total - foundDataForImport.nss : total = total - (ppE.nss || 0)
+        foundDataForImport.uniforms || (foundDataForImport.uniforms !== null && foundDataForImport.uniforms !== undefined && foundDataForImport.uniforms === 0) ? total = total - foundDataForImport.uniforms : total = total - (ppE.uniforms || 0)
+        
+        console.log('total')
+        console.log(total)
         return this.prenominaPeriodEmployeeService.update(ppE.id, { ...foundDataForImport, total })
       }
     )

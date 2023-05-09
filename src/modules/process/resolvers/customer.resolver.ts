@@ -67,7 +67,7 @@ export class CustomerResolver {
         return this.eMailService.send(email, 'Actualización de negocio en Lead', 'changeProcessOfCustomer.pug', { message })
       })
       await Promise.all(emailPromises)
-      // customerUpdated.emails = [] // TODO: check if this is necesary
+
     }
 
     return this.customerService.update(id, { ...data, modifiedBy: user.id, modifiedAt: new Date() })

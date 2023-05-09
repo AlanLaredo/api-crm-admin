@@ -54,7 +54,6 @@ export class BlProjectedDataService {
       if (file.split('-').length === 6) {
         const [currentName, clientCode, clientServiceCode, date, totalFactura, periodWithExt] = file.split('-')
         const [period, ext] = periodWithExt.split('.')
-        // console.log(currentName, clientCode, clientServiceCode, date, totalFactura, period, ext)
         structuredInvoices.push({
           currentName, clientCode, clientServiceCode, date, totalFactura, period, ext
         })

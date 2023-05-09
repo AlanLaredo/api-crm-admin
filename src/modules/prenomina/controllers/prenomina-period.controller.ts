@@ -12,7 +12,6 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common/decorators'
 import { PrenominaImportService, PrenominaService } from '../services'
 import { FileService } from 'src/modules/common/shared/services'
-import { PrenominaPeriodEmployeeEntity, PrenominaPeriodEntity } from 'src/entities/prenomina'
 
 
 @Controller('prenomina')
@@ -71,7 +70,6 @@ export class PrenominaPeriodController {
     @Res() res: Response
   ) {
 
-    console.log('importing file ' + prenominaPeriodId)
     const filePath = file.path
     await this.prenominaImportService.importFile(prenominaPeriodId, filePath)
     return res.status(200).json({ message: 'File imported successfully', success: true })

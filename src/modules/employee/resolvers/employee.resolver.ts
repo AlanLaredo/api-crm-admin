@@ -89,7 +89,7 @@ export class EmployeeResolver {
     const users: UserEntity[] = await this.eMailService.getUsersForPermissionTagNotification('admin.emailNotification.newEmployee', client && client.companyId || user.companyId)
     if (result && users && users.length > 0) {
       const message: string = 'Se ha registrado un nuevo empleado, ' + createEmployeeData.person.name + ' ' + (createEmployeeData.person.lastName ? createEmployeeData.person.lastName : '')
-      const subject: string = 'Registro de nuevo empleado'
+      const subject = 'Registro de nuevo empleado'
       await Promise.all(users.map(user => this.eMailService.send(user.email, subject, 'general.pug', { message, userName: user.firstName, subject })))
     }
     return result
