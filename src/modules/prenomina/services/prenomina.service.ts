@@ -3,11 +3,11 @@
 import { Injectable } from '@nestjs/common'
 import { DateTime } from 'luxon'
 import { Types } from 'mongoose'
-import { ClientServiceService } from 'src/database/mongoose/services/client'
+import { ClientService, ClientServiceService } from 'src/database/mongoose/services/client'
 import { EmployeeService, OperationService } from 'src/database/mongoose/services/employee'
 import { PrenominaConfigurationService, PrenominaPeriodEmployeeDayService, PrenominaPeriodEmployeeService, PrenominaPeriodService } from 'src/database/mongoose/services/prenomina'
 import { PositionService } from 'src/database/mongoose/services/recruiment'
-import { ClientServiceEntity } from 'src/entities/client'
+import { ClientEntity, ClientServiceEntity } from 'src/entities/client'
 import { EmployeeEntity, OperationEntity } from 'src/entities/employee'
 import { PrenominaConfigurationEntity, PrenominaPeriodEmployeeDayEntity, PrenominaPeriodEmployeeEntity, PrenominaPeriodEntity, PrenomionaPeriodVacanciesConfigurationEntity } from 'src/entities/prenomina'
 import { PositionEntity } from 'src/entities/recruiment'
@@ -24,6 +24,7 @@ export class PrenominaService {
     private readonly positionService: PositionService,
     private readonly prenominaPeriodService: PrenominaPeriodService,
     private readonly prenominaPeriodEmployeeService: PrenominaPeriodEmployeeService,
+    private readonly clientService: ClientService,
     private readonly prenominaPeriodEmployeeDayService: PrenominaPeriodEmployeeDayService) {}
 
   async getPrenomina (prenominaPeriodId: Types.ObjectId) {
@@ -166,8 +167,9 @@ export class PrenominaService {
 
   async generate (prenominaPeriod: PrenominaPeriodEntity, user: UserEntity) {
     const prenominaConfiguration: PrenominaConfigurationEntity = await this.prenominaConfigurationService.getById(prenominaPeriod.prenominaConfigurationId)
-    const clientServices = await this.clientServiceService.getWhereIn({ }, 'clientId', prenominaConfiguration.clientsIds)
-    let employees: EmployeeEntity[] = await this.getPeriodClientServiceEmployees(prenominaConfiguration.billingPeriod, clientServices)
+    const clientServices = await this.clientServiceService.getWhereIn({ }, 'clientId', prenominaConfiguration.clientsIds) 
+    let employees: any[] = await this.getPeriodClientServiceEmployees(prenominaConfiguration.billingPeriod, clientServices)
+
     employees = employees.filter(e => e.person.name !== 'Vacante')
     const { billingPeriod } = prenominaConfiguration
 
@@ -228,8 +230,28 @@ export class PrenominaService {
 
   async getPeriodClientServiceEmployees (billingPeriod: string, clientServices: ClientServiceEntity[]) {
     // const clientServicesFiltered = clientServices.filter((clientService: ClientServiceEntity) => clientService.billing === billingPeriod)
-    const clientServicesIds = clientServices.map(clientServiceFiltered => clientServiceFiltered.id)
-    const employees: EmployeeEntity[] = await this.employeeService.getWhereIn({ }, 'clientServiceId', clientServicesIds)
+    const clientServicesIds = clientServices.map(clientServiceFiltered => String(clientServiceFiltered.id))
+    const clientsIds = clientServices.map(clientServiceFiltered => String(clientServiceFiltered.clientId))
+    // const allPromises = []
+    // clientServices.forEach(clientService => {
+    //   allPromises.push(this.employeeService.get({ clientServiceId: clientService.id }))
+    // })
+    const clients: ClientEntity[] = await this.clientService.getWhereIn({ }, 'id', clientsIds)
+    let employees: any[] = await this.employeeService.getWhereIn({ }, 'clientServiceId', clientServicesIds) as any[]
+    employees = employees.map(employee => {
+      const copy = JSON.parse(JSON.stringify(employee))
+
+      const clientService: ClientServiceEntity = clientServices.find(clientService => String(clientService.id) === String(employee.clientServiceId))
+      const client = clients.find(client => String(client.id) === String(clientService.clientId))
+
+
+      copy.businessName = client.businessName
+      copy.businessReason = client.businessReason
+      copy.clientServiceName = clientService.name
+
+  
+      return copy
+    })
     return employees
   }
 
@@ -257,12 +279,16 @@ export class PrenominaService {
     })
   }
 
-  generatePrenominaPeriodEmployees (prenominaConfiguration: PrenominaConfigurationEntity, prenominaPeriod: PrenominaPeriodEntity, employees: EmployeeEntity[], operations: OperationEntity[], positions: PositionEntity[]) {
+  generatePrenominaPeriodEmployees (prenominaConfiguration: PrenominaConfigurationEntity,
+    prenominaPeriod: PrenominaPeriodEntity,
+    employees: EmployeeEntity[],
+    operations: OperationEntity[],
+    positions: PositionEntity[]) {
+
     const prenominaPeriodEmployees: PrenominaPeriodEmployeeEntity[] = []
     const { totalVacancies, id } = prenominaPeriod
 
     totalVacancies.forEach((vancancy: PrenomionaPeriodVacanciesConfigurationEntity, index: number) => {
-      let employee
       let position = null
       let multiplicator = null
       let totalAbscences = 0
@@ -270,11 +296,20 @@ export class PrenominaService {
       let salary = 0
       let absences = 0
       let bonus = 500
-      if (employees[index] && employees[index].id) {
-        employee = employees[index]
+
+          
+      // console.log('employees')
+      // console.log(employees[0])
+      // console.log(vancancy)
+
+      // businessName clientName
+      // clientServiceName clientServiceName
+      const employee = this.removeFirstMatchingEmployee(employees, vancancy)
+
+      if (employee) {
         position = positions.find((position: PositionEntity) => String(position.id) === String(employee.positionId))
         multiplicator = this.getPeriodMultiplicator(prenominaConfiguration.billingPeriod, prenominaPeriod.date)
-        const abscencesForBonus = operations.filter((operation: OperationEntity) => operation.operationConfirm === 'F' && String(operation.employeeId) === String(employees[index].id))
+        const abscencesForBonus = operations.filter((operation: OperationEntity) => operation.operationConfirm === 'F' && String(operation.employeeId) === String(employee.id))
         const operationsFilteredForAbscences = abscencesForBonus.filter((operation: OperationEntity) => !this.isHoliday(operation.date))
         totalAbscences = operationsFilteredForAbscences.length || 0
         if (abscencesForBonus && abscencesForBonus.length >= 1) {
@@ -287,8 +322,8 @@ export class PrenominaService {
       }
 
       const newPrenominaPeriodEmployee: PrenominaPeriodEmployeeEntity = {
-        employeeId: employee && employee.id ? employee.id : null,
-        prenominaPeriodId: id,
+        employeeId: employee && employee._id ? new Types.ObjectId(employee._id) : null,
+        prenominaPeriodId:  new Types.ObjectId(id),
         keycode: employee && employee.keycode ? employee.keycode : null,
         bankAccount: employee && employee.bankAccount ? employee.bankAccount : null,
         clientName: vancancy.clientName ? vancancy.clientName : 'N/A',
@@ -308,9 +343,24 @@ export class PrenominaService {
         createdAt: new Date(),
         createdBy: null
       }
+      console.log('newPrenominaPeriodEmployee')
+      console.log(newPrenominaPeriodEmployee)
       prenominaPeriodEmployees.push(newPrenominaPeriodEmployee)
     })
     return prenominaPeriodEmployees
   }
 
+  removeFirstMatchingEmployee (employees, vacancy) {
+    const index = employees.findIndex(employee =>
+      employee.businessName === vacancy.clientName &&
+      employee.clientServiceName === vacancy.clientServiceName
+    )
+
+    if (index !== -1) {
+      const removedEmployee = employees.splice(index, 1)[0]
+      return removedEmployee
+    }
+
+    return null
+  }
 }

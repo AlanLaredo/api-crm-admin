@@ -27,7 +27,7 @@ export abstract class BaseServiceMongoose<T> {
     return this.MainModel.find({
       ...data,
       deletedAt: null
-    }).where(column).in(array)
+    }).where(column).in(array).exec()
   }
 
   public async getOne (data: Partial<any> = {}): Promise<T> {
@@ -70,7 +70,7 @@ export abstract class BaseServiceMongoose<T> {
   public async getByIds (ids: Types.ObjectId[]): Promise<T[]> {
     return this.MainModel.find()
       .where('_id')
-      .in(ids)
+      .in(ids).exec()
   }
 
   public async create (data: any): Promise<T> {
