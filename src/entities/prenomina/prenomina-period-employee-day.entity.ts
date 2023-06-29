@@ -36,6 +36,19 @@ export class PrenominaPeriodEmployeeDayEntity extends IdentityLogEntity {
   @Field({ nullable: true })
   @Prop()
     operationAbbreviation?: string
+
+  @IsOptional()
+  @IsString()
+  @Prop()
+  @Field({ nullable: true })
+    operationComments?: string
+
+  @IsOptional()
+  @IsString()
+  @Prop()
+  @Field({ nullable: true })
+    operationConfirmComments?: string
+    
 }
 
 export const PrenominaPeriodEmployeeDaySchema = SchemaFactory.createForClass(PrenominaPeriodEmployeeDayEntity)

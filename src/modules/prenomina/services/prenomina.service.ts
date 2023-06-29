@@ -77,7 +77,9 @@ export class PrenominaService {
         infonavit: vacancy.infonavit ? Number(vacancy.infonavit).toFixed(2) : '',
         fonacot: vacancy.fonacot ? Number(vacancy.fonacot).toFixed(2) : '',
         loan: vacancy.loan ? Number(vacancy.loan).toFixed(2) : '',
+        loanDeposit: vacancy.loanDeposit ? Number(vacancy.loanDeposit).toFixed(2) : '',
         nss: vacancy.nss ? Number(vacancy.nss).toFixed(2) : '',
+        differenceWithoutImss: vacancy.differenceWithoutImss ? Number(vacancy.differenceWithoutImss).toFixed(2) : vacancy.total ? Number(vacancy.total).toFixed(2) : '',
         total: vacancy.total ? Number(vacancy.total).toFixed(2) : ''
       }
 
@@ -110,8 +112,10 @@ export class PrenominaService {
       infonavit: 'Infonavit',
       fonacot: 'Fonacot',
       loan: 'Prestamo',
+      loanDeposit: 'Depósito (Prestamo)',
       nss: 'NSS',
-      total: 'Total'
+      differenceWithoutImss: 'Bruto',
+      total: 'Neto'
     }
 
     const result: string[] = [
@@ -130,7 +134,9 @@ export class PrenominaService {
       'infonavit',
       'fonacot',
       'loan',
+      'loanDeposit',
       'nss',
+      'differenceWithoutImss',
       'total'
     ]
     days.forEach((date: DateTime, index: number) => {
@@ -168,7 +174,7 @@ export class PrenominaService {
   async generate (prenominaPeriod: PrenominaPeriodEntity, user: UserEntity) {
     const prenominaConfiguration: PrenominaConfigurationEntity = await this.prenominaConfigurationService.getById(prenominaPeriod.prenominaConfigurationId)
     const clientServices = await this.clientServiceService.getWhereIn({ }, 'clientId', prenominaConfiguration.clientsIds) 
-    let employees: any[] = await this.getPeriodClientServiceEmployees(prenominaConfiguration.billingPeriod, clientServices)
+    let employees: EmployeeEntity[] = await this.getPeriodClientServiceEmployees(prenominaConfiguration.billingPeriod, clientServices)
 
     employees = employees.filter(e => e.person.name !== 'Vacante')
     const { billingPeriod } = prenominaConfiguration
@@ -183,19 +189,21 @@ export class PrenominaService {
       dates.push(startDate)
     })
 
+
     const operations: OperationEntity[] = await this.getOperations(dates, employees)
     const positions: PositionEntity[] = await this.positionService.getWhereIn({ }, 'clientId', prenominaConfiguration.clientsIds)
     const prenominaPeriodEmployeesToInsert: PrenominaPeriodEmployeeEntity[] = this.generatePrenominaPeriodEmployees(prenominaConfiguration, prenominaPeriod, employees, operations, positions)
-
     if (prenominaPeriodEmployeesToInsert && prenominaPeriodEmployeesToInsert.length > 0) {
       const prenominaPeriodEmployeesPromises = prenominaPeriodEmployeesToInsert.map(
         (prenominaPeriodEmployee: PrenominaPeriodEmployeeEntity) => this.prenominaPeriodEmployeeService.create({ ...prenominaPeriodEmployee, createdBy: user.id })
       )
       const prenominaPeriodEmployees: PrenominaPeriodEmployeeEntity[] = await Promise.all(prenominaPeriodEmployeesPromises)
+
       const prenominaPeriodEmployeeDays: PrenominaPeriodEmployeeDayEntity[] = []
+
       prenominaPeriodEmployees.forEach((prenominaPeriodEmployee: PrenominaPeriodEmployeeEntity) => {
         dates.forEach((date: DateTime) => {
-          const operationsEmployee = operations.filter((operation: OperationEntity) => String(operation.employeeId) === String(prenominaPeriodEmployee.employeeId))
+          const operationsEmployee = operations.filter(operation => String(operation.employeeId) === String(prenominaPeriodEmployee.employeeId))
           const operation: OperationEntity = operationsEmployee.find((operation: OperationEntity) => {
             const operationDate = DateTime.fromJSDate(new Date(operation.date))
             return operationDate.equals(date)
@@ -205,6 +213,8 @@ export class PrenominaService {
             date: date.toJSDate(),
             operationText: operation ? operation.operationConfirm : '',
             operationAbbreviation: operation ? operation.operationConfirm : '',
+            operationComments: operation ? operation.operationComments : '',
+            operationConfirmComments: operation ? operation.operationConfirmComments : '',
             createdAt: new Date(),
             createdBy: user.id
           })
@@ -238,9 +248,11 @@ export class PrenominaService {
     // })
     const clients: ClientEntity[] = await this.clientService.getWhereIn({ }, 'id', clientsIds)
     let employees: any[] = await this.employeeService.getWhereIn({ }, 'clientServiceId', clientServicesIds) as any[]
+   
+    
     employees = employees.map(employee => {
       const copy = JSON.parse(JSON.stringify(employee))
-
+      copy.id = new Types.ObjectId(copy['_id'])
       const clientService: ClientServiceEntity = clientServices.find(clientService => String(clientService.id) === String(employee.clientServiceId))
       const client = clients.find(client => String(client.id) === String(clientService.clientId))
 
@@ -252,18 +264,21 @@ export class PrenominaService {
   
       return copy
     })
+
+
     return employees
   }
 
   async getOperations (dates: DateTime[], employees: EmployeeEntity[]): Promise<OperationEntity[]> {
     const operationPromises = []
-    employees.forEach(employee => {
+    employees.forEach((employee: any) => {
       dates.forEach(date => {
-        operationPromises.push(this.operationService.getOne({ employeeId: employee.id, date }))
+        operationPromises.push(this.operationService.getOne({ employeeId: employee.id, date: date.toJSDate() }))
       })
     })
     const operations = await Promise.all(operationPromises)
-    return operations.filter(operation => operation)
+    const filteredNotNulls = operations.filter(operation => !!operation)
+    return filteredNotNulls
   }
 
   getPeriodMultiplicator (billingPeriod: string, startDate: Date) {
@@ -297,13 +312,6 @@ export class PrenominaService {
       let absences = 0
       let bonus = 500
 
-          
-      // console.log('employees')
-      // console.log(employees[0])
-      // console.log(vancancy)
-
-      // businessName clientName
-      // clientServiceName clientServiceName
       const employee = this.removeFirstMatchingEmployee(employees, vancancy)
 
       if (employee) {
@@ -339,12 +347,13 @@ export class PrenominaService {
         fonacot: 0,
         loan: 0,
         nss: 0,
+        loanDeposit: 0,
+        differenceWithoutImss: 0,
         total,
         createdAt: new Date(),
         createdBy: null
       }
-      console.log('newPrenominaPeriodEmployee')
-      console.log(newPrenominaPeriodEmployee)
+
       prenominaPeriodEmployees.push(newPrenominaPeriodEmployee)
     })
     return prenominaPeriodEmployees

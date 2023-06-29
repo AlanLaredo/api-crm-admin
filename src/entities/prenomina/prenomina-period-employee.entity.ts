@@ -119,6 +119,19 @@ export class PrenominaPeriodEmployeeEntity extends IdentityLogEntity {
   @Prop()
     nss?: number
 
+    
+  @IsOptional()
+  @IsNumber()
+  @Field(() => Float, { nullable: true })
+  @Prop()
+    loanDeposit?: number
+    
+  @IsOptional()
+  @IsNumber()
+  @Field(() => Float, { nullable: true })
+  @Prop()
+    differenceWithoutImss?: number
+
   @IsOptional()
   @IsNumber()
   @Field(() => Float, { nullable: true })
