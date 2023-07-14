@@ -72,12 +72,17 @@ export class PrenominaImportService {
         foundDataForImport.infonavit || (foundDataForImport.infonavit !== null && foundDataForImport.infonavit !== undefined && foundDataForImport.infonavit === 0) ? total = total - foundDataForImport.infonavit : total = total - (ppE.infonavit || 0)
         foundDataForImport.fonacot || (foundDataForImport.fonacot !== null && foundDataForImport.fonacot !== undefined && foundDataForImport.fonacot === 0) ? total = total - foundDataForImport.fonacot : total = total - (ppE.fonacot || 0)
         foundDataForImport.loan || (foundDataForImport.loan !== null && foundDataForImport.loan !== undefined && foundDataForImport.loan === 0) ? total = total - foundDataForImport.loan : total = total - (ppE.loan || 0)
-        foundDataForImport.nss || (foundDataForImport.nss !== null && foundDataForImport.nss !== undefined && foundDataForImport.nss === 0) ? total = total + foundDataForImport.nss : total = total + (ppE.nss || 0)
         foundDataForImport.uniforms || (foundDataForImport.uniforms !== null && foundDataForImport.uniforms !== undefined && foundDataForImport.uniforms === 0) ? total = total - foundDataForImport.uniforms : total = total - (ppE.uniforms || 0)
         foundDataForImport.loanDeposit || (foundDataForImport.loanDeposit !== null && foundDataForImport.loanDeposit !== undefined && foundDataForImport.loanDeposit === 0) ? total = total + foundDataForImport.loanDeposit : total = total + (ppE.loanDeposit || 0)
+        foundDataForImport.nss || (foundDataForImport.nss !== null && foundDataForImport.nss !== undefined && foundDataForImport.nss === 0)
+          ? foundDataForImport.nss
+          : ppE.nss || 0
+        foundDataForImport.differenceWithoutImss = total - (foundDataForImport.nss || 0)
         
 
-        foundDataForImport.nss || (foundDataForImport.nss !== null && foundDataForImport.nss !== undefined && foundDataForImport.nss === 0) ? foundDataForImport.differenceWithoutImss = total - foundDataForImport.nss : foundDataForImport.differenceWithoutImss = total - (ppE.nss || 0)
+        // foundDataForImport.nss || 
+        // (foundDataForImport.nss !== null && foundDataForImport.nss !== undefined && foundDataForImport.nss === 0)
+        //  ? foundDataForImport.differenceWithoutImss = total - foundDataForImport.nss : foundDataForImport.differenceWithoutImss = total - (ppE.nss || 0)
 
         // foundDataForImport.differenceWithoutImss = total - (ppE.NSS || 0)
 

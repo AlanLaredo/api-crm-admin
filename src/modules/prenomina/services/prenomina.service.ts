@@ -79,9 +79,11 @@ export class PrenominaService {
         loan: vacancy.loan ? Number(vacancy.loan).toFixed(2) : '',
         loanDeposit: vacancy.loanDeposit ? Number(vacancy.loanDeposit).toFixed(2) : '',
         nss: vacancy.nss ? Number(vacancy.nss).toFixed(2) : '',
-        differenceWithoutImss: vacancy.differenceWithoutImss ? Number(vacancy.differenceWithoutImss).toFixed(2) : vacancy.total ? Number(vacancy.total).toFixed(2) : '',
+        differenceWithoutImss: vacancy.total ? Number(vacancy.total).toFixed(2) : '',
         total: vacancy.total ? Number(vacancy.total).toFixed(2) : ''
       }
+      
+      // vacancy.differenceWithoutImss ? Number(vacancy.differenceWithoutImss).toFixed(2) : vacancy.total ? Number(vacancy.total).toFixed(2) : '',
 
       days.forEach((date: DateTime, index: number) => {
         const dateName = date.toFormat('D')
@@ -348,7 +350,7 @@ export class PrenominaService {
         loan: 0,
         nss: 0,
         loanDeposit: 0,
-        differenceWithoutImss: 0,
+        differenceWithoutImss: total,
         total,
         createdAt: new Date(),
         createdBy: null
