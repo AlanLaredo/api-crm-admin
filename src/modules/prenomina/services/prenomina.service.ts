@@ -217,6 +217,8 @@ export class PrenominaService {
             operationAbbreviation: operation ? operation.operationConfirm : '',
             operationComments: operation ? operation.operationComments : '',
             operationConfirmComments: operation ? operation.operationConfirmComments : '',
+            operationHours: operation ? operation.operationHours : null,
+            operationConfirmHours: operation ? operation.operationConfirmHours : null,
             createdAt: new Date(),
             createdBy: user.id
           })
@@ -312,23 +314,39 @@ export class PrenominaService {
       let total = 0
       let salary = 0
       let absences = 0
-      let bonus = 500
+      let bonus = 0
+      let double = 0
 
       const employee = this.removeFirstMatchingEmployee(employees, vancancy)
-
+      
       if (employee) {
         position = positions.find((position: PositionEntity) => String(position.id) === String(employee.positionId))
+
         multiplicator = this.getPeriodMultiplicator(prenominaConfiguration.billingPeriod, prenominaPeriod.date)
         const abscencesForBonus = operations.filter((operation: OperationEntity) => operation.operationConfirm === 'F' && String(operation.employeeId) === String(employee.id))
+        const extrasDays = operations.filter((operation: OperationEntity) => operation.operationConfirmHours && String(operation.employeeId) === String(employee.id))
+
+        const hourSalary = (position && position.salary ? position.salary : 0) / (position && position.hoursPerShift ? position.hoursPerShift : 8)
+        bonus = position && position.bonus ? position.bonus : 500
+  
+        if (extrasDays.length > 0) {
+          const hoursExtra = extrasDays.map(e => e.operationConfirmHours)
+          const totalHours = hoursExtra.reduce((accumulator: number, item: number) => accumulator + item)
+          double = hourSalary * totalHours
+        }
+
         const operationsFilteredForAbscences = abscencesForBonus.filter((operation: OperationEntity) => !this.isHoliday(operation.date))
         totalAbscences = operationsFilteredForAbscences.length || 0
         if (abscencesForBonus && abscencesForBonus.length >= 1) {
-          bonus = bonus - 500
+          bonus = 0
         }
+
+        
         salary = position && position.salary ? position.salary * multiplicator : 0
         absences = position && position.salary ? position.salary * totalAbscences : 0
         total = salary - absences
         total += bonus
+        total += double
       }
 
       const newPrenominaPeriodEmployee: PrenominaPeriodEmployeeEntity = {
@@ -342,7 +360,7 @@ export class PrenominaService {
         saving: 0,
         uniforms: 0,
         advance: 0,
-        double: 0,
+        double,
         bonus,
         holiday: 0,
         infonavit: 0,

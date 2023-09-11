@@ -34,6 +34,18 @@ export class PositionEntity extends IdentityLogEntity {
     salary?: number
 
   @IsOptional()
+  @IsNumber()
+  @Field({ nullable: true })
+  @Prop()
+    hoursPerShift?: number
+
+  @IsOptional()
+  @IsNumber()
+  @Field({ nullable: true })
+  @Prop()
+    bonus?: number
+  
+  @IsOptional()
   @IsArray()
   @Field(() => [String], { nullable: true })
   @Prop({ type: [String] })

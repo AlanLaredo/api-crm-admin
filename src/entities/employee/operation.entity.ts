@@ -1,6 +1,6 @@
-import { Field, ID, InputType, ObjectType, ArgsType } from '@nestjs/graphql'
+import { Field, ID, InputType, ObjectType, ArgsType, Float } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { IsDate, IsMongoId, IsOptional, IsString } from 'class-validator'
+import { IsDate, IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator'
 import mongoose, { Types } from 'mongoose'
 
 import { IdentityLogEntity } from '../common'
@@ -63,10 +63,22 @@ export class OperationEntity extends IdentityLogEntity {
     operationComments?: string
 
   @IsOptional()
+  @IsNumber()
+  @Prop()
+  @Field(() => Float, { nullable: true })
+    operationHours?: number
+
+  @IsOptional()
   @IsString()
   @Prop()
   @Field({ nullable: true })
     operationConfirmComments?: string
+
+  @IsOptional()
+  @IsNumber()
+  @Prop()
+  @Field(() => Float, { nullable: true })
+    operationConfirmHours?: number
 
   @IsOptional()
   @IsMongoId()
