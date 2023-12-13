@@ -287,15 +287,22 @@ export class PrenominaService {
 
   getPeriodMultiplicator (billingPeriod: string, startDate: Date) {
     const dayOfPeriod: DateTime = DateTime.fromJSDate(startDate)
-    return billingPeriod === 'weekly' ? 7 : billingPeriod === 'biweekly' ? (dayOfPeriod.day < 15 ? 15 : (dayOfPeriod.endOf('month').day - 15)) : dayOfPeriod.endOf('month').day
+    return billingPeriod === 'weekly'
+      ? 7
+      : billingPeriod === 'biweekly'
+        ? (dayOfPeriod.day < 15
+          ? 15
+          : (dayOfPeriod.endOf('month').day - 15))
+        : dayOfPeriod.endOf('month').day
   }
 
   isHoliday (date: Date) {
     const datetimeDate = DateTime.fromJSDate(new Date(date))
-    return HOLIDAYS_DATA.find(hd => {
+    const result = HOLIDAYS_DATA.find(hd => {
       const dateTimeHd = DateTime.fromJSDate(hd)
       return datetimeDate.day === dateTimeHd.day && datetimeDate.month === dateTimeHd.month
     })
+    return result
   }
 
   generatePrenominaPeriodEmployees (prenominaConfiguration: PrenominaConfigurationEntity,
@@ -310,43 +317,130 @@ export class PrenominaService {
     totalVacancies.forEach((vancancy: PrenomionaPeriodVacanciesConfigurationEntity, index: number) => {
       let position = null
       let multiplicator = null
-      let totalAbscences = 0
-      let total = 0
       let salary = 0
-      let absences = 0
       let bonus = 0
       let double = 0
+      let total = 0
+      let absences = 0
+      let absencesWithoutHolidays = 0
+      let absencesInHolidays = 0
+      let absencesSalary = 0
 
       const employee = this.removeFirstMatchingEmployee(employees, vancancy)
       
       if (employee) {
+        // Obtén la posición de ese empleado
         position = positions.find((position: PositionEntity) => String(position.id) === String(employee.positionId))
-
-        multiplicator = this.getPeriodMultiplicator(prenominaConfiguration.billingPeriod, prenominaPeriod.date)
-        const abscencesForBonus = operations.filter((operation: OperationEntity) => operation.operationConfirm === 'F' && String(operation.employeeId) === String(employee.id))
-        const extrasDays = operations.filter((operation: OperationEntity) => operation.operationConfirmHours && String(operation.employeeId) === String(employee.id))
-
-        const hourSalary = (position && position.salary ? position.salary : 0) / (position && position.hoursPerShift ? position.hoursPerShift : 8)
+        // Inicializa el bono por asistencia acorde al sueldo o por default 500
         bonus = position && position.bonus ? position.bonus : 500
-  
+        // salario
+        const dairySalary = position && position.salary ? position.salary : 0
+        const dairyExtraSalary = position && position.salaryExtra ? position.salaryExtra : 0
+        let totalSalaryDaysOperations = 0
+        let totalSalaryExtraDaysOperations = 0
+        // Obtén el total de días del periodo
+        multiplicator = this.getPeriodMultiplicator(prenominaConfiguration.billingPeriod, prenominaPeriod.date)
+
+        // Obtén el salario por hora acorde a la duración del turno de este empleado 
+        const hourSalary = (position && dairySalary ? dairySalary : 0) / (position && position.hoursPerShift ? position.hoursPerShift : 8)
+
+        // ******************* procesa las operaciones
+        const operationsEmployee = operations.filter((operation: OperationEntity) => String(operation.employeeId) === String(employee.id))
+        
+        // 1 Cuenta la faltas: No suma salario
+        const operationsAbscences = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'F')
+
+        // Revisa si hay faltas y reinicia el bono
+        if (operationsAbscences && operationsAbscences.length >= 1) {
+          bonus = 0
+        }
+
+        // Faltas en fechas festivas no descuentan salario pero si descuentan el bono
+        const operationsFilteredForAbscences = operationsAbscences.filter((operation: OperationEntity) => !this.isHoliday(operation.date))
+        absencesWithoutHolidays = operationsFilteredForAbscences.length
+        absencesInHolidays = operationsAbscences.length - absencesWithoutHolidays
+
+        if (absencesInHolidays > 0) {
+          absencesSalary = absencesInHolidays * dairySalary
+        }
+
+        // 2 Asistencia: Se debe sumar un salario diario
+        const operationsA = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'A')
+        totalSalaryDaysOperations += operationsA.length
+
+        // 3 Obten horas extras en las operaciones para este empleado
+        const extrasDays = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirmHours)
         if (extrasDays.length > 0) {
           const hoursExtra = extrasDays.map(e => e.operationConfirmHours)
           const totalHours = hoursExtra.reduce((accumulator: number, item: number) => accumulator + item)
           double = hourSalary * totalHours
         }
+        
+        // 4 Permiso sin goce de sueldo: No suma salario y resta parcialmente el bono de 1 día
+        const operationsPSS = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'PSS')
+        if (bonus > 0 && operationsPSS.length > 0) {
+          const partialBonus = bonus / multiplicator
+          bonus = bonus - partialBonus * operationsPSS.length
+        }
 
-        const operationsFilteredForAbscences = abscencesForBonus.filter((operation: OperationEntity) => !this.isHoliday(operation.date))
-        totalAbscences = operationsFilteredForAbscences.length || 0
-        if (abscencesForBonus && abscencesForBonus.length >= 1) {
+        // 5 Descanso: Se debe sumar un día de salario
+        const operationsD = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'D')
+        totalSalaryDaysOperations += operationsD.length
+
+        // 6 Adelanto de turno: Se debe suma un día de salario
+        const operationsAT = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'A/T')
+        totalSalaryDaysOperations += operationsAT.length
+
+        //7 Tiempo extra: Sumar un salario diario de tipo 1 y un salario diario de tipo 2 (T/E jornada completa)
+        const operationsTE = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'TE')
+        totalSalaryDaysOperations += operationsTE.length
+        totalSalaryExtraDaysOperations += operationsTE.length
+
+        //8 Vacaciones: Se debe sumar un día de salario
+        const operationsVAC = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'VAC')
+        totalSalaryDaysOperations += operationsVAC.length
+
+        // 9 Descanso laborado: Suma un salario salario de tipo 1 y un salario diario de tipo 2 (T/E jornada completa)
+        const operationsDL = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'D/L')
+        totalSalaryDaysOperations += operationsDL.length
+        totalSalaryExtraDaysOperations += operationsDL.length
+
+        // 10 Baja: No suma ningún tipo de salario
+        const operationsB = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'B')
+        if (operationsB.length > 0) {
           bonus = 0
         }
 
+        // 11 Descanso laborado y tiempo extra: Se debe sumar salario diario de tipo 1 y 2 salarios de tipo 2 (T/E)
+        const operationsDLTE = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'DL&TE')
+        totalSalaryDaysOperations += operationsDLTE.length
+        totalSalaryExtraDaysOperations += operationsDLTE.length * 2
+
+        // 12 Justificante en tiempo y forma: Debe sumar un salario diario de tipo 1
+        const operationsFJJ = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'FJJ')
+        totalSalaryDaysOperations += operationsFJJ.length
+
+
+        // 13 Pago en efectivo y/o depositado a su tarjeta el mismo día: Debe sumar un salario diario de tipo 1
+        const operationsTEP = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'TEP')
+        totalSalaryDaysOperations += operationsTEP.length
+
+
+        // 14 Descanso fijo establecido, labora el elemento 12 horas y se le paga en efectivo y/o su tarjeta el mismo día: Debe sumar un salario diario de tipo 1
+        const operationsDEP = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'DEP')
+        totalSalaryDaysOperations += operationsDEP.length
+
         
-        salary = position && position.salary ? position.salary * multiplicator : 0
-        absences = position && position.salary ? position.salary * totalAbscences : 0
-        total = salary - absences
-        total += bonus
-        total += double
+        // 15 Descanso fijo establecido, labora el elemento 24 horas continuas y se le paga en efectivo y/o su tarjeta el mismo día: Debe sumar un salario diario de tipo 1
+        const operationsRP = operationsEmployee.filter((operation: OperationEntity) => operation.operationConfirm === 'RP')
+        totalSalaryDaysOperations += operationsRP.length
+
+      
+        // **************** Calculate total's
+        absences = absencesWithoutHolidays * -1 * dairySalary
+        salary = dairySalary * multiplicator
+        total = totalSalaryDaysOperations * dairySalary + bonus + double + absencesSalary + dairyExtraSalary * totalSalaryExtraDaysOperations // asistencias + adelantos de turno - faltas en días festivos + bonos + dobles
+        
       }
 
       const newPrenominaPeriodEmployee: PrenominaPeriodEmployeeEntity = {

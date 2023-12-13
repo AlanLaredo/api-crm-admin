@@ -37,6 +37,12 @@ export class PositionEntity extends IdentityLogEntity {
   @IsNumber()
   @Field({ nullable: true })
   @Prop()
+    salaryExtra?: number
+
+  @IsOptional()
+  @IsNumber()
+  @Field({ nullable: true })
+  @Prop()
     hoursPerShift?: number
 
   @IsOptional()

@@ -62,6 +62,7 @@ export class PrenominaImportService {
       throw new Error('No existe la prenómina')
     }
     const prenominaPeriodEmployees: PrenominaPeriodEmployeeEntity[] = await this.prenominaPeriodEmployeeService.getWhereIn({ prenominaPeriodId: prenominaPeriod.id }, 'keycode', employeesKeycode)
+    
     // 6 RECORRE LOS EXISTENTES Y ASIGNA LOS VALORES
     const saveObjectsPromises = prenominaPeriodEmployees.map(
       ppE => {
@@ -74,9 +75,11 @@ export class PrenominaImportService {
         foundDataForImport.loan || (foundDataForImport.loan !== null && foundDataForImport.loan !== undefined && foundDataForImport.loan === 0) ? total = total - foundDataForImport.loan : total = total - (ppE.loan || 0)
         foundDataForImport.uniforms || (foundDataForImport.uniforms !== null && foundDataForImport.uniforms !== undefined && foundDataForImport.uniforms === 0) ? total = total - foundDataForImport.uniforms : total = total - (ppE.uniforms || 0)
         foundDataForImport.loanDeposit || (foundDataForImport.loanDeposit !== null && foundDataForImport.loanDeposit !== undefined && foundDataForImport.loanDeposit === 0) ? total = total + foundDataForImport.loanDeposit : total = total + (ppE.loanDeposit || 0)
+        
         foundDataForImport.nss || (foundDataForImport.nss !== null && foundDataForImport.nss !== undefined && foundDataForImport.nss === 0)
           ? foundDataForImport.nss
           : ppE.nss || 0
+
         foundDataForImport.differenceWithoutImss = total - (foundDataForImport.nss || 0)
         
 
